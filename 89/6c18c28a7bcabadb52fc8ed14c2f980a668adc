@@ -1,0 +1,162 @@
+packages/env/src/client.ts
+  s_ad64d2d42ea1a0::t_72149cec894d19 1-2,5-12,14
+packages/env/package.json
+  s_0f82254db6beb9::t_d30d4cf6c5936f 8,16,21,26
+apps/web/src/lib/orpc.ts
+  s_2d1b71952be3be::t_634b72313cd7de 16
+  s_2d1b71952be3be::t_fd823e71fd01be 14-15
+  s_2d1b71952be3be::t_27ff12c431fd1f 17-19
+apps/web/src/app/providers.tsx
+  s_2cc0fada3c3279::t_5d0da1ad09c826 4,11,13-15
+  s_2d1b71952be3be::t_634b72313cd7de 3,6
+  s_2d1b71952be3be::t_8853b3da612c06 1-2
+  s_2d1b71952be3be::t_ceed970ae6d67f 7-9
+  s_2cc0fada3c3279::t_bd2de8f802b2bd 12
+apps/api/src/procedures.ts
+  s_0f82254db6beb9::t_ac8c6aed97068b 5,9,14-16
+  s_f85b56ad0d5f20::t_8f3f98feaa6ced 2-4,12,17
+  s_f85b56ad0d5f20::t_def732d8a69b3d 1
+  s_0f82254db6beb9::t_4aa04c1b1fc800 6-8
+packages/env/src/server.ts
+  s_ad64d2d42ea1a0::t_72149cec894d19 5
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 1,3
+apps/web/src/lib/orpc.server.ts
+  s_ad64d2d42ea1a0::t_72149cec894d19 25
+  s_0f82254db6beb9::t_ac8c6aed97068b 27
+  s_ad64d2d42ea1a0::t_fec0d67ccac93a 24
+packages/env/tests/env.test.ts
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 24-25,41,112
+  s_ad64d2d42ea1a0::t_b11ca8af47efcb 3-4,12-15,18,20,27-28,32,35-38,42-43,52-57,59,67,69,74-76,86-90,97-100,104-108,113-114
+packages/env/tsconfig.json
+  s_2d1b71952be3be::t_565d4657980b47 5
+packages/ui/tsconfig.json
+  s_2d1b71952be3be::t_565d4657980b47 8
+apps/web/src/styles/globals.css
+  s_0f82254db6beb9::t_157226d49ac120 3-4,6
+  s_0f82254db6beb9::t_39abb4126cf5f5 5
+  s_0f82254db6beb9::t_40a617c497ffe9 7
+apps/api/src/routers/index.ts
+  s_f85b56ad0d5f20::t_8f3f98feaa6ced 4
+  s_f85b56ad0d5f20::t_ef5f65a5f4900d 5
+packages/db/drizzle.config.ts
+  s_ad64d2d42ea1a0::t_72149cec894d19 15
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 1-2,4,8
+  s_0f82254db6beb9::t_408c966a0fc3b9 7
+packages/db/src/index.ts
+  s_ad64d2d42ea1a0::t_72149cec894d19 21,23
+apps/api/vitest.config.ts
+  s_2d1b71952be3be::t_280a4918db8037 5
+packages/db/package.json
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 8,16,21,26
+apps/api/tsconfig.json
+  s_2d1b71952be3be::t_565d4657980b47 4
+packages/env/vitest.config.ts
+  s_2d1b71952be3be::t_280a4918db8037 5
+apps/web/next.config.ts
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 1,4-12,14
+  s_2d1b71952be3be::t_280a4918db8037 16
+  s_ad64d2d42ea1a0::t_72149cec894d19 18
+apps/web/src/components/app-shell.tsx
+  s_2cc0fada3c3279::t_d904b859fbd48d 3,5-6,13-16,18-22
+  s_2cc0fada3c3279::t_35cc56228951e1 10
+  s_2cc0fada3c3279::t_d714ce82a29ac7 17
+packages/db/tsconfig.json
+  s_2d1b71952be3be::t_565d4657980b47 4
+apps/api/src/routers/user.ts
+  s_0f82254db6beb9::t_ac8c6aed97068b 1,5-12
+  s_f85b56ad0d5f20::t_e496f38c97658d 3-4,13
+apps/web/tsconfig.json
+  s_f85b56ad0d5f20::t_fdc5b955574dca 21-23
+apps/web/package.json
+  s_2cc0fada3c3279::t_e3cd696472b038 10,13,29
+  s_f85b56ad0d5f20::t_fdc5b955574dca 17,21-22
+  s_ad64d2d42ea1a0::t_9b38ff2c062a62 23
+packages/env/src/index.ts
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 19
+  s_ad64d2d42ea1a0::t_4eb11c0e310824 21-25
+  s_ad64d2d42ea1a0::t_72149cec894d19 3-4,7-8,10,17
+apps/web/src/lib/query-client.ts
+  s_2d1b71952be3be::t_634b72313cd7de 1-44
+apps/api/package.json
+  s_f85b56ad0d5f20::t_d2a8a8b14b69e1 20-23,25-28
+pnpm-workspace.yaml
+  s_2cc0fada3c3279::t_d714ce82a29ac7 27-29
+  s_0f82254db6beb9::t_8d2b46ef80d5d5 31
+apps/web/src/components/app-sidebar.tsx
+  s_2cc0fada3c3279::t_d904b859fbd48d 3,30-31,34-35,56,78,137-141,143-155,160-185
+  s_2cc0fada3c3279::t_e845d2deaeeb6e 7,9-10,80,94-97,142,156-158
+  s_2cc0fada3c3279::t_a5a5f563a536fd 4-6,8,11-29,32-33,37-40,42-43,45-54,57-76,79,83-89,91-93,98-125,127-130,132-136
+  s_2cc0fada3c3279::t_35cc56228951e1 126
+apps/web/src/app/layout.tsx
+  s_ad64d2d42ea1a0::t_897c885d4a764c 3-4,7-9,11
+  s_ad64d2d42ea1a0::t_42559ded445b43 5
+  s_0f82254db6beb9::t_157226d49ac120 10,19
+  s_ad64d2d42ea1a0::t_c34c9ae0530817 6
+apps/web/src/app/api/rpc/[[...rest]]/route.ts
+  s_2d1b71952be3be::t_634b72313cd7de 12
+  s_2d1b71952be3be::t_c56f3a18177f75 10-11
+  s_2d1b71952be3be::t_92b3d65fdd4239 13
+packages/config/tsconfig.base.json
+  s_2d1b71952be3be::t_565d4657980b47 20-21
+apps/api/src/routers/health.ts
+  s_f85b56ad0d5f20::t_8f3f98feaa6ced 1-4,6-7
+  s_f85b56ad0d5f20::t_264f5ea1f4b677 5
+apps/web/src/proxy.ts
+  s_ad64d2d42ea1a0::t_92b97885dbbb2c 1-2,4,6-27
+packages/config/package.json
+  s_2d1b71952be3be::t_de36c1a9ebd5b3 7-10
+packages/ui/package.json
+  s_2d1b71952be3be::t_455ab939eda2e3 11,17,23,29,35,41,48-51,53-54,58-59
+pnpm-lock.yaml
+  s_0f82254db6beb9::t_664ec76f31cf2c 173-175,179-181,200-202,305-307,317-325,332-334,341-343,1096-1101,1108-1124,1139-1143,1805-1812,2621-2626,2759-2762,3410-3415,3429-3456,3476-3489,3887-3893,4358-4362,4533-4534
+supabase/config.toml
+  s_0f82254db6beb9::t_d5f1e0a365538a 4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "896c18c28a7bcabadb52fc8ed14c2f980a668adc",
+  "prompts": {},
+  "sessions": {
+    "s_0f82254db6beb9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11efb-1d4c-7b00-861f-c8f3e5461917",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_2cc0fada3c3279": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ee8-4194-74f0-b3de-8d6cdf5a8fe0",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_2d1b71952be3be": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ecc-480d-71c0-84ee-f03e6f8a5da4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_ad64d2d42ea1a0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11eab-487d-7100-afac-286106475626",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_f85b56ad0d5f20": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11d62-254b-7530-8b75-5e67a38cb2e3",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
