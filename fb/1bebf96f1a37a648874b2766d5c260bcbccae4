@@ -1,0 +1,28 @@
+apps/api/tests/rpc.test.ts
+  s_4ceebc66b39096::t_2f81a306a3e148 3,5,7,11-12,23-27,42-56,58-61
+  s_4ceebc66b39096::t_3bb1d5f7714d4b 57
+apps/api/src/routers/user.ts
+  s_4ceebc66b39096::t_ea77a1b2266b5b 5-8
+apps/web/src/components/user-menu.tsx
+  s_4ceebc66b39096::t_e9578f20a34ff6 60-62,68
+  s_4ceebc66b39096::t_ea77a1b2266b5b 1-59,63-67,69-100,102-121
+  s_4ceebc66b39096::t_4ba0404fad7312 101
+apps/web/src/components/app-sidebar.tsx
+  s_4ceebc66b39096::t_ea77a1b2266b5b 7-8,26,95,121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb1bebf96f1a37a648874b2766d5c260bcbccae4",
+  "prompts": {},
+  "sessions": {
+    "s_4ceebc66b39096": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d700-e3be-7b92-b9ce-8b912e992ed2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
