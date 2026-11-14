@@ -1,33 +1,42 @@
-import { RPCJsonSerializer } from "@orpc/client";
+import { ORPCError, RPCJsonSerializer } from "@orpc/client";
+import { createHydrationOptions } from "@orpc/tanstack-query";
 import {
   defaultShouldDehydrateQuery,
   environmentManager,
-  hashKey,
   QueryClient,
 } from "@tanstack/react-query";
 
 const serializer = new RPCJsonSerializer();
+const permanentErrorCodes = new Set([
+  "BAD_REQUEST",
+  "UNAUTHORIZED",
+  "FORBIDDEN",
+  "NOT_FOUND",
+  "METHOD_NOT_SUPPORTED",
+  "CONFLICT",
+  "UNPROCESSABLE_CONTENT",
+]);
 
 export function makeQueryClient() {
+  const hydration = createHydrationOptions(serializer);
   return new QueryClient({
     defaultOptions: {
+      ...hydration,
       queries: {
         staleTime: 60 * 1000,
-        queryKeyHashFn: (queryKey) => {
-          const { json, meta } = serializer.serializeJson(queryKey);
-          return hashKey([json, meta?.map((entry) => JSON.stringify(entry)).sort()]);
-        },
+        // oRPC already serializes query keys. Retry only transient client-side failures.
+        retry: (failureCount, error) =>
+          !environmentManager.isServer() &&
+          failureCount < 2 &&
+          !(error instanceof ORPCError && permanentErrorCodes.has(error.code)),
       },
       dehydrate: {
+        ...hydration.dehydrate,
         // Include in-flight prefetches so React can stream their results.
         shouldDehydrateQuery: (query) =>
           defaultShouldDehydrateQuery(query) || query.state.status === "pending",
         // Next.js handles error redaction and needs its own errors for dynamic rendering.
         shouldRedactErrors: () => false,
-        serializeData: (data) => serializer.serializeJson(data),
-      },
-      hydrate: {
-        deserializeData: (data) => serializer.deserializeJson(data),
       },
     },
   });

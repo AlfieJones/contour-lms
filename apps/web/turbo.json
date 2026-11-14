@@ -5,30 +5,45 @@
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
       "env": [
+        "ADMIN_EMAIL_PATTERNS",
         "DATABASE_URL",
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-        "NODE_ENV"
+        "NODE_ENV",
+        "APP_URL",
+        "EMAIL_SMTP_URL",
+        "EMAIL_FROM",
+        "EMAIL_FROM_NAME"
       ],
       "dependsOn": ["^build", "check-types"]
     },
     "check-types": {
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
       "env": [
+        "ADMIN_EMAIL_PATTERNS",
         "DATABASE_URL",
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-        "NODE_ENV"
+        "NODE_ENV",
+        "APP_URL",
+        "EMAIL_SMTP_URL",
+        "EMAIL_FROM",
+        "EMAIL_FROM_NAME"
       ],
       "outputs": ["next-env.d.ts", ".next/types/**", "tsconfig.tsbuildinfo"]
     },
     "dev": {
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
       "env": [
+        "ADMIN_EMAIL_PATTERNS",
         "DATABASE_URL",
         "NEXT_PUBLIC_SUPABASE_URL",
         "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-        "NODE_ENV"
+        "NODE_ENV",
+        "APP_URL",
+        "EMAIL_SMTP_URL",
+        "EMAIL_FROM",
+        "EMAIL_FROM_NAME"
       ]
     }
   }

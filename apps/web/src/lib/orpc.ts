@@ -2,15 +2,7 @@ import type { RouterClient } from "@orpc/server";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { Router } from "@lms/api";
-import { createTanstackQueryUtils } from "@orpc/tanstack-query";
-
-if (import.meta.env.SSR) {
-  await import("./orpc.server");
-}
-
-declare global {
-  var $client: RouterClient<Router> | undefined;
-}
+import { createAppQueryUtils } from "#lib/orpc-query-utils.ts";
 
 const link = new RPCLink({
   url: "/api/rpc",
@@ -23,7 +15,7 @@ const link = new RPCLink({
   },
 });
 
-// Handle requests directly if on the server, otherwise use fetch to get them from our api
-export const client: RouterClient<Router> = globalThis.$client ?? createORPCClient(link);
+// Server Components import serverClient from orpc.server.ts directly.
+export const client: RouterClient<Router> = createORPCClient(link);
 
-export const orpc = createTanstackQueryUtils(client);
+export const orpc = createAppQueryUtils(client);

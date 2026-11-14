@@ -32,10 +32,8 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
     }),
   );
   const user = account.data;
-  const metadataName: unknown = user?.user_metadata.full_name ?? user?.user_metadata.name;
-  const avatarUrl: unknown = user?.user_metadata.avatar_url;
-  const name =
-    (typeof metadataName === "string" && metadataName.trim()) || user?.email || "Account";
+  const avatarUrl = user?.avatarUrl;
+  const name = user?.name || user?.email || "Account";
   const initials = name
     .split(/\s+/)
     .slice(0, 2)
@@ -46,7 +44,9 @@ export function UserMenu({ compact = false }: { compact?: boolean }) {
     ? "Loading account…"
     : account.isError
       ? "Account unavailable"
-      : user?.email || (user ? "Signed in" : "Sign in to your account");
+      : user
+        ? `${user.email} · ${user.role}`
+        : "Sign in to your account";
 
   return (
     <Menu open={open} onOpenChange={setOpen}>

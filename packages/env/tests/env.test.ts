@@ -25,7 +25,7 @@ test("server validates the existing environment and combines client and server v
   stubEnv({ ...valid, NODE_ENV: "production" });
 
   const { env } = await import("../src/server.ts");
-  expect(env).toEqual({ ...valid, NODE_ENV: "production" });
+  expect(env).toEqual({ ...valid, NODE_ENV: "production", ADMIN_EMAIL_PATTERNS: [] });
   expectTypeOf(env).toEqualTypeOf<Env>();
   expectTypeOf(env.DATABASE_URL).toEqualTypeOf<string>();
   expectTypeOf(env.NODE_ENV).toEqualTypeOf<"development" | "production" | "test">();
@@ -112,4 +112,26 @@ test.each(["https://db.example.com", "postgres:password", "", "not-a-url"])(
 test("server import rejects browser usage", async () => {
   vi.stubGlobal("window", {});
   await expect(import("../src/server.ts")).rejects.toThrow("Use @lms/env/client in browser code.");
+});
+
+test("admin patterns are parsed and normalized only on the server", async () => {
+  stubEnv({ ...valid, ADMIN_EMAIL_PATTERNS: '["Admin@Example.com", "*@Staff.Example.com"]' });
+  const { env } = await import("../src/server.ts");
+  expect(env.ADMIN_EMAIL_PATTERNS).toEqual(["admin@example.com", "*@staff.example.com"]);
+  const { env: client } = await import("../src/client.ts");
+  expect(client).not.toHaveProperty("ADMIN_EMAIL_PATTERNS");
+});
+
+test.each([
+  '["*"]',
+  '["*@*"]',
+  '["admin@*.com"]',
+  '["not-an-email"]',
+  "null",
+  "{}",
+  "admin@example.com",
+])("rejects invalid admin configuration %s", async (patterns) => {
+  stubEnv({ ...valid, ADMIN_EMAIL_PATTERNS: patterns });
+  vi.spyOn(console, "warn").mockImplementation(() => {});
+  await expect(import("../src/server.ts")).rejects.toThrow("ADMIN_EMAIL_PATTERNS");
 });

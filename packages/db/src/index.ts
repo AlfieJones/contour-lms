@@ -27,4 +27,4 @@ export function getDb(url: string): Database {
 }
 
 export { schema };
-export { eq, sql } from "drizzle-orm";
+export { and, asc, eq, ne, sql, getTableColumns } from "drizzle-orm";

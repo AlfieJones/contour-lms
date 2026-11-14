@@ -29,7 +29,8 @@
     }
   },
   "scripts": {
-    "push": "drizzle-kit push",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
     "build": "tsdown",
     "check-types": "tsc --noEmit"
   },

@@ -7,7 +7,42 @@ export const clientVariables = {
     .startsWith("sb_publishable_", "Must be a Supabase publishable key (sb_publishable_...)."),
 };
 
+// Separate schema keeps email tools independent of database configuration.
+export const emailEnvSchema = z.object({
+  APP_URL: z.url({ protocol: /^https?$/ }).default("http://localhost:3000"),
+  EMAIL_SMTP_URL: z.url({ protocol: /^smtps?$/ }).default("smtp://127.0.0.1:55325"),
+  EMAIL_FROM: z.email().default("noreply@contour.local"),
+  EMAIL_FROM_NAME: z.string().trim().min(1).default("Contour"),
+});
+
 export const serverVariables = {
+  ADMIN_EMAIL_PATTERNS: z
+    .string()
+    .default("[]")
+    .transform((value, context) => {
+      try {
+        return z
+          .array(
+            z
+              .string()
+              .trim()
+              .toLowerCase()
+              .refine(
+                (pattern) =>
+                  z.email().safeParse(pattern.replace(/^\*@/, "staff@")).success &&
+                  !pattern.replace(/^\*@/, "").includes("*"),
+                "Use an email address or *@example.com.",
+              ),
+          )
+          .parse(JSON.parse(value));
+      } catch {
+        context.addIssue({
+          code: "custom",
+          message: "Must be a JSON array of emails or *@domain patterns.",
+        });
+        return z.NEVER;
+      }
+    }),
   DATABASE_URL: z.url({
     protocol: /^postgres(ql)?$/,
     hostname: /.+/,

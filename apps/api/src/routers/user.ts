@@ -1,5 +1,6 @@
 import { ORPCError } from "@orpc/server";
 import { publicOS } from "#procedures";
+import { loadAccount } from "#account";
 
 export const userRouter = {
   logout: publicOS.handler(async ({ context }) => {
@@ -12,6 +13,6 @@ export const userRouter = {
     const { data, error } = await context.supabase.auth.getUser();
     if (error) throw new ORPCError("UNAUTHORIZED", { cause: error });
 
-    return data.user;
+    return data.user ? loadAccount(data.user, context.adminEmailPatterns, context.db) : null;
   }),
 };
