@@ -26,22 +26,34 @@
       "development": "./src/auth-schema.ts",
       "types": "./dist/auth-schema.d.ts",
       "default": "./dist/auth-schema.js"
+    },
+    "./relations": {
+      "development": "./src/relations.ts",
+      "types": "./dist/relations.d.ts",
+      "default": "./dist/relations.js"
+    },
+    "./env": {
+      "development": "./src/env.ts",
+      "types": "./dist/env.d.ts",
+      "default": "./dist/env.js"
     }
   },
   "scripts": {
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
+    "seed": "node --conditions=development seed.ts",
     "build": "tsdown",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@lms/env": "workspace:*",
     "drizzle-orm": "1.0.0-rc.5",
-    "postgres": "4.1.1"
+    "postgres": "4.1.1",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@lms/config": "workspace:*",
-    "@next/env": "catalog:",
+    "@supabase/supabase-js": "catalog:",
     "@types/node": "catalog:",
     "drizzle-kit": "1.0.0-rc.5",
     "tsdown": "catalog:",

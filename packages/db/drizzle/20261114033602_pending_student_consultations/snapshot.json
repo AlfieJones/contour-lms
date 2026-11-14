@@ -1,0 +1,153 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "0ded5032-745f-47bf-bc6c-598ff96607f0",
+  "prevIds": ["92cb0a56-2a46-4308-87ff-3aac45f8988c"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "app", "consultations", "student_email"],
+      "writes": [
+        "s|col|app.consultations.student_email",
+        "n|col|app.consultations.student_email",
+        "e|col|app.consultations.student_email"
+      ],
+      "reads": ["n|tbl|app.consultations", "n|sch|app"]
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": ["column", "app", "consultations", "student_id"],
+      "writes": ["s|colprop|app.consultations.student_id.notNull"],
+      "reads": ["n|tbl|app.consultations", "n|sch|app", "n|col|app.consultations.student_id"],
+      "sqlHash": "f1764a5b837b3190"
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "consultations", "consultations_pending_email_idx"],
+      "writes": [
+        "s|idx|app.consultations_pending_email_idx",
+        "n|idx|app.consultations_pending_email_idx",
+        "e|idx|app.consultations_pending_email_idx",
+        "n|rel|app.consultations_pending_email_idx"
+      ],
+      "reads": ["n|tbl|app.consultations", "n|sch|app", "n|col|app.consultations.student_email"]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "app", "consultations"],
+      "writes": [
+        "s|ck|app.consultations.consultations_student_check",
+        "n|ck|app.consultations.consultations_student_check",
+        "e|ck|app.consultations.consultations_student_check",
+        "n|con|app.consultations.consultations_student_check"
+      ],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|col|app.consultations.student_id",
+        "n|col|app.consultations.student_email"
+      ]
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": ["table", "app", "consultations"],
+      "writes": [
+        "s|ck|app.consultations.consultations_email_check",
+        "n|ck|app.consultations.consultations_email_check",
+        "e|ck|app.consultations.consultations_email_check",
+        "n|con|app.consultations.consultations_email_check"
+      ],
+      "reads": ["n|tbl|app.consultations", "n|sch|app", "n|col|app.consultations.student_email"]
+    },
+    {
+      "statementType": "alter_check",
+      "statementTarget": ["table", "app", "consultations"],
+      "writes": ["s|ck|app.consultations.consultations_names_check"],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|col|app.consultations.first_name",
+        "e|col|app.consultations.first_name",
+        "e|col|app.consultations.last_name"
+      ],
+      "sqlHash": "e3d535d4f72dad95"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "consultations",
+        "name": "student_email",
+        "type": "varchar(255)",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "consultations",
+        "name": "consultations_pending_email_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "student_email",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": "\"student_id\" is null",
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "consultations",
+        "name": "consultations_student_check",
+        "value": "\"student_id\" is not null or (\"student_email\" is not null and length(trim(\"student_email\")) > 0)",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "consultations",
+        "name": "consultations_email_check",
+        "value": "\"student_email\" = lower(trim(\"student_email\"))",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"app\",\"consultations\",\"student_id\"]",
+      "set": {
+        "notNull": false
+      }
+    },
+    {
+      "op": "alter",
+      "key": "checks\u0000[\"app\",\"consultations\",\"consultations_names_check\"]",
+      "set": {
+        "value": "length(trim(\"first_name\")) > 0"
+      }
+    }
+  ]
+}

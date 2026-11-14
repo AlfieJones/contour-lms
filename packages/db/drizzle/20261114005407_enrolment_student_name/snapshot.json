@@ -1,0 +1,37 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "3f9f47dc-66cf-46bf-970e-459964a0eb8a",
+  "prevIds": ["5ed204fd-9fc0-43bd-b3ed-f9d0ae5290b5"],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": ["column", "app", "enrolments", "student_name"],
+      "writes": [
+        "s|col|app.enrolments.student_name",
+        "n|col|app.enrolments.student_name",
+        "e|col|app.enrolments.student_name"
+      ],
+      "reads": ["n|tbl|app.enrolments", "n|sch|app"]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "enrolments",
+        "name": "student_name",
+        "type": "varchar(100)",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "generate": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "env": ["DATABASE_URL"]
+    },
+    "migrate": {
+      "cache": false,
+      "env": ["DATABASE_URL"]
+    }
+  }
+}
