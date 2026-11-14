@@ -1,0 +1,52 @@
+.github/workflows/check.yml
+  h_18044dd1b61a81 34-59
+.gitignore
+  h_18044dd1b61a81 17-19
+README.md
+  h_18044dd1b61a81 41,45-80
+apps/api/tests/consultation.integration.test.ts
+  h_18044dd1b61a81 7-10,539,550
+apps/web/e2e/auth.spec.ts
+  h_18044dd1b61a81 1-41
+apps/web/e2e/consultation.spec.ts
+  h_18044dd1b61a81 1-69
+apps/web/e2e/fixtures.ts
+  h_18044dd1b61a81 1-45
+apps/web/next.config.ts
+  h_18044dd1b61a81 16-21
+apps/web/package.json
+  h_18044dd1b61a81 13,37,42-43
+apps/web/playwright.config.ts
+  h_18044dd1b61a81 1-25
+apps/web/testing/create-accounts.ts
+  h_18044dd1b61a81 1-29
+apps/web/testing/test-accounts.ts
+  h_18044dd1b61a81 1-68
+apps/web/tests/consultation-scheduling.test.ts
+  h_18044dd1b61a81 2,15,25,31,39,47,59,66,75,82
+apps/web/tests/orpc-query.test.ts
+  h_18044dd1b61a81 2,14,50,67,108,136,156,194
+apps/web/tsconfig.json
+  h_18044dd1b61a81 23-26
+apps/web/vitest.config.ts
+  h_18044dd1b61a81 1-6
+package.json
+  h_18044dd1b61a81 27-30
+pnpm-lock.yaml
+  h_18044dd1b61a81 182-184,355,372-374,390-392,1401-1405,2855-2864,3881-3884,4767,4786,4881-4886
+pnpm-workspace.yaml
+  h_18044dd1b61a81 35
+scripts/local.mjs
+  h_18044dd1b61a81 7-9,60-68,71-77,79-100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "531d82e6a66767aabb8520ed14a630601b55cdbc",
+  "prompts": {},
+  "humans": {
+    "h_18044dd1b61a81": {
+      "author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
