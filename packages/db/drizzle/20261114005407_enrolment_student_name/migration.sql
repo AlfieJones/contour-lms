@@ -1,1 +1,0 @@
-ALTER TABLE "app"."enrolments" ADD COLUMN "student_name" varchar(100);

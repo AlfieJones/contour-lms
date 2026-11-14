@@ -1,2 +1,0 @@
-ALTER TABLE "app"."consultations" ADD COLUMN "duration_minutes" smallint DEFAULT 30 NOT NULL;--> statement-breakpoint
-ALTER TABLE "app"."consultations" ADD CONSTRAINT "consultations_duration_check" CHECK ("duration_minutes" in (30, 60, 120));

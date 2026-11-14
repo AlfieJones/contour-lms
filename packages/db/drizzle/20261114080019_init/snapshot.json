@@ -1,0 +1,1265 @@
+{
+  "type": "base",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "f4dccfef-187b-4f94-8794-bbaa8c65b7e7",
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
+  "footprints": [
+    {
+      "statementType": "create_schema",
+      "statementTarget": ["schema", "app"],
+      "writes": ["s|sch|app", "n|sch|app", "e|sch|app"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "consultation_emails"],
+      "writes": [
+        "s|tbl|app.consultation_emails",
+        "n|tbl|app.consultation_emails",
+        "e|tbl|app.consultation_emails",
+        "n|rel|app.consultation_emails",
+        "n|type|app.consultation_emails",
+        "n|rel|app.consultation_emails_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "consultations"],
+      "writes": [
+        "s|tbl|app.consultations",
+        "n|tbl|app.consultations",
+        "e|tbl|app.consultations",
+        "n|rel|app.consultations",
+        "n|type|app.consultations",
+        "n|rel|app.consultations_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "enrolments"],
+      "writes": [
+        "s|tbl|app.enrolments",
+        "n|tbl|app.enrolments",
+        "e|tbl|app.enrolments",
+        "n|rel|app.enrolments",
+        "n|type|app.enrolments",
+        "n|rel|app.enrolments_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "teacher_availability"],
+      "writes": [
+        "s|tbl|app.teacher_availability",
+        "n|tbl|app.teacher_availability",
+        "e|tbl|app.teacher_availability",
+        "n|rel|app.teacher_availability",
+        "n|type|app.teacher_availability",
+        "n|rel|app.teacher_availability_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "user_roles"],
+      "writes": [
+        "s|tbl|app.user_roles",
+        "n|tbl|app.user_roles",
+        "e|tbl|app.user_roles",
+        "n|rel|app.user_roles",
+        "n|type|app.user_roles",
+        "n|rel|app.user_roles_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "app",
+        "consultation_emails",
+        "consultation_emails_booking_sequence_recipient_idx"
+      ],
+      "writes": [
+        "s|idx|app.consultation_emails_booking_sequence_recipient_idx",
+        "n|idx|app.consultation_emails_booking_sequence_recipient_idx",
+        "e|idx|app.consultation_emails_booking_sequence_recipient_idx",
+        "n|rel|app.consultation_emails_booking_sequence_recipient_idx"
+      ],
+      "reads": [
+        "n|tbl|app.consultation_emails",
+        "n|sch|app",
+        "n|col|app.consultation_emails.consultation_id",
+        "n|col|app.consultation_emails.sequence",
+        "n|col|app.consultation_emails.recipient"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "consultations", "consultations_student_datetime_idx"],
+      "writes": [
+        "s|idx|app.consultations_student_datetime_idx",
+        "n|idx|app.consultations_student_datetime_idx",
+        "e|idx|app.consultations_student_datetime_idx",
+        "n|rel|app.consultations_student_datetime_idx"
+      ],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|col|app.consultations.student_id",
+        "n|col|app.consultations.scheduled_at",
+        "n|col|app.consultations.id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "consultations", "consultations_teacher_datetime_idx"],
+      "writes": [
+        "s|idx|app.consultations_teacher_datetime_idx",
+        "n|idx|app.consultations_teacher_datetime_idx",
+        "e|idx|app.consultations_teacher_datetime_idx",
+        "n|rel|app.consultations_teacher_datetime_idx"
+      ],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|col|app.consultations.teacher_id",
+        "n|col|app.consultations.scheduled_at",
+        "n|col|app.consultations.id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "consultations", "consultations_datetime_idx"],
+      "writes": [
+        "s|idx|app.consultations_datetime_idx",
+        "n|idx|app.consultations_datetime_idx",
+        "e|idx|app.consultations_datetime_idx",
+        "n|rel|app.consultations_datetime_idx"
+      ],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|col|app.consultations.scheduled_at",
+        "n|col|app.consultations.id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "consultations", "consultations_pending_email_idx"],
+      "writes": [
+        "s|idx|app.consultations_pending_email_idx",
+        "n|idx|app.consultations_pending_email_idx",
+        "e|idx|app.consultations_pending_email_idx",
+        "n|rel|app.consultations_pending_email_idx"
+      ],
+      "reads": ["n|tbl|app.consultations", "n|sch|app", "n|col|app.consultations.student_email"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "enrolments", "enrolments_teacher_email_idx"],
+      "writes": [
+        "s|idx|app.enrolments_teacher_email_idx",
+        "n|idx|app.enrolments_teacher_email_idx",
+        "e|idx|app.enrolments_teacher_email_idx",
+        "n|rel|app.enrolments_teacher_email_idx"
+      ],
+      "reads": [
+        "n|tbl|app.enrolments",
+        "n|sch|app",
+        "n|col|app.enrolments.teacher_id",
+        "n|col|app.enrolments.student_email"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "enrolments", "enrolments_student_idx"],
+      "writes": [
+        "s|idx|app.enrolments_student_idx",
+        "n|idx|app.enrolments_student_idx",
+        "e|idx|app.enrolments_student_idx",
+        "n|rel|app.enrolments_student_idx"
+      ],
+      "reads": ["n|tbl|app.enrolments", "n|sch|app", "n|col|app.enrolments.student_id"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": ["index", "app", "enrolments", "enrolments_pending_email_idx"],
+      "writes": [
+        "s|idx|app.enrolments_pending_email_idx",
+        "n|idx|app.enrolments_pending_email_idx",
+        "e|idx|app.enrolments_pending_email_idx",
+        "n|rel|app.enrolments_pending_email_idx"
+      ],
+      "reads": ["n|tbl|app.enrolments", "n|sch|app", "n|col|app.enrolments.student_email"]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "app",
+        "teacher_availability",
+        "teacher_availability_teacher_idx"
+      ],
+      "writes": [
+        "s|idx|app.teacher_availability_teacher_idx",
+        "n|idx|app.teacher_availability_teacher_idx",
+        "e|idx|app.teacher_availability_teacher_idx",
+        "n|rel|app.teacher_availability_teacher_idx"
+      ],
+      "reads": [
+        "n|tbl|app.teacher_availability",
+        "n|sch|app",
+        "n|col|app.teacher_availability.teacher_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "consultation_emails"],
+      "writes": [
+        "s|fk|app.consultation_emails.consultation_emails_consultation_id_consultations_id_fkey",
+        "n|fk|app.consultation_emails.consultation_emails_consultation_id_consultations_id_fkey",
+        "e|fk|app.consultation_emails.consultation_emails_consultation_id_consultations_id_fkey",
+        "n|con|app.consultation_emails.consultation_emails_consultation_id_consultations_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.consultation_emails",
+        "n|sch|app",
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|col|app.consultation_emails.consultation_id",
+        "n|col|app.consultations.id",
+        "e|uniqueness|app.consultations.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "consultations"],
+      "writes": [
+        "s|fk|app.consultations.consultations_student_id_users_id_fkey",
+        "n|fk|app.consultations.consultations_student_id_users_id_fkey",
+        "e|fk|app.consultations.consultations_student_id_users_id_fkey",
+        "n|con|app.consultations.consultations_student_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.consultations.student_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "consultations"],
+      "writes": [
+        "s|fk|app.consultations.consultations_teacher_id_users_id_fkey",
+        "n|fk|app.consultations.consultations_teacher_id_users_id_fkey",
+        "e|fk|app.consultations.consultations_teacher_id_users_id_fkey",
+        "n|con|app.consultations.consultations_teacher_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.consultations",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.consultations.teacher_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "enrolments"],
+      "writes": [
+        "s|fk|app.enrolments.enrolments_teacher_id_users_id_fkey",
+        "n|fk|app.enrolments.enrolments_teacher_id_users_id_fkey",
+        "e|fk|app.enrolments.enrolments_teacher_id_users_id_fkey",
+        "n|con|app.enrolments.enrolments_teacher_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.enrolments",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.enrolments.teacher_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "enrolments"],
+      "writes": [
+        "s|fk|app.enrolments.enrolments_student_id_users_id_fkey",
+        "n|fk|app.enrolments.enrolments_student_id_users_id_fkey",
+        "e|fk|app.enrolments.enrolments_student_id_users_id_fkey",
+        "n|con|app.enrolments.enrolments_student_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.enrolments",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.enrolments.student_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "teacher_availability"],
+      "writes": [
+        "s|fk|app.teacher_availability.teacher_availability_teacher_id_users_id_fkey",
+        "n|fk|app.teacher_availability.teacher_availability_teacher_id_users_id_fkey",
+        "e|fk|app.teacher_availability.teacher_availability_teacher_id_users_id_fkey",
+        "n|con|app.teacher_availability.teacher_availability_teacher_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.teacher_availability",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.teacher_availability.teacher_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "user_roles"],
+      "writes": [
+        "s|fk|app.user_roles.user_roles_user_id_users_id_fkey",
+        "n|fk|app.user_roles.user_roles_user_id_users_id_fkey",
+        "e|fk|app.user_roles.user_roles_user_id_users_id_fkey",
+        "n|con|app.user_roles.user_roles_user_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.user_roles",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.user_roles.user_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    }
+  ],
+  "ddl": [
+    {
+      "name": "app",
+      "entityType": "schemas"
+    },
+    {
+      "schema": "app",
+      "name": "consultation_emails",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "app",
+      "name": "consultations",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "app",
+      "name": "enrolments",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "app",
+      "name": "teacher_availability",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "app",
+      "name": "user_roles",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "consultation_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "sequence",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "recipient",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "details",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "sent_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "student_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "student_email",
+      "type": "varchar(255)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "teacher_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "first_name",
+      "type": "varchar(100)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "last_name",
+      "type": "varchar(100)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "reason",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "duration_minutes",
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "30",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "scheduled_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "calendar_sequence",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "status",
+      "type": "varchar(20)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'scheduled'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "teacher_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "student_email",
+      "type": "varchar(255)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "student_name",
+      "type": "varchar(100)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "student_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "teacher_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "day_of_week",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "start_minute",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "end_minute",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "user_roles",
+      "name": "user_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "user_roles",
+      "name": "role",
+      "type": "varchar(20)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'student'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "consultation_emails_booking_sequence_recipient_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "consultation_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "sequence",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "recipient",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_student_datetime_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "student_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "scheduled_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_teacher_datetime_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "teacher_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "scheduled_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_datetime_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "scheduled_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_pending_email_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "student_email",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "\"student_id\" is null",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_teacher_email_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "teacher_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "student_email",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_student_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "student_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_pending_email_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "student_email",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "\"student_id\" is null",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "teacher_availability_teacher_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "teacher_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "consultation_emails_consultation_id_consultations_id_fkey",
+      "nameExplicit": false,
+      "columns": ["consultation_id"],
+      "schemaTo": "app",
+      "tableTo": "consultations",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_student_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": ["student_id"],
+      "schemaTo": "auth",
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_teacher_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": ["teacher_id"],
+      "schemaTo": "auth",
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_teacher_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": ["teacher_id"],
+      "schemaTo": "auth",
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_student_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": ["student_id"],
+      "schemaTo": "auth",
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "teacher_availability_teacher_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": ["teacher_id"],
+      "schemaTo": "auth",
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "user_roles",
+      "name": "user_roles_user_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": ["user_id"],
+      "schemaTo": "auth",
+      "tableTo": "users",
+      "columnsTo": ["id"],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "consultation_emails_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "teacher_availability_pkey",
+      "columns": ["id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "app",
+      "table": "user_roles",
+      "name": "user_roles_pkey",
+      "columns": ["user_id"],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "app",
+      "table": "consultation_emails",
+      "name": "consultation_emails_sequence_check",
+      "value": "\"sequence\" >= 0",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_student_check",
+      "value": "\"student_id\" is not null or (\"student_email\" is not null and length(trim(\"student_email\")) > 0)",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_email_check",
+      "value": "\"student_email\" = lower(trim(\"student_email\"))",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_status_check",
+      "value": "\"status\" in ('scheduled', 'completed', 'cancelled')",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_names_check",
+      "value": "length(trim(\"first_name\")) > 0",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_duration_check",
+      "value": "\"duration_minutes\" in (30, 60, 120)",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_calendar_sequence_check",
+      "value": "\"calendar_sequence\" >= 0",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "consultations",
+      "name": "consultations_reason_check",
+      "value": "length(trim(\"reason\")) between 1 and 2000",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "enrolments",
+      "name": "enrolments_email_check",
+      "value": "\"student_email\" = lower(trim(\"student_email\"))",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "teacher_availability_day_check",
+      "value": "\"day_of_week\" between 0 and 6",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "teacher_availability",
+      "name": "teacher_availability_time_check",
+      "value": "\"start_minute\" >= 0 and \"end_minute\" <= 1440 and \"start_minute\" < \"end_minute\" and \"start_minute\" % 30 = 0 and \"end_minute\" % 30 = 0",
+      "entityType": "checks"
+    },
+    {
+      "schema": "app",
+      "table": "user_roles",
+      "name": "user_roles_role_check",
+      "value": "\"role\" in ('student', 'teacher')",
+      "entityType": "checks"
+    }
+  ]
+}

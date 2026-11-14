@@ -68,6 +68,12 @@ migrations, and direct access to PostgreSQL features. The
 [schema](packages/db/src/schema.ts) and [migrations](packages/db/drizzle/) are in
 `packages/db`.
 
+The initial migration is generated from the Drizzle schema. A separate custom SQL
+migration creates the Supabase avatar bucket and its Storage policies. Generate
+future schema changes with `pnpm db:generate`. This migration history is a
+fresh-install baseline; databases using the previous history need to be recreated
+before applying it.
+
 Foreign keys and check constraints protect stored data. Lists are paginated,
 calendar reads have bounded date ranges, and common queries have indexes.
 Booking writes lock the teacher's schedule within a transaction and recheck
@@ -76,7 +82,7 @@ availability before saving, preventing overlapping bookings through the API.
 ### Authorization
 
 Application tables use API-level authorization rather than RLS. They sit in a
-private `app` schema with access revoked from browser database roles. The local
+private `app` schema that is not exposed through the Data API. The local
 Supabase Data API is disabled. Procedures verify the user, role, and record access.
 Avatar uploads use separate owner-scoped Storage RLS policies.
 
