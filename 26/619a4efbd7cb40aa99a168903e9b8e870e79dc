@@ -1,0 +1,54 @@
+apps/web/src/app/(auth)/forgot-password/page.tsx
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 14-18
+  s_c7b1fd739dbd86::t_ec7169f6321797 3-4,19-21,24-25,43,52,54-56,73
+apps/web/src/components/consultation-scheduler.tsx
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 112-114,116-117,123-125
+  s_c7b1fd739dbd86::t_69ef5fb5350ed1 4,19,115,130-133,194,197,203,206,221,259,386,464,519,594-606,610,615-620,640,670-673,697,707,722
+  s_c7b1fd739dbd86::t_47254368350685 3,70-77,118-122,126-129,211-212,225-227,229,567,607-609,611-614,669,674-677,700,702-703
+apps/web/src/app/(dashboard)/settings/account-settings.tsx
+  s_c7b1fd739dbd86::t_feaeddba7e9097 65-67,76-77,124,187,189-191,224-228,237,240-241,251,260,282,284-286,296-297,299-302,305,317,319-321
+  s_c7b1fd739dbd86::t_ec7169f6321797 3-4,391
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 60-64,303-304
+apps/web/src/app/(auth)/auth/mfa/mfa-challenge.tsx
+  s_c7b1fd739dbd86::t_69ef5fb5350ed1 29-31,60
+  s_c7b1fd739dbd86::t_ec7169f6321797 3-4,26-28,32-33,35,39-40,49,55-57,78,80-85,113,117,125
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 20-25
+apps/web/src/app/(dashboard)/settings/availability/teacher-availability.tsx
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 3-4,107-117,139,170,211,213,234,254,270,318,368
+pnpm-workspace.yaml
+  s_c6bd3a8f1e0598::t_ef73b0ecdebb3d 38
+apps/web/src/components/auth-form.tsx
+  s_c7b1fd739dbd86::t_ec7169f6321797 3-4,8,18-20,23-26,71,74,89,91-93,101,103-105,129
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 13-17,75-85
+apps/web/package.json
+  s_c6bd3a8f1e0598::t_ef73b0ecdebb3d 33
+apps/web/src/app/(dashboard)/students/student-enrolments.tsx
+  s_c7b1fd739dbd86::t_ec7169f6321797 3-4,46-49,113-114,116,156,168,171,173-175,197
+  s_c7b1fd739dbd86::t_82375e99992558 178
+pnpm-lock.yaml
+  s_c6bd3a8f1e0598::t_be64c448c6a528 227-229,368-370,2936-2945,5011-5016
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26619a4efbd7cb40aa99a168903e9b8e870e79dc",
+  "prompts": {},
+  "sessions": {
+    "s_c6bd3a8f1e0598": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d906-28fc-7751-ab67-8118b84354e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_c7b1fd739dbd86": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d907-00d0-7d42-9840-dd3598b137ba",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
