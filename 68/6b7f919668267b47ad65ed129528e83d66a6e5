@@ -1,0 +1,21 @@
+README.md
+  s_98f5c158459d98::t_df7a81e22a6906 97
+apps/web/src/app/(dashboard)/settings/availability/teacher-availability.tsx
+  s_98f5c158459d98::t_df7a81e22a6906 39,75-77,104,180,203,225
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "686b7f919668267b47ad65ed129528e83d66a6e5",
+  "prompts": {},
+  "sessions": {
+    "s_98f5c158459d98": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d917-c365-7b90-a6e9-f3a2ea47c837",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
