@@ -1,0 +1,46 @@
+apps/web/src/lib/orpc.ts
+  s_c6bd3a8f1e0598::t_f607be0954946a 5,21
+apps/web/src/components/consultation-dashboard.tsx
+  s_c6bd3a8f1e0598::t_f607be0954946a 37,48-49,69,71-72,76-77,79-83,85-86,88-91,93-94,121,123-151
+  s_c6bd3a8f1e0598::t_664c91b16ca95b 70,78,84,92,118,120,122
+  s_c6bd3a8f1e0598::t_79803522add8e8 5,119
+  s_c6bd3a8f1e0598::t_4b91a2d2615964 73-75
+  s_c6bd3a8f1e0598::t_4662efd74fc020 152
+apps/web/src/app/(dashboard)/settings/account-settings.tsx
+  s_c6bd3a8f1e0598::t_f607be0954946a 38-53
+  s_c6bd3a8f1e0598::t_6d79faca179db2 54-56
+apps/web/src/app/(dashboard)/settings/availability/teacher-availability.tsx
+  s_c7b1fd739dbd86::t_58ffa1a57c311a 111-112
+  s_c6bd3a8f1e0598::t_f607be0954946a 4,115-123
+apps/web/src/app/(dashboard)/students/student-enrolments.tsx
+  s_c6bd3a8f1e0598::t_f607be0954946a 49-74
+  s_c6bd3a8f1e0598::t_424eb1444df843 75-77
+apps/web/src/lib/orpc.server.ts
+  s_c6bd3a8f1e0598::t_f607be0954946a 10,26
+apps/web/src/app/(dashboard)/admin/users/user-management.tsx
+  s_c6bd3a8f1e0598::t_f607be0954946a 24-26,36-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cff41806f2ce7e923bf4acfee8ae9915196506d8",
+  "prompts": {},
+  "sessions": {
+    "s_c6bd3a8f1e0598": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d906-28fc-7751-ab67-8118b84354e6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_c7b1fd739dbd86": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d907-00d0-7d42-9840-dd3598b137ba",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
