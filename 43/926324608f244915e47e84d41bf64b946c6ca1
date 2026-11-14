@@ -1,0 +1,32 @@
+.husky/pre-commit
+  s_feec923f2bb2b8::t_93f74300e1ac1e 1
+apps/web/package.json
+  s_bdde23724c7b74::t_c19d47b97a2f88 17
+  s_bdde23724c7b74::t_97aaa241be39e8 34
+  s_bdde23724c7b74::t_daf158bea80bc0 33
+  s_bdde23724c7b74::t_6d29682fd20224 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "43926324608f244915e47e84d41bf64b946c6ca1",
+  "prompts": {},
+  "sessions": {
+    "s_bdde23724c7b74": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d866-269d-7c11-be97-d9ca8e03cab8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_feec923f2bb2b8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d8fb-e421-7f10-a6cf-8b31362d702a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
