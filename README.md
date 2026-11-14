@@ -143,8 +143,14 @@ covers browser date and slot helpers.
 
 ```sh
 pnpm test   # Unit tests
-pnpm ready  # Build, types, tests, lint, and formatting
+pnpm ready  # Package boundaries, build, types, tests, lint, and formatting
 ```
+
+GitHub Actions runs each of these checks separately on pushes and pull requests.
+The **Checks** workflow can also be run manually from the Actions tab. CI uses
+Node.js 24, the pnpm version pinned in `package.json`, and a frozen lockfile.
+Builds and unit tests use placeholder environment values; no secrets or running
+Supabase instance are required.
 
 I also ran local integration checks for login/roles, student isolation, admin
 visibility, booking changes, calendar emails, and repeatable seeding against real

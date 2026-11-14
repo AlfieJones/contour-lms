@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "emails:generate": "pnpm --filter @lms/email build && node scripts/emails.mjs",
-    "ready": "turbo run build check-types test lint format",
+    "ready": "pnpm check:boundaries && turbo run build check-types test lint format",
     "dev": "turbo watch dev --filter=@lms/web",
     "supabase:start": "node scripts/supabase.mjs",
     "supabase:stop": "supabase stop",
@@ -34,10 +34,8 @@
     "turbo": "catalog:"
   },
   "lint-staged": {
-    "*": [
-      "oxlint --fix",
-      "oxfmt --no-error-on-unmatched-pattern"
-    ]
+    "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}": "oxlint --fix",
+    "*": "oxfmt --no-error-on-unmatched-pattern"
   },
   "engines": {
     "node": ">=24"
