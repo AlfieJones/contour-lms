@@ -1,0 +1,77 @@
+packages/db/src/schema.ts
+  s_472c55bd4a8a02::t_7ae0b2cb8c01a8 7,37-39,45,73,122
+  s_9487b4224e2d8e::t_d89e258a0abe2c 71,85-87,90-100,105-109,144,157
+  s_9487b4224e2d8e::t_ce8e390860a0b9 6,47,74,79-84,88-89,101-104,110,141-142,150-151
+  s_9487b4224e2d8e::t_7e4b353010f822 5,57-59,61-62,65-66,68-70,72,111-113,138-140,143,145-149,152-156,158-159
+packages/db/drizzle/20261114005407_enrolment_student_name/migration.sql
+  s_fae8b8c2e7ae53::t_75ac2b0d813954 1
+packages/db/src/index.ts
+  s_0f7454e8d92b0b::t_083cafe8aa5f69 33
+packages/db/drizzle/20261114044852_consultation_calendar_emails/snapshot.json
+  s_9487b4224e2d8e::t_f3ab50720f0506 6,10,19,23,29,55,74,81,267,270,282,308
+  s_9487b4224e2d8e::t_771df850ca898f 1-5,7-9,11-18,20-22,24-28,30-54,56-73,75-80,82-266,268-269,271-281,283-307
+packages/db/drizzle/20261114005407_enrolment_student_name/snapshot.json
+  s_fae8b8c2e7ae53::t_75ac2b0d813954 1-37
+packages/db/drizzle/20261114041201_profile_avatars/snapshot.json
+  s_43889123d9301a::t_dc7cbec659cf1c 6,9
+  s_43889123d9301a::t_6f54a42f921e76 1-5,7-8
+packages/db/drizzle/20261114005231_consultation_duration/snapshot.json
+  s_fae8b8c2e7ae53::t_01814ce53d6af7 1-58
+packages/db/drizzle/20261114033602_pending_student_consultations/snapshot.json
+  s_9487b4224e2d8e::t_51157f21d85081 6-153
+  s_9487b4224e2d8e::t_a13abef6714e55 1-5
+packages/db/drizzle/20261114041201_profile_avatars/migration.sql
+  s_43889123d9301a::t_75281cecf7878c 1-19
+packages/db/drizzle/20261114044852_consultation_calendar_emails/migration.sql
+  s_9487b4224e2d8e::t_771df850ca898f 1-15
+packages/db/drizzle/20261114005231_consultation_duration/migration.sql
+  s_fae8b8c2e7ae53::t_01814ce53d6af7 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e796aee88b87135ab22e55208e08928f5d39012c",
+  "prompts": {},
+  "sessions": {
+    "s_0f7454e8d92b0b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d86e-5143-7f11-9571-7fdd8fb9f3cf",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_43889123d9301a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d83f-d210-7802-95e3-d1c64be1613b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_472c55bd4a8a02": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d77c-88b3-74a0-aeb0-6ebfda01c781",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_9487b4224e2d8e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d85b-022a-7ba2-9db6-93c6867fd9a2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_fae8b8c2e7ae53": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d788-72b3-7641-8ec6-f6a199bc4531",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
