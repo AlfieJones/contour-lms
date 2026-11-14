@@ -1,0 +1,21 @@
+apps/api/src/index.ts
+  s_b75b2d6df9d33d::t_e7c152f4e932df 3
+supabase/config.toml
+  s_b75b2d6df9d33d::t_e7c152f4e932df 43-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4ccb2909224a607cd3beb527def30b17f508d8d4",
+  "prompts": {},
+  "sessions": {
+    "s_b75b2d6df9d33d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d918-d2a6-7cf0-a7f2-682237262a73",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
