@@ -1,84 +1,166 @@
-# Run locally
+# Contour mini-LMS
 
-Requires Node.js 24+, pnpm and Docker running. Run commands from the repo root.
+## Run
+
+Requires [Node.js](https://nodejs.org/) 24+, [pnpm](https://pnpm.io/) 12.18.0, and
+[Docker](https://www.docker.com/). From the repository root:
 
 ```sh
 pnpm install
-pnpm setup:local
+pnpm supabase:start
+pnpm db:migrate
+pnpm seed
 pnpm dev
 ```
 
-Setup generates auth emails, starts Supabase, writes `.env.local` and applies migrations.
+App: **http://localhost:3000**
 
-Open http://localhost:3000. Sign up with any email and confirm it using the local
-inbox at http://127.0.0.1:55324. Use the same browser to open the confirmation link.
+`supabase:start` starts Supabase and creates `apps/web/.env.local` from
+`.env.example`, filling in the local database URL and Supabase key. Existing
+settings are preserved. `db:migrate` applies the schema. `seed` creates the demo
+accounts, enrolments, teacher availability, and sample consultations.
 
-Sign up as `admin@example.com` for admin access. Other accounts are students.
-Change `ADMIN_EMAIL_PATTERNS` in `.env.local` and restart the app to change admins.
-Admins have teacher access and can make other teachers on the Admin page. Teachers enrol students by email on
-Students. Enrolled students can book with their teachers. Teachers can also book consultations for their
-verified, enrolled students from My consultations by choosing a student in the booking details. All emails go to the local inbox.
+### Demo accounts
 
-## Consultation calendar prototype
+| Role           | Email                  | Password          |
+| -------------- | ---------------------- | ----------------- |
+| Student        | `student@example.com`  | `ContourDemo123!` |
+| Second student | `student2@example.com` | `ContourDemo123!` |
+| Teacher        | `teacher@example.com`  | `ContourDemo123!` |
+| Admin          | `admin@example.com`    | `ContourDemo123!` |
 
-The student overview includes a COSS calendar with date and time selection, timezones,
-teacher selection, booking confirmation and `.ics` downloads. Students can reschedule
-scheduled consultations or book again from completed and cancelled consultations.
-Rebooking copies the previous details into a new booking; rescheduling updates the
-existing booking only when confirmed.
+Emails are confirmed. Both students are enrolled with the teacher. Availability
+is Monday–Friday, 9am–5pm Perth time. There are two upcoming consultations, one
+completed, and one cancelled.
 
-Example slots are 30 minutes, Monday–Friday, 9am–5pm in Perth, with one hour's notice
-and a 90-day booking window. These availability rules currently run in the browser.
-Before launch, add server-side teacher availability and atomic conflict checks,
-calendar integrations, booking notifications and reminders. Calendar downloads are
-static and do not sync later booking changes.
+1. As the first student, book, reschedule, mark complete/incomplete, and cancel a
+   consultation. Actions are in the consultation menu.
+2. As the second student, check that the first student's consultations are hidden.
+3. As admin, open **Admin → Consultations** to see all consultations.
+4. To test signup, create an account and confirm it at http://127.0.0.1:55324 using
+   the same browser. Enrol that email from the teacher's account before booking.
 
-## Checks
+Run `pnpm seed` again to restore the demo passwords and fixtures. Other accounts
+and additional bookings are preserved. Log in again after reseeding.
 
-```sh
-pnpm test              # Unit tests
-pnpm test:integration  # Database/API tests; keep Supabase running
-pnpm ready             # Build, types, tests, lint and formatting
+## Implementation and choices
+
+The required stack is [Next.js](https://nextjs.org/) 16 with the App Router,
+[TypeScript](https://www.typescriptlang.org/), and
+[Supabase](https://supabase.com/docs)/[PostgreSQL](https://www.postgresql.org/).
+
+### API contract
+
+[oRPC](https://orpc.dev/) is the contract between the frontend and backend.
+[Zod](https://zod.dev/) validates inputs at runtime; TypeScript infers the client inputs and return
+values from the router.
+
+Browser calls go through `/api/rpc`. Database queries and business rules live in
+backend procedures with shared authentication and role checks, plus record-level
+ownership checks. This gives me one boundary to audit instead of database access
+scattered across pages and Server Actions. Type safety helps during development;
+validation and authorization protect requests at runtime.
+
+### Drizzle
+
+I chose [Drizzle](https://orm.drizzle.team/docs/overview) because I know it well. It gives me typed queries, explicit SQL
+migrations, and direct access to PostgreSQL features. The
+[schema](packages/db/src/schema.ts) and [migrations](packages/db/drizzle/) are in
+`packages/db`.
+
+Foreign keys and check constraints protect stored data. Lists are paginated,
+calendar reads have bounded date ranges, and common queries have indexes.
+Booking writes lock the teacher's schedule within a transaction and recheck
+availability before saving, preventing overlapping bookings through the API.
+
+### Authorization
+
+Application tables use API-level authorization rather than RLS. They sit in a
+private `app` schema with access revoked from browser database roles. The local
+Supabase Data API is disabled. Procedures verify the user, role, and record access.
+Avatar uploads use separate owner-scoped Storage RLS policies.
+
+Admin access requires a verified email matching this server-only setting in
+`apps/web/.env.local`:
+
+```dotenv
+ADMIN_EMAIL_PATTERNS='["admin@example.com"]'
 ```
 
-## Database changes
+Student and teacher roles are stored in the database. Admins also have teacher
+access. The allowlist keeps assessment setup simple; in production, I would store
+admin as a database role with controlled assignment and an audit trail.
 
-After editing `packages/db/src/schema.ts`:
+### React Query and SSR
+
+[TanStack React Query](https://tanstack.com/query/latest/docs/framework/react/overview)
+handles caching, loading/error states, mutations, and
+invalidation. Completion updates are optimistic and roll back on failure.
+
+Server pages prefetch by calling the oRPC router directly, with the same validation
+and authorization. This avoids an HTTP round trip to the app's own API. Independent
+prefetches run in parallel.
+
+Results hydrate React Query with matching browser query keys. A 60-second stale
+time avoids immediately fetching the same data again. New calendar ranges and
+interactions still fetch through the API. Server caches are request-scoped;
+oRPC serialization preserves values such as `Date` across hydration.
+
+### UI
+
+[coss UI](https://coss.com/ui/docs) uses [Base UI](https://base-ui.com/) and
+[Tailwind](https://tailwindcss.com/) with a [shadcn](https://ui.shadcn.com/)-style
+approach to owning component source. I chose it for accessible components and a
+consistent design without spending the assessment on custom CSS.
+
+### Email templates
+
+I use [React Email](https://react.email/docs/introduction) for the templates in
+`packages/email`. Typed props and shared React components make them easier to
+maintain than hand-written HTML strings. Auth, enrolment, and consultation emails
+share a layout; application emails include HTML and plain-text versions.
+
+The core flows work, including calendar invitations and updates. With more time,
+I would refine the design and copy, and test rendering across Gmail, Outlook,
+and mobile email clients.
+
+### Monorepo
+
+`apps/web` hosts Next.js and the HTTP endpoint. `apps/api` contains the oRPC backend.
+Shared packages hold the database, UI, emails, environment validation, and
+TypeScript configuration.
+
+This layout is more than the assessment needs. I've found it works well with
+larger teams: ownership is clear and dependencies are explicit.
+[Turborepo](https://turborepo.dev/docs) runs tasks in dependency order, parallelizes
+independent work, and caches results.
+
+### Testing
+
+[Vitest](https://vitest.dev/) covers availability rules, environment validation,
+and email delivery with SMTP mocked. [Node's test runner](https://nodejs.org/api/test.html)
+covers browser date and slot helpers.
 
 ```sh
-pnpm db:generate --name your_change
-pnpm db:migrate
+pnpm test   # Unit tests
+pnpm ready  # Build, types, tests, lint, and formatting
 ```
 
-## Emails
+I also ran local integration checks for login/roles, student isolation, admin
+visibility, booking changes, calendar emails, and repeatable seeding against real
+Supabase. With more time, I would commit an automated integration suite, run it in
+CI, and add browser tests for the assessment walkthrough.
 
-`packages/email/src/templates/` has one React Email component per template. Shared
-layout, text and action components live in `packages/email/src/components/`.
-Run `pnpm emails:generate` after changing auth templates, then restart Supabase.
-Enrolment emails render when sent; the API delegates delivery to `@lms/email/server`.
+### Assumptions and remaining work
 
-Supabase Auth sends authentication emails. Enrolment notifications use SMTP into
-Supabase's local Mailpit inbox at `127.0.0.1:55325`, visible at
-http://127.0.0.1:55324. This replaces the Mailpit HTTP API call.
-Restart Supabase after pulling this change to expose the SMTP port.
-
-The email package validates `APP_URL`, `EMAIL_SMTP_URL`, `EMAIL_FROM` and
-`EMAIL_FROM_NAME` through `@lms/env/email`. Local defaults are in `.env.example`;
-`pnpm setup:local` writes them while preserving existing email settings.
-`APP_URL` controls links in enrolment emails. Set these values for your deployed
-app and SMTP server when deploying. SMTP credentials belong in `EMAIL_SMTP_URL`
-(use percent encoding for special characters); use `smtps://` for implicit TLS.
-
-Supabase is an auth email sender, not a general transactional email service.
-Hosted auth templates must also be configured in the Supabase dashboard, and
-production auth delivery needs custom SMTP in Supabase. Point the app's SMTP
-configuration at the same provider for enrolment emails. No Supabase admin key
-or email HTTP fetch is needed by the email package.
-
-## Stop
-
-Press Ctrl+C to stop the app, then run:
-
-```sh
-pnpm supabase:stop
-```
+- Names come from the student's saved profile rather than being re-entered for
+  each booking. Students book with teachers who have enrolled them.
+- Sessions last 30, 60, or 120 minutes, with half-hour starts, one hour's notice,
+  and a 90-day booking window. Availability uses Perth time; bookings are stored
+  as absolute timestamps and displayed in the viewer's timezone.
+- Cancellation retains the record and releases the time. Completed consultations
+  can be marked incomplete; cancelled consultations cannot be reopened.
+- Email failures do not undo bookings. Delivery records support manual retries.
+  Background retries, reminders, and external calendar checks remain future work.
+- Production would also need a restricted runtime database role, hosted Supabase,
+  SMTP, and deployment configuration.

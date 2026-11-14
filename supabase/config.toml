@@ -31,11 +31,17 @@ minimum_password_length = 8
 additional_redirect_urls = [
   "http://localhost:3000/auth/callback",
   "http://127.0.0.1:3000/auth/callback",
+  "http://localhost:3000/auth/callback?next=/settings/security",
+  "http://127.0.0.1:3000/auth/callback?next=/settings/security",
 ]
 
 [auth.email]
 enabled = true
 enable_confirmations = true
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
 
 [auth.email.template.confirmation]
 subject = "Verify your email · Contour"
