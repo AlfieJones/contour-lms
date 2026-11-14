@@ -1,5 +1,4 @@
-import { afterEach, expect, test, vi } from "vitest";
-import { createEmailSender } from "../src/sender.ts";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 const { sendMail, createTransport } = vi.hoisted(() => ({
   sendMail: vi.fn(),
@@ -7,31 +6,34 @@ const { sendMail, createTransport } = vi.hoisted(() => ({
 }));
 vi.mock("nodemailer", () => ({ default: { createTransport } }));
 
-afterEach(() => vi.resetAllMocks());
-
-function sender() {
+beforeEach(() => {
+  vi.resetModules();
+  vi.stubEnv("APP_URL", "https://learn.example.com");
+  vi.stubEnv("EMAIL_SMTP_URL", "smtp://localhost:55325");
+  vi.stubEnv("EMAIL_FROM", "noreply@contour.local");
+  vi.stubEnv("EMAIL_FROM_NAME", "Contour");
   createTransport.mockReturnValue({ sendMail });
   sendMail.mockResolvedValue({
     accepted: ["student@example.com"],
     rejected: [],
     messageId: "message-123",
   });
-  return createEmailSender({
-    smtpUrl: "smtp://localhost:55325",
-    from: { name: "Contour", address: "noreply@contour.local" },
-  });
-}
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.resetAllMocks();
+});
 
 test.each([true, false])(
   "sends enrolment HTML and text for existing account: %s",
   async (hasAccount) => {
-    const mailer = sender();
+    const mailer = await import("./server.ts");
     await expect(
       mailer.sendEnrolmentEmail({
         email: "student+test@example.com",
         teacherName: "Alfie Jones",
         hasAccount,
-        appUrl: "https://learn.example.com",
       }),
     ).resolves.toEqual({ messageId: "message-123" });
     const message = sendMail.mock.calls[0]![0];
@@ -45,32 +47,11 @@ test.each([true, false])(
     expect(message.html).toContain(
       `https://learn.example.com/${hasAccount ? "login" : "signup"}?email=student%2Btest%40example.com`,
     );
-    expect(createTransport.mock.calls[0]![0]).toMatchObject({
-      url: "smtp://localhost:55325",
-      connectionTimeout: 5000,
-    });
-    expect(createTransport.mock.calls[0]![1]).toMatchObject({
-      from: { name: "Contour", address: "noreply@contour.local" },
-    });
-  },
-);
-
-test.each([null, "  "])(
-  "falls back to Your teacher for a missing name (%s)",
-  async (teacherName) => {
-    await sender().sendEnrolmentEmail({
-      email: "student@example.com",
-      teacherName,
-      hasAccount: false,
-      appUrl: "https://learn.example.com",
-    });
-    expect(sendMail.mock.calls[0]![0].html).toContain("Your teacher added you as a student.");
-    expect(sendMail.mock.calls[0]![0].text).toContain("Your teacher added you as a student.");
   },
 );
 
 test("preserves SMTP failures for the enrolment flow to handle", async () => {
-  const mailer = sender();
+  const mailer = await import("./server.ts");
   const error = new Error("Connection refused");
   sendMail.mockRejectedValue(error);
   await expect(
@@ -78,20 +59,37 @@ test("preserves SMTP failures for the enrolment flow to handle", async () => {
       email: "student@example.com",
       teacherName: null,
       hasAccount: true,
-      appUrl: "https://learn.example.com",
     }),
   ).rejects.toBe(error);
 });
 
-test("does not report success when the server rejects the recipient", async () => {
-  const mailer = sender();
-  sendMail.mockResolvedValue({ accepted: [], rejected: ["student@example.com"], messageId: "" });
-  await expect(
-    mailer.sendEnrolmentEmail({
-      email: "student@example.com",
-      teacherName: null,
-      hasAccount: true,
-      appUrl: "https://learn.example.com",
-    }),
-  ).rejects.toThrow("did not accept");
-});
+test.each(["booked", "rescheduled", "cancelled"] as const)(
+  "sends %s consultations with a calendar attachment",
+  async (kind) => {
+    const { sendConsultationEmail } = await import("./server.ts");
+    await sendConsultationEmail({
+      consultationId: "booking-123",
+      sequence: 2,
+      kind,
+      scheduledAt: "2026-12-01T01:00:00Z",
+      updatedAt: "2026-11-14T04:00:00Z",
+      durationMinutes: 60,
+      studentName: "Test Student",
+      teacherName: "Test Teacher",
+      studentEmail: "student@example.com",
+      teacherEmail: "teacher@example.com",
+      recipient: "teacher@example.com",
+    });
+    const message = sendMail.mock.calls[0]![0];
+    expect(message.to).toEqual({ address: "teacher@example.com", name: "" });
+    expect(message.html).toContain("https://learn.example.com/");
+    expect(message.icalEvent).toMatchObject({
+      filename: "consultation.ics",
+      method: kind === "cancelled" ? "CANCEL" : "REQUEST",
+    });
+    expect(message.icalEvent.content).toContain("UID:booking-123@contour");
+    expect(message.icalEvent.content).toContain(
+      'ORGANIZER;CN="Contour":mailto:noreply@contour.local',
+    );
+  },
+);

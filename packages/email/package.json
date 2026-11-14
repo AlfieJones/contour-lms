@@ -6,18 +6,11 @@
   "exports": {
     ".": {
       "development": "./src/index.tsx",
-      "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./server": {
       "development": "./src/server.ts",
-      "types": "./dist/server.d.ts",
       "default": "./dist/server.js"
-    },
-    "./sender": {
-      "development": "./src/sender.ts",
-      "types": "./dist/sender.d.ts",
-      "default": "./dist/sender.js"
     }
   },
   "scripts": {
@@ -30,7 +23,8 @@
     "nodemailer": "10.5.0",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-email": "6.11.12"
+    "react-email": "6.11.12",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@lms/config": "workspace:*",
