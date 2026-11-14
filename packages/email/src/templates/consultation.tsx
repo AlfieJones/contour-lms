@@ -21,7 +21,7 @@ export function ConsultationEmail(input: ConsultationCalendarEmailProps) {
       <EmailText>
         {input.kind === "cancelled"
           ? "This consultation has been cancelled. The attached calendar notice can remove it from your calendar."
-          : "Use the attached calendar invitation to add this consultation or update its time. Your calendar shows the time in your local timezone."}
+          : "Use the attached calendar invitation to add this consultation or update its time."}
       </EmailText>
       <EmailText>
         Your booking is saved in Contour. Make changes there; accepting or declining this invitation
