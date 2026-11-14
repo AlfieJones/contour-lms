@@ -5,7 +5,7 @@ import type { Account } from "@lms/api";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { CalendarDaysIcon, CommandIcon, ShieldIcon, UsersIcon } from "lucide-react";
+import { CalendarDaysIcon, CommandIcon, UsersIcon } from "lucide-react";
 import { buttonVariants } from "@lms/ui/button";
 import { ThemeToggle } from "@lms/ui/theme-toggle";
 import {
@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -25,7 +26,7 @@ import {
 import { TooltipProvider } from "@lms/ui/tooltip";
 import { UserMenu } from "#components/user-menu.tsx";
 
-export const navigation = [
+const mainNavigation = [
   {
     name: "My consultations",
     href: "/",
@@ -34,8 +35,24 @@ export const navigation = [
   },
   { name: "Students", href: "/students", icon: UsersIcon, roles: ["teacher", "admin"] },
   { name: "Teachers", href: "/teachers", icon: UsersIcon, roles: ["student"] },
-  { name: "Admin", href: "/admin", icon: ShieldIcon, roles: ["admin"] },
 ];
+
+const adminNavigation = [
+  { name: "Users", href: "/admin/users", icon: UsersIcon, roles: ["admin"] },
+  {
+    name: "Consultations",
+    href: "/admin/consultations",
+    icon: CalendarDaysIcon,
+    roles: ["admin"],
+  },
+];
+
+const navigationGroups = [
+  { label: null, ariaLabel: "Main navigation", items: mainNavigation },
+  { label: "Admin", ariaLabel: "Admin navigation", items: adminNavigation },
+];
+
+export const navigation = [...mainNavigation, ...adminNavigation];
 
 function SidebarLink({ onClick, ...props }: React.ComponentProps<typeof Link>) {
   const { setOpenMobile } = useSidebar();
@@ -68,30 +85,35 @@ function SidebarNavigation({ account }: { account: Account }) {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu aria-label="Main navigation">
-              {navigation
-                .filter((item) => item.roles.includes(account.role))
-                .map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      isActive={pathname === item.href}
-                      render={
-                        <SidebarLink
-                          href={item.href}
-                          aria-current={pathname === item.href ? "page" : undefined}
-                        />
-                      }
-                    >
-                      <item.icon />
-                      <span>{item.name}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {navigationGroups.map((group) => {
+          const items = group.items.filter((item) => item.roles.includes(account.role));
+          if (items.length === 0) return null;
+          return (
+            <SidebarGroup key={group.ariaLabel}>
+              {group.label ? <SidebarGroupLabel>{group.label}</SidebarGroupLabel> : null}
+              <SidebarGroupContent>
+                <SidebarMenu aria-label={group.ariaLabel}>
+                  {items.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        isActive={pathname === item.href}
+                        render={
+                          <SidebarLink
+                            href={item.href}
+                            aria-current={pathname === item.href ? "page" : undefined}
+                          />
+                        }
+                      >
+                        <item.icon />
+                        <span>{item.name}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          );
+        })}
       </SidebarContent>
       <SidebarFooter className="px-3 pb-5">
         <UserMenu />

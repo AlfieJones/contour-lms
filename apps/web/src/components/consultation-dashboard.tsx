@@ -60,11 +60,9 @@ import {
 export function ConsultationDashboard({
   account,
   allConsultations = false,
-  embedded = false,
 }: {
   account: Account;
   allConsultations?: boolean;
-  embedded?: boolean;
 }) {
   const { role } = account;
   const admin = role === "admin" && allConsultations;
@@ -413,8 +411,6 @@ export function ConsultationDashboard({
       </section>
     </div>
   );
-
-  if (embedded) return content;
 
   const dashboardPage = (
     <PageLayout
