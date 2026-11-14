@@ -1,0 +1,4 @@
+@import "@lms/ui/styles.css";
+
+/* Resolve app sources from this file, independent of the build working directory. */
+@source "../";

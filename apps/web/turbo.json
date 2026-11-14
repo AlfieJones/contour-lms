@@ -1,0 +1,35 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "env": [
+        "DATABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+        "NODE_ENV"
+      ],
+      "dependsOn": ["^build", "check-types"]
+    },
+    "check-types": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "env": [
+        "DATABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+        "NODE_ENV"
+      ],
+      "outputs": ["next-env.d.ts", ".next/types/**", "tsconfig.tsbuildinfo"]
+    },
+    "dev": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "env": [
+        "DATABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+        "NODE_ENV"
+      ]
+    }
+  }
+}

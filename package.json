@@ -1,0 +1,45 @@
+{
+  "name": "lms",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ready": "turbo run build check-types test lint format",
+    "dev": "turbo watch dev --filter=@lms/web",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "db:push": "turbo run push --filter=@lms/db",
+    "prepare": "husky",
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter=\"./packages/*\" --filter=\"./apps/api\"",
+    "check": "turbo run check-types lint format",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "check:boundaries": "turbo boundaries"
+  },
+  "devDependencies": {
+    "husky": "catalog:",
+    "lint-staged": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "pnpm": "catalog:",
+    "supabase": "2.120.0",
+    "turbo": "catalog:"
+  },
+  "lint-staged": {
+    "*": [
+      "oxlint --fix",
+      "oxfmt --no-error-on-unmatched-pattern"
+    ]
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.10.1"
+}

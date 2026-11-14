@@ -1,0 +1,45 @@
+{
+  "name": "@lms/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#*": {
+      "types": "./src/*.ts",
+      "source": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./auth-schema": {
+      "types": "./dist/auth-schema.d.ts",
+      "default": "./dist/auth-schema.js"
+    }
+  },
+  "scripts": {
+    "push": "drizzle-kit push",
+    "build": "tsdown",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lms/env": "workspace:*",
+    "drizzle-orm": "1.0.0-rc.4",
+    "postgres": "3.4.9"
+  },
+  "devDependencies": {
+    "@lms/config": "workspace:*",
+    "@next/env": "catalog:",
+    "@types/node": "catalog:",
+    "drizzle-kit": "1.0.0-rc.4",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

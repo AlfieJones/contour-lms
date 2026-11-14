@@ -1,0 +1,35 @@
+{
+  "name": "@lms/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check-types": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@lms/api": "workspace:*",
+    "@lms/env": "workspace:*",
+    "@lms/ui": "workspace:*",
+    "@next/env": "catalog:",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "^16.4.0",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@lms/config": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  }
+}
