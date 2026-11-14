@@ -39,7 +39,6 @@ import {
   availableSlots,
   bookingWindow,
   calendarDate,
-  calendarEvent,
   firstAvailableDate,
   formatBookingDate,
   formatBookingTime,
@@ -344,20 +343,6 @@ function Scheduler({
           Calendar invitations have been emailed to the student and teacher.
         </p>
       );
-    const calendarButton = (
-      <Button
-        variant="outline"
-        render={
-          <a
-            download="contour-consultation.ics"
-            href={`data:text/calendar;charset=utf-8,${encodeURIComponent(calendarEvent(confirmed.id, confirmed.scheduledAt, confirmed.durationMinutes))}`}
-          />
-        }
-      >
-        Add to calendar
-      </Button>
-    );
-
     return (
       <>
         <DialogHeader className="pe-14">
@@ -373,7 +358,6 @@ function Scheduler({
         </DialogHeader>
         <DialogPanel>{emailNotice}</DialogPanel>
         <DialogFooter>
-          {calendarButton}
           <DialogClose render={<Button type="button" />}>Done</DialogClose>
         </DialogFooter>
       </>

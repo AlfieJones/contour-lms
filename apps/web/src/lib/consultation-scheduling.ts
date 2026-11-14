@@ -1,9 +1,4 @@
-import {
-  BOOKING_WINDOW_DAYS,
-  NOTICE_MINUTES,
-  SESSION_MINUTES,
-} from "@lms/api/consultation-scheduling";
-export { SESSION_MINUTES } from "@lms/api/consultation-scheduling";
+import { BOOKING_WINDOW_DAYS, NOTICE_MINUTES } from "@lms/api/consultation-scheduling";
 export const CONSULTATION_DURATIONS = [
   { minutes: 30, label: "30 minutes" },
   { minutes: 60, label: "1 hour" },
@@ -86,26 +81,4 @@ export function formatBookingDate(date: Date, timeZone: string) {
     month: "short",
     year: "numeric",
   }).format(date);
-}
-
-export function calendarEvent(id: string, scheduledAt: Date, durationMinutes = SESSION_MINUTES) {
-  const stamp = (date: Date) =>
-    date
-      .toISOString()
-      .replace(/[-:]/g, "")
-      .replace(/\.\d{3}/, "");
-  return [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Contour//Consultations//EN",
-    "BEGIN:VEVENT",
-    `UID:${id}@contour`,
-    `DTSTAMP:${stamp(new Date())}`,
-    `DTSTART:${stamp(scheduledAt)}`,
-    `DTEND:${stamp(new Date(scheduledAt.getTime() + durationMinutes * MINUTE))}`,
-    "SUMMARY:Contour consultation",
-    "END:VEVENT",
-    "END:VCALENDAR",
-    "",
-  ].join("\r\n");
 }
