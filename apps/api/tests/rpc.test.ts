@@ -1,16 +1,15 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
-import type { RouterClient } from "@orpc/server";
+import { createRouterClient, type RouterClient } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import { createClient } from "@supabase/supabase-js";
+import { AuthApiError, createClient } from "@supabase/supabase-js";
 import { createDb } from "@lms/db";
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 
 import { router } from "../src/index.ts";
 
-test("RPC client and handler round-trip public requests without a session", async () => {
-  const handler = new RPCHandler(router);
-  const context = {
+function createTestContext() {
+  return {
     db: createDb("postgresql://postgres:postgres@127.0.0.1:55322/postgres"),
     supabase: createClient("http://127.0.0.1:55321", "sb_publishable_test_key", {
       auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
@@ -21,6 +20,11 @@ test("RPC client and handler round-trip public requests without a session", asyn
       },
     }),
   };
+}
+
+test("RPC client and handler round-trip public requests without a session", async () => {
+  const handler = new RPCHandler(router);
+  const context = createTestContext();
   const client: RouterClient<typeof router> = createORPCClient(
     new RPCLink({
       origin: "http://localhost",
@@ -35,4 +39,24 @@ test("RPC client and handler round-trip public requests without a session", asyn
 
   await expect(client.health()).resolves.toEqual({ status: "ok" });
   await expect(client.user.get()).resolves.toBeNull();
+  await expect(client.user.logout()).resolves.toBeUndefined();
+});
+
+test("logout ends only the current session", async () => {
+  const context = createTestContext();
+  const signOut = vi.spyOn(context.supabase.auth, "signOut").mockResolvedValue({ error: null });
+  const client = createRouterClient(router, { context });
+
+  await expect(client.user.logout()).resolves.toBeUndefined();
+  expect(signOut).toHaveBeenCalledExactlyOnceWith({ scope: "local" });
+});
+
+test("logout reports a failure so the account menu can offer a retry", async () => {
+  const context = createTestContext();
+  vi.spyOn(context.supabase.auth, "signOut").mockResolvedValue({
+    error: new AuthApiError("Sign out failed", 500, "unexpected_failure"),
+  });
+  const client = createRouterClient(router, { context });
+
+  await expect(client.user.logout()).rejects.toMatchObject({ code: "INTERNAL_SERVER_ERROR" });
 });

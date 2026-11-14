@@ -4,19 +4,9 @@ import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { BookOpenIcon, CommandIcon, LayoutDashboardIcon, LogInIcon } from "lucide-react";
-import { Avatar, AvatarFallback } from "@lms/ui/avatar";
-import { Button, buttonVariants } from "@lms/ui/button";
+import { BookOpenIcon, CommandIcon, LayoutDashboardIcon } from "lucide-react";
+import { buttonVariants } from "@lms/ui/button";
 import { ThemeToggle } from "@lms/ui/theme-toggle";
-import {
-  Menu,
-  MenuGroup,
-  MenuGroupLabel,
-  MenuLinkItem,
-  MenuPopup,
-  MenuSeparator,
-  MenuTrigger,
-} from "@lms/ui/menu";
 import {
   Sidebar,
   SidebarContent,
@@ -33,6 +23,7 @@ import {
 } from "@lms/ui/sidebar";
 import { TooltipProvider } from "@lms/ui/tooltip";
 import { cn } from "@lms/ui/lib/utils";
+import { UserMenu } from "#components/user-menu.tsx";
 
 export const navigation = [
   { name: "Overview", href: "/", icon: LayoutDashboardIcon },
@@ -50,28 +41,6 @@ function SidebarLink({ onClick, ...props }: React.ComponentProps<typeof Link>) {
         if (!event.defaultPrevented) setOpenMobile(false);
       }}
     />
-  );
-}
-
-function ProfileMenu() {
-  return (
-    <Menu>
-      <MenuTrigger aria-label="Account menu" render={<Button variant="ghost" size="icon" />}>
-        <Avatar className="size-7">
-          <AvatarFallback>CO</AvatarFallback>
-        </Avatar>
-      </MenuTrigger>
-      <MenuPopup align="end" className="w-56">
-        <MenuGroup>
-          <MenuGroupLabel>Contour</MenuGroupLabel>
-          <MenuSeparator />
-          <MenuLinkItem render={<SidebarLink href="/login" />}>
-            <LogInIcon />
-            Sign in
-          </MenuLinkItem>
-        </MenuGroup>
-      </MenuPopup>
-    </Menu>
   );
 }
 
@@ -95,7 +64,6 @@ function SidebarNavigation() {
             className={buttonVariants({ variant: "ghost", size: "icon" })}
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           />
-          <ProfileMenu />
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -124,14 +92,7 @@ function SidebarNavigation() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="px-3 pb-5">
-        <Button
-          variant="outline"
-          className="w-full justify-between"
-          render={<SidebarLink href="/login" />}
-        >
-          Sign in
-          <LogInIcon data-icon="inline-end" />
-        </Button>
+        <UserMenu />
       </SidebarFooter>
     </Sidebar>
   );
@@ -157,7 +118,7 @@ export function AppSidebar({ children }: { children: ReactNode }) {
               className={buttonVariants({ variant: "ghost", size: "icon" })}
               onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
             />
-            <ProfileMenu />
+            <UserMenu compact />
           </div>
         </header>
         <SidebarNavigation />
