@@ -1,0 +1,19 @@
+packages/email/src/templates/consultation.tsx
+  s_0dfaac70ed62ac::t_8237d4d8b5511a 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a80cbc62651f2ab25dbf441996ab49f23ed4eb81",
+  "prompts": {},
+  "sessions": {
+    "s_0dfaac70ed62ac": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d933-c2b7-79e1-acc7-0b3442e9d100",
+        "model": "unknown"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
