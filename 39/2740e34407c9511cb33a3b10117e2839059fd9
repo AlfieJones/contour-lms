@@ -1,0 +1,20 @@
+apps/web/src/app/(dashboard)/admin/consultations/page.tsx
+  h_18044dd1b61a81 1-2,4-5,7-10,12-14
+apps/web/src/app/(dashboard)/admin/page.tsx
+  h_18044dd1b61a81 4-8,11-12
+apps/web/src/app/(dashboard)/admin/users/page.tsx
+  h_18044dd1b61a81 3-6,11-18
+apps/web/src/components/app-sidebar.tsx
+  h_18044dd1b61a81 8,17,29,40-56,88-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "392740e34407c9511cb33a3b10117e2839059fd9",
+  "prompts": {},
+  "humans": {
+    "h_18044dd1b61a81": {
+      "author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
