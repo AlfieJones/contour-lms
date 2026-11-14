@@ -35,22 +35,26 @@ export function PageLayout({
   }
 
   return (
-    <div
-      className={cn(
-        "mx-auto flex w-full max-w-[1400px] flex-col gap-6 p-5 md:p-8 lg:p-10",
-        className,
-      )}
-    >
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex min-w-0 flex-col gap-2">
-          <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
-          {description ? <div className="text-sm text-muted-foreground">{description}</div> : null}
-        </div>
-        {actions ? (
-          <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>
-        ) : null}
-      </header>
-      <div className="flex min-w-0 flex-col gap-6">{children}</div>
+    <div className="w-full min-w-full max-w-full">
+      <div
+        className={cn(
+          "mx-auto flex w-full min-w-0 max-w-[1400px] flex-col gap-6 p-5 md:p-8 lg:p-10",
+          className,
+        )}
+      >
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 flex-col gap-2">
+            <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+            {description ? (
+              <div className="text-sm text-muted-foreground">{description}</div>
+            ) : null}
+          </div>
+          {actions ? (
+            <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>
+          ) : null}
+        </header>
+        <div className="flex min-w-0 flex-col gap-6">{children}</div>
+      </div>
     </div>
   );
 }

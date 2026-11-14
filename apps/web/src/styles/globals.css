@@ -5,3 +5,47 @@
 }
 
 @source "../../../../**/*.{ts,tsx}";
+
+/* FullCalendar's geometry comes from its theme; colours follow our shared tokens. */
+.consultation-calendar {
+  --fc-classic-border-style: solid;
+  --fc-classic-background: var(--background);
+  --fc-classic-foreground: var(--foreground);
+  --fc-classic-faint: color-mix(in oklab, var(--muted) 35%, transparent);
+  --fc-classic-muted: var(--muted);
+  --fc-classic-strong: var(--accent);
+  --fc-classic-muted-foreground: var(--muted-foreground);
+  --fc-classic-faint-foreground: var(--muted-foreground);
+  --fc-classic-border: var(--border);
+  --fc-classic-strong-border: var(--input);
+  --fc-classic-today: color-mix(in oklab, var(--info) 4%, var(--background));
+  --fc-classic-now: var(--destructive);
+  --fc-classic-primary: var(--primary);
+  --fc-classic-primary-foreground: var(--primary-foreground);
+  --fc-classic-event: color-mix(in oklab, var(--info) 12%, var(--background));
+  --fc-classic-event-contrast: var(--info-foreground);
+}
+
+.consultation-calendar .consultation-event {
+  border-inline-start: 3px solid var(--info);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.consultation-calendar .consultation-event:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.consultation-calendar .consultation-event-completed {
+  --fc-classic-event: color-mix(in oklab, var(--success) 12%, var(--background));
+  --fc-classic-event-contrast: var(--success-foreground);
+  border-inline-start-color: var(--success);
+}
+
+.consultation-calendar .consultation-event-cancelled {
+  --fc-classic-event: var(--muted);
+  --fc-classic-event-contrast: var(--muted-foreground);
+  border-inline-start-color: var(--muted-foreground);
+  text-decoration: line-through;
+}

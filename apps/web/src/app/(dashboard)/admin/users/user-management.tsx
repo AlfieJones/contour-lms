@@ -78,9 +78,14 @@ export function UserManagement() {
           emptyMessage="No users found."
           columns={[
             {
+              id: "name",
+              header: "Name",
+              cell: (user) => <span className="font-medium">{user.name ?? "—"}</span>,
+            },
+            {
               id: "email",
-              header: "User",
-              cell: (user) => <span className="font-medium">{user.email ?? user.id}</span>,
+              header: "Email",
+              cell: (user) => user.email ?? user.id,
             },
             {
               id: "role",

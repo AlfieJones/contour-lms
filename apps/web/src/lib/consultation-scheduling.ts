@@ -1,18 +1,29 @@
-/** Prototype availability. Replace this with a server availability endpoint before launch. */
-export const SESSION_MINUTES = 30;
-export const BOOKING_WINDOW_DAYS = 90;
-export const NOTICE_MINUTES = 60;
+import {
+  BOOKING_WINDOW_DAYS,
+  NOTICE_MINUTES,
+  SESSION_MINUTES,
+} from "@lms/api/consultation-scheduling";
+export { SESSION_MINUTES } from "@lms/api/consultation-scheduling";
+export const CONSULTATION_DURATIONS = [
+  { minutes: 30, label: "30 minutes" },
+  { minutes: 60, label: "1 hour" },
+  { minutes: 120, label: "2 hours" },
+] as const;
 const MINUTE = 60_000;
-const DAY = 24 * 60 * MINUTE;
-const PERTH_OFFSET = 8 * 60 * MINUTE;
+
+const dateFormatters = new Map<string, Intl.DateTimeFormat>();
 
 function dateFormatter(timeZone: string) {
-  return new Intl.DateTimeFormat("en-CA", {
+  const existing = dateFormatters.get(timeZone);
+  if (existing) return existing;
+  const formatter = new Intl.DateTimeFormat("en-CA", {
     timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
+  dateFormatters.set(timeZone, formatter);
+  return formatter;
 }
 
 /** Calendar values are floating local dates; slot values are absolute instants. */
@@ -30,45 +41,32 @@ export function bookingWindow(now: Date, timeZone: string) {
   return { start, end };
 }
 
-export function availableSlots(day: Date, timeZone: string, now: Date): Date[] {
+/** Display only the selected teacher's server-validated slots in the viewer's timezone. */
+export function availableSlots(
+  day: Date,
+  timeZone: string,
+  now: Date,
+  publishedSlots: readonly string[],
+): Date[] {
   const { start, end } = bookingWindow(now, timeZone);
   if (day < start || day > end) return [];
-  const formatter = dateFormatter(timeZone);
-  // Build the requested key without assuming noon UTC is the same date in every zone.
-  const keyParts = formatter.formatToParts(new Date(0));
-  const requestedKey = keyParts
-    .map((part) => {
-      if (part.type === "year") return String(day.getFullYear());
-      if (part.type === "month") return String(day.getMonth() + 1).padStart(2, "0");
-      if (part.type === "day") return String(day.getDate()).padStart(2, "0");
-      return part.value;
-    })
-    .join("");
-  const nominalMidnight = Date.UTC(day.getFullYear(), day.getMonth(), day.getDate());
-  const slots: Date[] = [];
-  // Covers UTC-12 through UTC+14, including 23/25-hour DST days.
-  for (
-    let time = nominalMidnight - 14 * 60 * MINUTE;
-    time < nominalMidnight + DAY + 12 * 60 * MINUTE;
-    time += SESSION_MINUTES * MINUTE
-  ) {
-    if (time < now.getTime() + NOTICE_MINUTES * MINUTE) continue;
-    const perth = new Date(time + PERTH_OFFSET);
-    if (perth.getUTCDay() === 0 || perth.getUTCDay() === 6) continue;
-    if (perth.getUTCHours() < 9 || perth.getUTCHours() >= 17) continue;
-    const slot = new Date(time);
-    if (formatter.format(slot) === requestedKey) slots.push(slot);
-  }
-  return slots;
+  return publishedSlots
+    .map((value) => new Date(value))
+    .filter((slot) => {
+      if (slot.getTime() < now.getTime() + NOTICE_MINUTES * MINUTE) return false;
+      return calendarDate(slot, timeZone).getTime() === day.getTime();
+    });
 }
 
-export function firstAvailableDate(now: Date, timeZone: string): Date {
-  const day = calendarDate(now, timeZone);
-  for (let offset = 0; offset < 8; offset++) {
-    if (availableSlots(day, timeZone, now).length > 0) return day;
-    day.setDate(day.getDate() + 1);
-  }
-  return day;
+export function firstAvailableDate(
+  now: Date,
+  timeZone: string,
+  publishedSlots: readonly string[],
+): Date {
+  const first = publishedSlots.find(
+    (value) => new Date(value).getTime() >= now.getTime() + NOTICE_MINUTES * MINUTE,
+  );
+  return calendarDate(first ? new Date(first) : now, timeZone);
 }
 
 export function formatBookingTime(date: Date, timeZone: string, hour12 = true) {
@@ -90,7 +88,7 @@ export function formatBookingDate(date: Date, timeZone: string) {
   }).format(date);
 }
 
-export function calendarEvent(id: string, scheduledAt: Date) {
+export function calendarEvent(id: string, scheduledAt: Date, durationMinutes = SESSION_MINUTES) {
   const stamp = (date: Date) =>
     date
       .toISOString()
@@ -104,7 +102,7 @@ export function calendarEvent(id: string, scheduledAt: Date) {
     `UID:${id}@contour`,
     `DTSTAMP:${stamp(new Date())}`,
     `DTSTART:${stamp(scheduledAt)}`,
-    `DTEND:${stamp(new Date(scheduledAt.getTime() + SESSION_MINUTES * MINUTE))}`,
+    `DTEND:${stamp(new Date(scheduledAt.getTime() + durationMinutes * MINUTE))}`,
     "SUMMARY:Contour consultation",
     "END:VEVENT",
     "END:VCALENDAR",

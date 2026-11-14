@@ -6,7 +6,13 @@ export async function GET(request: NextRequest) {
   if (code) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(new URL("/", request.url));
+    if (!error) {
+      const next = request.nextUrl.searchParams.get("next");
+      // Only allow known destinations; callback URLs must never be open redirects.
+      return NextResponse.redirect(
+        new URL(next === "/settings/security" ? next : "/", request.url),
+      );
+    }
   }
   return NextResponse.redirect(new URL("/auth/error", request.url));
 }

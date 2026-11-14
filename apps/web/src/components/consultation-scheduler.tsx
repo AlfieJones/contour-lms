@@ -1,38 +1,40 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CalendarCheckIcon,
-  CheckIcon,
-  Clock3Icon,
-  DownloadIcon,
-  GlobeIcon,
-} from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type RefObject } from "react";
+import Link from "next/link";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, Clock3Icon } from "lucide-react";
 import { Alert, AlertDescription } from "@lms/ui/alert";
 import { Button } from "@lms/ui/button";
 import { Calendar } from "@lms/ui/calendar";
-import { Field, FieldLabel } from "@lms/ui/field";
-import { Input } from "@lms/ui/input";
-import { RadioGroup, RadioGroupPrimitive, RadioPrimitive } from "@lms/ui/radio-group";
+import {
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogTitle,
+} from "@lms/ui/dialog";
+import { Field, FieldDescription, FieldLabel } from "@lms/ui/field";
+import { RadioGroupPrimitive, RadioPrimitive } from "@lms/ui/radio-group";
 import {
   Select,
   SelectGroup,
   SelectItem,
   SelectPopup,
+  SelectPrimitive,
   SelectTrigger,
   SelectValue,
 } from "@lms/ui/select";
 import { SegmentedControl, SegmentedControlItem } from "@lms/ui/segmented-control";
-import { Separator } from "@lms/ui/separator";
 import { Skeleton } from "@lms/ui/skeleton";
+import { ScrollArea } from "@lms/ui/scroll-area";
+import { Toggle } from "@lms/ui/toggle";
+import { ToggleGroup } from "@lms/ui/toggle-group";
 import { Textarea } from "@lms/ui/textarea";
-import type { client } from "#lib/orpc.ts";
+import { orpc, type client } from "#lib/orpc.ts";
 import { formText } from "#lib/form.ts";
 import { useLocalTimezone } from "#lib/use-local-timezone.ts";
-import { StudentSelect } from "#components/student-select.tsx";
-import { TeacherSelect } from "#components/teacher-select.tsx";
 import {
   availableSlots,
   bookingWindow,
@@ -41,11 +43,18 @@ import {
   firstAvailableDate,
   formatBookingDate,
   formatBookingTime,
-  SESSION_MINUTES,
+  CONSULTATION_DURATIONS,
 } from "#lib/consultation-scheduling.ts";
 
-export type Consultation = Awaited<ReturnType<typeof client.consultation.create>> & {
+export type Consultation = Omit<
+  Awaited<ReturnType<typeof client.consultation.create>>,
+  "emailSent"
+> & {
+  emailSent?: boolean;
   teacherEmail?: string | null;
+  teacherName?: string | null;
+  teacherAvatarUrl?: string | null;
+  studentAvatarUrl?: string | null;
 };
 export type BookingFlow =
   | { mode: "book" }
@@ -53,90 +62,107 @@ export type BookingFlow =
 export type BookingDetails = {
   enrolmentId?: string;
   teacherId: string;
-  firstName: string;
-  lastName: string;
   reason: string;
   scheduledAt: string;
+  durationMinutes: number;
 };
 
-const timeZones = [
-  "Australia/Perth",
-  "Australia/Adelaide",
-  "Australia/Brisbane",
-  "Australia/Darwin",
-  "Australia/Hobart",
-  "Australia/Melbourne",
-  "Australia/Sydney",
-  "Pacific/Auckland",
-  "Asia/Singapore",
-  "Europe/London",
-  "America/New_York",
-  "America/Los_Angeles",
-  "UTC",
-];
+const noSlots: string[] = [];
 
-export function ConsultationScheduler(props: {
+const durationItems = CONSULTATION_DURATIONS.map((duration) => ({
+  value: duration.minutes,
+  label: duration.label,
+}));
+
+type SchedulerProps = {
   teachers: { id: string; email: string }[];
   bookingForStudents?: boolean;
+  headingRef?: RefObject<HTMLHeadingElement | null>;
   flow: BookingFlow;
   onSave: (details: BookingDetails) => Promise<Consultation | null>;
-  onReset: () => void;
-}) {
-  const localZone = useLocalTimezone();
-  if (!localZone)
+};
+
+export function ConsultationScheduler(props: SchedulerProps) {
+  const timeZone = useLocalTimezone();
+  if (!timeZone)
     return (
       <Skeleton className="h-[460px] w-full rounded-xl" aria-label="Loading booking calendar" />
     );
-  return <Scheduler {...props} localZone={localZone} />;
+  return <Scheduler {...props} timeZone={timeZone} />;
 }
 
 function Scheduler({
   flow,
   onSave,
-  onReset,
-  localZone,
+  timeZone,
   teachers,
   bookingForStudents = false,
-}: {
-  teachers: { id: string; email: string }[];
-  bookingForStudents?: boolean;
-  flow: BookingFlow;
-  localZone: string;
-  onSave: (details: BookingDetails) => Promise<Consultation | null>;
-  onReset: () => void;
-}) {
+  headingRef,
+}: SchedulerProps & { timeZone: string }) {
   const [now, setNow] = useState(() => new Date());
-  const [timeZone, setTimeZone] = useState(localZone);
-  const [day, setDay] = useState(() => firstAvailableDate(now, localZone));
-  const [month, setMonth] = useState(day);
+  const original = flow.mode === "book" ? undefined : flow.consultation;
+  const [durationMinutes, setDurationMinutes] = useState(original?.durationMinutes ?? 60);
+  const [chosenDay, setChosenDay] = useState<Date | null>(null);
+  const [viewedMonth, setViewedMonth] = useState<Date | null>(null);
   const [slot, setSlot] = useState<string | null>(null);
   const [hour12, setHour12] = useState(true);
-  const [step, setStep] = useState<"time" | "details" | "confirmed">("time");
+  const [step, setStep] = useState<"duration" | "time" | "details" | "confirmed">(
+    flow.mode === "reschedule" ? "time" : "duration",
+  );
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [confirmed, setConfirmed] = useState<Consultation | null>(null);
-  const stepHeading = useRef<HTMLHeadingElement>(null);
+  const localHeading = useRef<HTMLHeadingElement>(null);
+  const stepHeading = headingRef ?? localHeading;
   const previousStep = useRef(step);
-  const original = flow.mode === "book" ? undefined : flow.consultation;
   const rescheduling = flow.mode === "reschedule";
   const detailsForm = useRef<HTMLFormElement>(null);
   const [draft, setDraft] = useState({
     enrolmentId: undefined as string | undefined,
-    firstName: original?.firstName ?? "",
-    lastName: original?.lastName ?? "",
     reason: original?.reason ?? "",
-    teacherId: original?.teacherId ?? (teachers.length === 1 ? teachers[0]!.id : null),
   });
+  const [teacherId, setTeacherId] = useState<string | null>(() =>
+    teachers.some((teacher) => teacher.id === original?.teacherId)
+      ? original!.teacherId
+      : teachers.length === 1
+        ? teachers[0]!.id
+        : null,
+  );
+  const availability = useQuery(
+    orpc.consultation.availability.slots.queryOptions({
+      input: {
+        teacherId: teacherId ?? "",
+        durationMinutes: durationMinutes as 30 | 60 | 120,
+        consultationId: rescheduling ? original?.id : undefined,
+      },
+      enabled: !!teacherId,
+      refetchInterval: 60_000,
+    }),
+  );
+  const publishedSlots = availability.isError ? noSlots : (availability.data?.slots ?? noSlots);
+  const availableDays = useMemo(
+    () =>
+      new Set(
+        publishedSlots
+          .filter((value) => new Date(value).getTime() >= now.getTime() + 60 * 60_000)
+          .map((value) => calendarDate(new Date(value), timeZone).getTime()),
+      ),
+    [publishedSlots, timeZone, now],
+  );
+  const day =
+    chosenDay && availableDays.has(chosenDay.getTime())
+      ? chosenDay
+      : firstAvailableDate(now, timeZone, publishedSlots);
+  const month = viewedMonth ?? day;
   const window = bookingWindow(now, timeZone);
-  const slots = availableSlots(day, timeZone, now).filter(
-    (value) => !rescheduling || value.getTime() !== original?.scheduledAt.getTime(),
+  const slots = availableSlots(day, timeZone, now, publishedSlots).filter(
+    (value) =>
+      !rescheduling ||
+      teacherId !== original?.teacherId ||
+      value.getTime() !== original?.scheduledAt.getTime() ||
+      durationMinutes !== original?.durationMinutes,
   );
   const selectedSlot = slot ? new Date(slot) : null;
-  const validSlot = slots.some((value) => value.toISOString() === slot);
-  const zoneItems = [...new Set([localZone, ...timeZones])].map((value) => ({
-    value,
-    label: value.replaceAll("_", " "),
-  }));
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 60_000);
@@ -146,16 +172,14 @@ function Scheduler({
   useEffect(() => {
     if (previousStep.current !== step) stepHeading.current?.focus();
     previousStep.current = step;
-  }, [step]);
+  }, [step, stepHeading]);
 
-  function changeTimeZone(value: string | null) {
-    if (!value) return;
-    setTimeZone(value);
-    const nextDay = selectedSlot
-      ? calendarDate(selectedSlot, value)
-      : firstAvailableDate(now, value);
-    setDay(nextDay);
-    setMonth(nextDay);
+  function changeDuration(value: number) {
+    if (!CONSULTATION_DURATIONS.some((duration) => duration.minutes === value)) return;
+    setDurationMinutes(value);
+    setChosenDay(null);
+    setViewedMonth(null);
+    setSlot(null);
     setError("");
   }
 
@@ -163,11 +187,21 @@ function Scheduler({
     const data = new FormData(form);
     return {
       enrolmentId: formText(data, "enrolmentId") || undefined,
-      teacherId: formText(data, "teacherId") || null,
-      firstName: rescheduling ? original!.firstName : formText(data, "firstName"),
-      lastName: rescheduling ? original!.lastName : formText(data, "lastName"),
       reason: rescheduling ? original!.reason : formText(data, "reason"),
     };
+  }
+
+  function changeTeacher(value: string | null) {
+    if (pending || value === teacherId) return;
+    const nextDraft =
+      step === "details" && detailsForm.current ? readDraft(detailsForm.current) : draft;
+    setDraft(nextDraft);
+    setTeacherId(value);
+    setChosenDay(null);
+    setViewedMonth(null);
+    setSlot(null);
+    setError("");
+    if (step === "details") setStep("time");
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -177,7 +211,9 @@ function Scheduler({
     setDraft(nextDraft);
     if (
       !slot ||
-      !availableSlots(day, timeZone, new Date()).some((value) => value.toISOString() === slot)
+      !availableSlots(day, timeZone, new Date(), publishedSlots).some(
+        (value) => value.toISOString() === slot,
+      )
     ) {
       setError("That time is no longer within the booking window. Please choose another time.");
       setStep("time");
@@ -186,23 +222,20 @@ function Scheduler({
     }
     const details = {
       ...nextDraft,
-      teacherId: nextDraft.teacherId ?? "",
+      teacherId: teacherId ?? "",
       scheduledAt: slot,
+      durationMinutes,
     };
     if (!teachers.some((teacher) => teacher.id === details.teacherId)) {
       setError("Choose a teacher who has enrolled you.");
       return;
     }
-    if (bookingForStudents && !details.enrolmentId) {
+    if (bookingForStudents && !rescheduling && !details.enrolmentId) {
       setError("Choose an enrolled student.");
       return;
     }
-    if (!details.firstName || !details.lastName || !details.reason) {
-      setError(
-        bookingForStudents
-          ? "Enter the student’s name and a reason for the consultation."
-          : "Please enter your name and a reason for the consultation.",
-      );
+    if (!rescheduling && !details.reason) {
+      setError("Enter discussion notes for the consultation.");
       return;
     }
     setError("");
@@ -216,429 +249,514 @@ function Scheduler({
         });
         setStep("confirmed");
       } else {
-        setError("We couldn’t confirm the save. Refresh your bookings before trying again.");
+        setError("We couldn’t confirm the booking. Please try again.");
       }
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Couldn’t save the booking. Please try again.",
+      );
+      setSlot(null);
+      setStep("time");
+      void availability.refetch();
     } finally {
       setPending(false);
     }
   }
 
-  if (confirmed && step === "confirmed") {
-    return (
-      <div className="flex flex-col items-center gap-6 rounded-xl border bg-card px-6 py-12 text-center">
-        <div className="flex size-14 items-center justify-center rounded-full bg-success/8 text-success-foreground">
-          <CalendarCheckIcon className="size-6" aria-hidden="true" />
-        </div>
-        <div className="flex flex-col gap-2" role="status">
-          <h2
-            ref={stepHeading}
-            tabIndex={-1}
-            className="text-2xl font-semibold tracking-tight outline-none"
-          >
-            {rescheduling ? "Rescheduled" : "Booking confirmed"}
-          </h2>
-        </div>
-        <dl className="flex w-full max-w-md flex-col gap-4 rounded-lg border p-5 text-left text-sm">
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">Consultation</dt>
-            <dd className="font-medium">One-to-one · {SESSION_MINUTES} min</dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">When</dt>
-            <dd className="text-right">
-              <time dateTime={confirmed.scheduledAt.toISOString()}>
-                {formatBookingDate(confirmed.scheduledAt, timeZone)}
-                <br />
-                {formatBookingTime(confirmed.scheduledAt, timeZone, hour12)}
-              </time>
-            </dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">Timezone</dt>
-            <dd className="break-all text-right">{timeZone.replaceAll("_", " ")}</dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">Attendee</dt>
-            <dd className="min-w-0 break-words text-right">
-              {confirmed.firstName} {confirmed.lastName}
-            </dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">Teacher</dt>
-            <dd className="min-w-0 break-all text-right">{confirmed.teacherEmail}</dd>
-          </div>
-        </dl>
-        <div className="flex flex-wrap justify-center gap-3">
-          <Button
-            variant="outline"
-            render={
-              <a
-                download="contour-consultation.ics"
-                href={`data:text/calendar;charset=utf-8,${encodeURIComponent(calendarEvent(confirmed.id, confirmed.scheduledAt))}`}
-              />
-            }
-          >
-            <DownloadIcon aria-hidden="true" /> Add to calendar
-          </Button>
-          <Button onClick={onReset}>
-            Book another <ArrowRightIcon aria-hidden="true" />
-          </Button>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          Calendar downloads do not update automatically.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="@container overflow-hidden rounded-xl border bg-card shadow-xs/5">
-      <header className="flex flex-wrap items-center justify-between gap-4 border-b p-5 sm:px-6">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold tracking-tight">
-            {rescheduling
-              ? "Reschedule consultation"
-              : flow.mode === "rebook"
-                ? "Follow-up consultation"
-                : "30 min consultation"}
-          </h2>
-          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <Clock3Icon className="size-4" aria-hidden="true" />
-            {SESSION_MINUTES} minutes · One-to-one
-          </p>
-        </div>
-        <ol aria-label="Booking progress" className="flex items-center gap-2 text-xs">
-          <li
-            aria-current={step === "time" ? "step" : undefined}
-            className={step === "time" ? "font-medium" : "text-muted-foreground"}
-          >
-            1. Date & time
-          </li>
-          <ArrowRightIcon className="size-3 text-muted-foreground" aria-hidden="true" />
-          <li
-            aria-current={step === "details" ? "step" : undefined}
-            className={step === "details" ? "font-medium" : "text-muted-foreground"}
-          >
-            2. {rescheduling ? "Confirm" : bookingForStudents ? "Student details" : "Your details"}
-          </li>
-        </ol>
-      </header>
-      {original && (
-        <div className="flex flex-wrap items-start justify-between gap-3 border-b bg-muted/25 px-5 py-3 text-sm sm:px-6">
-          <div className="flex flex-col gap-1">
-            <p className="font-medium">
-              {rescheduling ? "Current booking" : "Previous consultation"}
-            </p>
-            <p className="text-muted-foreground">
-              {formatBookingDate(original.scheduledAt, timeZone)} ·{" "}
-              {formatBookingTime(original.scheduledAt, timeZone, hour12)}
-            </p>
-            <p className="line-clamp-2 max-w-xl break-words text-muted-foreground">
-              {original.reason}
-            </p>
-          </div>
-          {rescheduling && (
-            <p className="text-xs text-muted-foreground">
-              Your current time stays booked until you confirm.
-            </p>
-          )}
-        </div>
-      )}
-      {step === "time" ? (
-        <>
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
-            <Field className="min-w-0 max-w-full">
-              <FieldLabel className="sr-only">Timezone</FieldLabel>
-              <Select items={zoneItems} value={timeZone} onValueChange={changeTimeZone}>
-                <SelectTrigger className="w-fit min-w-0 max-w-full gap-2" size="sm">
-                  <GlobeIcon aria-hidden="true" />
-                  <SelectValue />
-                </SelectTrigger>
+  const title = {
+    duration: "Consultation duration",
+    time: "Date and time",
+    confirmed: rescheduling ? "Consultation rescheduled" : "Booking confirmed",
+    details: rescheduling ? "Reschedule consultation" : "Consultation details",
+  }[step];
+  const header = (
+    <DialogHeader className="shrink-0 border-b pe-14">
+      <DialogTitle ref={stepHeading} tabIndex={-1} className="outline-none">
+        {title}
+      </DialogTitle>
+      {step !== "confirmed" && (
+        <DialogDescription>
+          {step === "duration" ? (
+            "Choose a length to see available dates and times."
+          ) : step === "time" ? (
+            <>
+              Choose a date and time for your{" "}
+              <Select
+                items={durationItems}
+                value={durationMinutes}
+                onValueChange={(value) => {
+                  if (value !== null) changeDuration(value);
+                }}
+              >
+                <SelectPrimitive.Trigger
+                  aria-label={`Consultation length: ${durationMinutes} minutes`}
+                  render={
+                    <Button
+                      type="button"
+                      variant="link"
+                      size="sm"
+                      className="h-auto gap-1 px-0 py-0 align-baseline"
+                    />
+                  }
+                >
+                  <span className="underline underline-offset-4">
+                    <SelectValue>
+                      {durationMinutes === 30 ? "30-minute" : `${durationMinutes / 60}-hour`}
+                    </SelectValue>{" "}
+                    consultation
+                  </span>
+                  <ChevronDownIcon aria-hidden="true" data-icon="inline-end" />
+                </SelectPrimitive.Trigger>
                 <SelectPopup>
                   <SelectGroup>
-                    {zoneItems.map((zone) => (
-                      <SelectItem key={zone.value} value={zone.value}>
-                        {zone.label}
+                    {durationItems.map((duration) => (
+                      <SelectItem key={duration.value} value={duration.value}>
+                        {duration.label}
                       </SelectItem>
                     ))}
                   </SelectGroup>
                 </SelectPopup>
               </Select>
-            </Field>
-            <SegmentedControl
-              aria-label="Time format"
-              size="sm"
-              render={
-                <RadioGroupPrimitive
-                  value={hour12 ? "12" : "24"}
-                  onValueChange={(value) => setHour12(value === "12")}
-                />
-              }
-            >
-              <SegmentedControlItem
-                render={<RadioPrimitive.Root value="12" aria-label="12-hour time" />}
-              >
-                12h
-              </SegmentedControlItem>
-              <SegmentedControlItem
-                render={<RadioPrimitive.Root value="24" aria-label="24-hour time" />}
-              >
-                24h
-              </SegmentedControlItem>
-            </SegmentedControl>
-          </div>
-          <div className="grid @min-[640px]:grid-cols-[minmax(0,1fr)_minmax(15rem,0.65fr)]">
-            <section aria-label="Choose a date" className="flex min-w-0 flex-col gap-4 p-4 sm:p-6">
-              <h3 ref={stepHeading} tabIndex={-1} className="sr-only outline-none">
-                Choose a date
-              </h3>
-              <Calendar
-                mode="single"
-                required
-                selected={day}
-                month={month}
-                onMonthChange={setMonth}
-                onSelect={(value) => {
-                  if (value) {
-                    setDay(value);
-                    setSlot(null);
-                    setError("");
-                  }
-                }}
-                disabled={(value) => availableSlots(value, timeZone, now).length === 0}
-                startMonth={window.start}
-                endMonth={window.end}
-                fixedWeeks
-                showOutsideDays={false}
-                weekStartsOn={1}
-                className="w-full [--cell-size:clamp(2.25rem,6cqw,4rem)] sm:[--cell-size:clamp(2.25rem,6cqw,4rem)] [&_table]:w-full [&_table]:table-fixed"
-                classNames={{
-                  month_caption: "mx-0 mb-4 h-10 justify-start pe-20",
-                  caption_label: "text-lg font-semibold sm:text-lg",
-                  nav: "start-auto end-0 w-auto gap-1",
-                  button_previous: "size-9",
-                  button_next: "size-9",
-                  weekday: "h-8 text-[10px] uppercase",
-                  day: "w-auto p-0.5 [&:not([data-disabled]):not([data-selected])>button]:bg-muted/70",
-                  day_button: "w-full in-data-disabled:no-underline",
-                }}
-              />
-            </section>
-            <section
-              aria-label="Choose a time"
-              className="flex min-w-0 flex-col gap-4 border-t p-5 @min-[640px]:border-t-0 @min-[640px]:border-l sm:p-6"
-            >
-              <div className="flex flex-col gap-1">
-                <h3 className="text-base font-semibold">
-                  {day.toLocaleDateString("en-AU", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "short",
-                  })}
-                </h3>
-                <p aria-live="polite" className="text-xs text-muted-foreground">
-                  {slots.length} {slots.length === 1 ? "time" : "times"}
-                </p>
-              </div>
-              <RadioGroup
-                aria-label="Consultation time"
-                value={slot ?? ""}
-                onValueChange={(value) => setSlot(String(value))}
-                className="grid max-h-80 grid-cols-2 gap-2 overflow-y-auto overscroll-contain p-1 @min-[640px]:max-h-[26rem] @min-[640px]:grid-cols-1"
-              >
-                {slots.map((value) => (
-                  <RadioPrimitive.Root
-                    key={value.toISOString()}
-                    value={value.toISOString()}
-                    render={<Button type="button" variant="outline" size="lg" />}
-                    className="h-11 w-full gap-2 tabular-nums data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="size-1.5 rounded-full bg-success-foreground"
-                    />
-                    {formatBookingTime(value, timeZone, hour12)}
-                    {slot === value.toISOString() && <CheckIcon aria-hidden="true" />}
-                  </RadioPrimitive.Root>
-                ))}
-              </RadioGroup>
-              {slots.length === 0 && (
-                <p className="text-sm text-muted-foreground">
-                  No times on this date. Choose another day.
-                </p>
-              )}
-            </section>
-          </div>
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t px-5 py-4 sm:px-6">
-            <div className="flex flex-col gap-1">
-              <p role="status" className="text-sm font-medium">
-                {validSlot && selectedSlot
-                  ? `${formatBookingDate(selectedSlot, timeZone)} · ${formatBookingTime(selectedSlot, timeZone, hour12)}`
-                  : "Select a time to continue"}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Example availability · Calendar conflicts are not checked.
-              </p>
-            </div>
-            <Button
-              type="button"
-              disabled={!validSlot}
-              size="lg"
-              onClick={() => {
-                setError("");
-                setStep("details");
-              }}
-            >
-              Continue <ArrowRightIcon aria-hidden="true" />
-            </Button>
-          </div>
-          {error && (
-            <Alert variant="error" className="mx-5 mb-5 w-auto">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-        </>
-      ) : (
-        <form
-          ref={detailsForm}
-          onSubmit={(event) => void submit(event)}
-          className="mx-auto flex w-full min-w-0 max-w-2xl flex-col gap-6 p-6 sm:p-8"
-        >
-          <div className="flex flex-col gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="self-start"
-              disabled={pending}
-              onClick={() => {
-                if (detailsForm.current) {
-                  setDraft(readDraft(detailsForm.current));
-                }
-                setStep("time");
-              }}
-            >
-              <ArrowLeftIcon aria-hidden="true" /> Change date or time
-            </Button>
-            <div className="flex flex-col gap-2">
-              <h3
-                ref={stepHeading}
-                tabIndex={-1}
-                className="text-xl font-semibold tracking-tight outline-none"
-              >
-                {rescheduling
-                  ? "Confirm your new time"
-                  : bookingForStudents
-                    ? "Student consultation details"
-                    : "A few details, then you’re in."}
-              </h3>
-              {selectedSlot && (
-                <p className="text-sm text-muted-foreground">
-                  <time dateTime={slot!}>
-                    {formatBookingDate(selectedSlot, timeZone)} ·{" "}
-                    {formatBookingTime(selectedSlot, timeZone, hour12)}
-                  </time>
-                  <br />
-                  {timeZone.replaceAll("_", " ")} · {SESSION_MINUTES} minutes
-                </p>
-              )}
-            </div>
-          </div>
-          <Separator />
-          {bookingForStudents ? (
-            <fieldset disabled={pending}>
-              <legend className="sr-only">Student</legend>
-              <input type="hidden" name="teacherId" value={teachers[0]?.id ?? ""} />
-              <StudentSelect defaultValue={draft.enrolmentId} />
-            </fieldset>
-          ) : (
-            <fieldset disabled={pending}>
-              <legend className="sr-only">Your teacher</legend>
-              <TeacherSelect
-                teachers={teachers}
-                defaultValue={
-                  teachers.some((teacher) => teacher.id === draft.teacherId)
-                    ? draft.teacherId
-                    : null
-                }
-              />
-            </fieldset>
-          )}
-          {rescheduling ? (
-            <div className="flex flex-col gap-3 text-sm">
-              <p className="font-medium">
-                {original?.firstName} {original?.lastName}
-              </p>
-              <p className="break-words whitespace-pre-wrap text-muted-foreground">
-                {original?.reason}
-              </p>
-              <p className="text-muted-foreground">
-                Confirming replaces your current booking time.
-              </p>
-            </div>
-          ) : (
-            <fieldset disabled={pending} className="flex min-w-0 flex-col gap-5">
-              <legend className="sr-only">Your consultation details</legend>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field>
-                  <FieldLabel>
-                    {bookingForStudents ? "Student first name" : "First name"}
-                  </FieldLabel>
-                  <Input
-                    type="text"
-                    name="firstName"
-                    defaultValue={draft.firstName}
-                    autoComplete={bookingForStudents ? "off" : "given-name"}
-                    required
-                    maxLength={100}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel>{bookingForStudents ? "Student last name" : "Last name"}</FieldLabel>
-                  <Input
-                    type="text"
-                    name="lastName"
-                    defaultValue={draft.lastName}
-                    autoComplete={bookingForStudents ? "off" : "family-name"}
-                    required
-                    maxLength={100}
-                  />
-                </Field>
-              </div>
-              <Field>
-                <FieldLabel>What would you like to discuss?</FieldLabel>
-                <Textarea
-                  name="reason"
-                  defaultValue={draft.reason}
-                  required
-                  maxLength={2000}
-                  placeholder="Reason for consultation"
-                />
-              </Field>
-            </fieldset>
-          )}
-          {error && (
-            <Alert variant="error">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-4">
-            <p className="max-w-64 text-xs leading-relaxed text-muted-foreground">
-              {flow.mode === "rebook" ? "Creates a new booking." : ""}
-            </p>
-            <Button type="submit" loading={pending} size="lg">
-              {rescheduling ? "Confirm new time" : "Confirm booking"}
-              <ArrowRightIcon aria-hidden="true" />
-            </Button>
-          </div>
-        </form>
+            </>
+          ) : selectedSlot ? (
+            <>
+              <time dateTime={slot!}>
+                {formatBookingDate(selectedSlot, timeZone)} ·{" "}
+                {formatBookingTime(selectedSlot, timeZone, hour12)}
+              </time>{" "}
+              · {durationMinutes} minutes
+            </>
+          ) : null}
+        </DialogDescription>
       )}
-      {flow.mode !== "book" && (
-        <div className="border-t px-5 py-3">
-          <Button variant="ghost" size="sm" disabled={pending} onClick={onReset}>
-            {rescheduling ? "Keep current booking" : "Cancel rebooking"}
+    </DialogHeader>
+  );
+  if (confirmed && step === "confirmed") {
+    const emailNotice =
+      confirmed.emailSent === false ? (
+        <Alert variant="warning">
+          <AlertDescription>
+            Your booking is saved, but some calendar emails couldn’t be sent. Use Resend calendar
+            email in the consultation’s actions to try again.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <p role="status" className="text-sm text-muted-foreground">
+          Calendar invitations have been emailed to the student and teacher.
+        </p>
+      );
+    const calendarButton = (
+      <Button
+        variant="outline"
+        render={
+          <a
+            download="contour-consultation.ics"
+            href={`data:text/calendar;charset=utf-8,${encodeURIComponent(calendarEvent(confirmed.id, confirmed.scheduledAt, confirmed.durationMinutes))}`}
+          />
+        }
+      >
+        Add to calendar
+      </Button>
+    );
+
+    return (
+      <>
+        <DialogHeader className="pe-14">
+          <DialogTitle ref={stepHeading} tabIndex={-1} className="outline-none">
+            {title}
+          </DialogTitle>
+          <DialogDescription>
+            <time dateTime={confirmed.scheduledAt.toISOString()}>
+              {formatBookingDate(confirmed.scheduledAt, timeZone)} ·{" "}
+              {formatBookingTime(confirmed.scheduledAt, timeZone, hour12)}
+            </time>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogPanel>{emailNotice}</DialogPanel>
+        <DialogFooter>
+          {calendarButton}
+          <DialogClose render={<Button type="button" />}>Done</DialogClose>
+        </DialogFooter>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {header}
+      <form ref={detailsForm} onSubmit={(event) => void submit(event)} className="contents">
+        <DialogPanel className="@container min-h-0 p-0 in-[[data-slot=dialog-popup]:has([data-slot=dialog-header])]:pt-0">
+          {original && (
+            <div className="flex flex-wrap items-start justify-between gap-3 border-b bg-muted/25 px-5 py-3 text-sm sm:px-6">
+              <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <p className="font-medium whitespace-nowrap">
+                    {rescheduling ? "Current booking" : "Previous consultation"}
+                  </p>
+                  <p className="text-muted-foreground">
+                    {formatBookingDate(original.scheduledAt, timeZone)} ·{" "}
+                    {formatBookingTime(original.scheduledAt, timeZone, hour12)}
+                  </p>
+                </div>
+                <p className="line-clamp-2 max-w-xl break-words text-muted-foreground">
+                  {original.reason}
+                </p>
+              </div>
+            </div>
+          )}
+          {step === "duration" ? (
+            <section className="p-6 sm:py-10" aria-label="Consultation length">
+              <div className="grid gap-3 sm:grid-cols-3">
+                {CONSULTATION_DURATIONS.map((duration) => (
+                  <Button
+                    key={duration.minutes}
+                    type="button"
+                    variant="outline"
+                    className="h-auto min-h-28 flex-col gap-3 py-6"
+                    onClick={() => {
+                      changeDuration(duration.minutes);
+                      setStep("time");
+                    }}
+                  >
+                    <Clock3Icon aria-hidden="true" />
+                    {duration.label}
+                  </Button>
+                ))}
+              </div>
+            </section>
+          ) : step === "time" ? (
+            <>
+              {!bookingForStudents && teachers.length > 1 && (
+                <div className="border-b p-6">
+                  <TeacherSelect
+                    teachers={teachers}
+                    value={teacherId}
+                    onValueChange={changeTeacher}
+                  />
+                </div>
+              )}
+              {teacherId && availability.isError && (
+                <Alert variant="error" className="m-6 w-auto">
+                  <AlertDescription>
+                    Couldn’t load available times.{" "}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => void availability.refetch()}
+                    >
+                      Retry
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              )}
+              <section className="grid sm:grid-cols-2" aria-label="Choose a date and time">
+                <div className="@container min-w-0 p-6">
+                  <Calendar
+                    className="w-full [--cell-size:calc(100cqw/7)] sm:[--cell-size:calc(100cqw/7)] [&_table]:w-full [&_table]:border-collapse"
+                    mode="single"
+                    required
+                    selected={day}
+                    month={month}
+                    onMonthChange={setViewedMonth}
+                    onSelect={(value) => {
+                      if (value) {
+                        setChosenDay(value);
+                        setSlot(null);
+                        setError("");
+                      }
+                    }}
+                    disabled={(value) => !availableDays.has(value.getTime())}
+                    startMonth={window.start}
+                    endMonth={window.end}
+                    fixedWeeks
+                    showOutsideDays={false}
+                    weekStartsOn={1}
+                  />
+                </div>
+                <div className="flex min-w-0 flex-col gap-4 border-t p-6 sm:border-t-0 sm:border-s">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-sm font-medium">
+                      {day.toLocaleDateString("en-AU", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </h3>
+                    <SegmentedControl
+                      aria-label="Time format"
+                      className="shrink-0"
+                      size="sm"
+                      render={
+                        <RadioGroupPrimitive
+                          value={hour12 ? "12" : "24"}
+                          onValueChange={(value) => setHour12(value === "12")}
+                        />
+                      }
+                    >
+                      <SegmentedControlItem
+                        render={<RadioPrimitive.Root value="12" aria-label="12-hour time" />}
+                      >
+                        12h
+                      </SegmentedControlItem>
+                      <SegmentedControlItem
+                        render={<RadioPrimitive.Root value="24" aria-label="24-hour time" />}
+                      >
+                        24h
+                      </SegmentedControlItem>
+                    </SegmentedControl>
+                  </div>
+                  <div className="relative min-h-40 flex-1 max-sm:h-48 max-sm:flex-none">
+                    <div className="absolute inset-0">
+                      <ScrollArea overscrollContain scrollbarGutter scrollFade>
+                        <div className="pb-1">
+                          <ToggleGroup
+                            aria-label="Consultation time"
+                            className="grid w-full grid-cols-1 gap-1.5"
+                            value={slot ? [slot] : []}
+                            onValueChange={(values) => {
+                              const value = values[0];
+                              if (!value) return;
+                              setSlot(String(value));
+                              setError("");
+                              setStep("details");
+                            }}
+                          >
+                            {slots.map((value) => (
+                              <Toggle
+                                key={value.toISOString()}
+                                type="button"
+                                size="sm"
+                                value={value.toISOString()}
+                                variant="outline"
+                              >
+                                {formatBookingTime(value, timeZone, hour12)}
+                              </Toggle>
+                            ))}
+                          </ToggleGroup>
+                          {slots.length === 0 && (
+                            <p role="status" className="text-sm text-muted-foreground">
+                              {!teacherId
+                                ? "Choose a teacher to see available times."
+                                : availability.isPending
+                                  ? "Loading available times…"
+                                  : availability.isError
+                                    ? "Available times could not be loaded."
+                                    : publishedSlots.length === 0
+                                      ? "This teacher has no available times for this duration in the next 90 days. Try a shorter consultation or contact your teacher."
+                                      : "No times on this date. Choose another day."}
+                            </p>
+                          )}
+                        </div>
+                      </ScrollArea>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              {error && (
+                <Alert variant="error" className="mx-5 mb-5 w-auto">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+            </>
+          ) : (
+            <div className="mx-auto flex w-full min-w-0 max-w-2xl flex-col gap-6 p-6 sm:p-8">
+              {!rescheduling || !bookingForStudents ? (
+                <fieldset disabled={pending}>
+                  <legend className="sr-only">{bookingForStudents ? "Student" : "Teacher"}</legend>
+                  {bookingForStudents ? (
+                    <StudentSelect defaultValue={draft.enrolmentId} />
+                  ) : (
+                    <TeacherSelect
+                      teachers={teachers}
+                      value={teacherId}
+                      onValueChange={changeTeacher}
+                    />
+                  )}
+                </fieldset>
+              ) : null}
+              {rescheduling ? (
+                <div className="flex flex-col gap-3 text-sm">
+                  {bookingForStudents && (
+                    <p className="font-medium">
+                      {original?.firstName} {original?.lastName}
+                    </p>
+                  )}
+                  <p className="break-words whitespace-pre-wrap text-muted-foreground">
+                    {original?.reason}
+                  </p>
+                  <p className="text-muted-foreground">
+                    Confirming replaces your current booking time.
+                  </p>
+                </div>
+              ) : (
+                <fieldset disabled={pending} className="flex min-w-0 flex-col gap-5">
+                  <legend className="sr-only">Consultation details</legend>
+                  <Field>
+                    <FieldLabel>Discussion notes</FieldLabel>
+                    <Textarea
+                      name="reason"
+                      defaultValue={draft.reason}
+                      required
+                      maxLength={2000}
+                      placeholder="Add a topic or question"
+                    />
+                  </Field>
+                </fieldset>
+              )}
+              {error && (
+                <Alert variant="error">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+          )}
+        </DialogPanel>
+        <DialogFooter className="flex shrink-0 flex-col-reverse gap-3 border-t px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            {step === "details" && (
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={pending}
+                onClick={() => {
+                  if (detailsForm.current) setDraft(readDraft(detailsForm.current));
+                  setError("");
+                  setSlot(null);
+                  setStep("time");
+                }}
+              >
+                <ArrowLeftIcon aria-hidden="true" /> Back
+              </Button>
+            )}
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            <DialogClose render={<Button type="button" variant="outline" disabled={pending} />}>
+              Cancel
+            </DialogClose>
+            {step === "details" && (
+              <Button
+                type="submit"
+                loading={pending}
+                disabled={!slots.some((value) => value.toISOString() === slot)}
+              >
+                {rescheduling ? "Confirm new time" : "Confirm booking"}
+                <ArrowRightIcon aria-hidden="true" />
+              </Button>
+            )}
+          </div>
+        </DialogFooter>
+      </form>
+    </>
+  );
+}
+
+function StudentSelect({ defaultValue }: { defaultValue?: string }) {
+  const query = useInfiniteQuery(
+    orpc.enrolment.students.infiniteOptions({
+      input: (page: number) => ({ page }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, _pages, page) =>
+        lastPage.hasMore && page < 10000 ? page + 1 : undefined,
+    }),
+  );
+  const items =
+    query.data?.pages
+      .flatMap((page) => page.items)
+      .map((student) => ({
+        value: student.id,
+        label: student.studentName
+          ? `${student.studentName} · ${student.studentEmail}`
+          : student.studentEmail,
+      })) ?? [];
+
+  return (
+    <Field name="enrolmentId">
+      <FieldLabel>Student</FieldLabel>
+      <Select
+        name="enrolmentId"
+        items={items}
+        defaultValue={defaultValue ?? null}
+        required
+        disabled={query.isPending || (!query.data && query.isError)}
+      >
+        <SelectTrigger>
+          <SelectValue
+            placeholder={query.isPending ? "Loading students…" : "Choose an enrolled student"}
+          />
+        </SelectTrigger>
+        <SelectPopup>
+          <SelectGroup>
+            {items.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectPopup>
+      </Select>
+      {query.isError ? (
+        <div className="flex flex-col items-start gap-2">
+          <p role="alert" className="text-sm text-destructive-foreground">
+            Could not load students.
+          </p>
+          <Button type="button" variant="outline" size="sm" onClick={() => void query.refetch()}>
+            Try again
           </Button>
         </div>
-      )}
-    </div>
+      ) : null}
+      {query.hasNextPage ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="self-start"
+          loading={query.isFetchingNextPage}
+          onClick={() => void query.fetchNextPage()}
+        >
+          Load more students
+        </Button>
+      ) : null}
+      {!query.isPending && !query.isError && items.length === 0 ? (
+        <FieldDescription>
+          No students enrolled yet.{" "}
+          <Link href="/students" className="underline underline-offset-4">
+            Enrol a student
+          </Link>{" "}
+          to book for them.
+        </FieldDescription>
+      ) : null}
+    </Field>
+  );
+}
+
+function TeacherSelect({
+  teachers,
+  value,
+  onValueChange,
+}: {
+  teachers: { id: string; email: string }[];
+  value: string | null;
+  onValueChange: (value: string | null) => void;
+}) {
+  const items = teachers.map((teacher) => ({ label: teacher.email, value: teacher.id }));
+  return (
+    <Field name="teacherId">
+      <FieldLabel>Teacher</FieldLabel>
+      <Select name="teacherId" items={items} value={value} onValueChange={onValueChange} required>
+        <SelectTrigger>
+          <SelectValue placeholder="Choose your teacher" />
+        </SelectTrigger>
+        <SelectPopup>
+          <SelectGroup>
+            {items.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectPopup>
+      </Select>
+    </Field>
   );
 }

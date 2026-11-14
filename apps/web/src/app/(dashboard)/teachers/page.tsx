@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { requireAccount } from "#lib/account.server.ts";
-import { Teachers } from "#components/teachers.tsx";
+import { Teachers } from "./teachers";
 import { serverOrpc } from "#lib/orpc.server.ts";
 import { HydrateClient, prefetch } from "#lib/query-server.tsx";
 

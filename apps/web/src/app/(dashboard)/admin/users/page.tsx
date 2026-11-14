@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireAccount } from "#lib/account.server.ts";
 import { PageLayout } from "#components/page-layout.tsx";
-import { UserManagement } from "#components/user-management.tsx";
+import { UserManagement } from "./user-management";
 import { serverOrpc } from "#lib/orpc.server.ts";
 import { HydrateClient, prefetch } from "#lib/query-server.tsx";
 

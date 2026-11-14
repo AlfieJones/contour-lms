@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { env } from "#env.ts";
 import { headers } from "next/headers";
 import { PageLayout } from "#components/page-layout.tsx";
 
@@ -11,8 +12,7 @@ export default async function CheckEmailPage({
   const email = typeof params.email === "string" ? params.email : null;
   const host = (await headers()).get("host") ?? "";
   const isLocalDevelopment =
-    process.env.NODE_ENV === "development" &&
-    /^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/.test(host);
+    env.NODE_ENV === "development" && /^(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/.test(host);
 
   return (
     <PageLayout

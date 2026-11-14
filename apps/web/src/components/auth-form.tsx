@@ -111,6 +111,14 @@ export function AuthForm({ signup = false, email = "" }: { signup?: boolean; ema
         <Button className="w-full" type="submit" loading={pending}>
           {signup ? "Sign up" : "Log in"}
         </Button>
+        {!signup && (
+          <Link
+            href="/forgot-password"
+            className="text-center text-sm text-muted-foreground hover:underline"
+          >
+            Forgot your password?
+          </Link>
+        )}
       </Form>
     </PageLayout>
   );
