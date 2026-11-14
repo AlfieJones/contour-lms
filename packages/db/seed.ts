@@ -17,6 +17,7 @@ if (
   throw new Error("Demo seeding requires local Supabase credentials. Run pnpm seed.");
 }
 
+const timeZone = "Australia/Melbourne";
 const password = "ContourDemo123!";
 const accounts = [
   { email: "admin@example.com", name: "Demo Admin", role: "student" },
@@ -83,6 +84,10 @@ try {
         set: { studentId: sql`excluded.student_id`, studentName: sql`excluded.student_name` },
       });
     await tx
+      .insert(schema.teacherScheduleSettings)
+      .values({ teacherId: teacher.id, timeZone })
+      .onConflictDoUpdate({ target: schema.teacherScheduleSettings.teacherId, set: { timeZone } });
+    await tx
       .delete(schema.teacherAvailability)
       .where(eq(schema.teacherAvailability.teacherId, teacher.id));
     await tx.insert(schema.teacherAvailability).values(
@@ -107,24 +112,33 @@ try {
       .where(
         sql`${schema.consultations.teacherId} = ${teacher.id} and ${schema.consultations.status} <> 'cancelled'`,
       );
-    // Start tomorrow at 10am Perth time and choose two free weekday sessions.
-    const perth = new Date(Date.now() + 8 * 3600_000);
-    let candidate = Date.UTC(
-      perth.getUTCFullYear(),
-      perth.getUTCMonth(),
-      perth.getUTCDate() + 1,
-      2,
-    );
+    // Choose free weekday sessions from tomorrow in Melbourne, including DST.
+    const formatter = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      weekday: "short",
+      hour: "2-digit",
+      hourCycle: "h23",
+    });
+    const localParts = (time: number) =>
+      Object.fromEntries(formatter.formatToParts(time).map(({ type, value }) => [type, value]));
+    const localDate = (parts: Record<string, string>) =>
+      `${parts.year}-${parts.month}-${parts.day}`;
+    const today = localDate(localParts(Date.now()));
+    let candidate = Math.ceil((Date.now() + 3600_000) / (30 * 60_000)) * 30 * 60_000;
     const upcoming: Date[] = [];
     const bookingHorizon = Date.now() + 90 * 86400_000;
     while (upcoming.length < 2 && candidate <= bookingHorizon) {
-      const local = new Date(candidate + 8 * 3600_000);
+      const local = localParts(candidate);
       const end = candidate + 30 * 60_000;
       if (
-        local.getUTCDay() > 0 &&
-        local.getUTCDay() < 6 &&
-        local.getUTCHours() >= 9 &&
-        local.getUTCHours() < 17 &&
+        localDate(local) > today &&
+        local.weekday !== "Sat" &&
+        local.weekday !== "Sun" &&
+        Number(local.hour) >= 9 &&
+        Number(local.hour) < 17 &&
         !occupied.some(
           (booking) =>
             booking.scheduledAt.getTime() < end &&
@@ -194,7 +208,7 @@ try {
     })),
   );
   console.log(
-    "Seeded two enrolled students, weekday availability (9am–5pm Perth), and four consultations.",
+    "Seeded two enrolled students, weekday availability (9am–5pm Melbourne), and four consultations.",
   );
 } finally {
   await db.$client.end();

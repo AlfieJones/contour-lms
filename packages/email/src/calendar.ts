@@ -3,6 +3,7 @@ export interface ConsultationCalendarEmailProps {
   sequence: number;
   kind: "booked" | "rescheduled" | "cancelled";
   scheduledAt: string;
+  timeZone?: string;
   updatedAt: string;
   durationMinutes: number;
   studentName: string;

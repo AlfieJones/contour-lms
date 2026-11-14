@@ -89,6 +89,7 @@ export const consultationEmails = appSchema.table(
     recipient: text().notNull(),
     details: jsonb()
       .$type<{
+        timeZone?: string;
         kind: "booked" | "rescheduled" | "cancelled";
         scheduledAt: string;
         durationMinutes: number;
@@ -136,6 +137,14 @@ export const enrolments = appSchema.table(
   ],
 );
 
+// Kept separately so a teacher's timezone survives clearing all weekly hours.
+export const teacherScheduleSettings = appSchema.table("teacher_schedule_settings", {
+  teacherId: uuid("teacher_id")
+    .primaryKey()
+    .references(() => authUsers.id, { onDelete: "cascade" }),
+  timeZone: text("time_zone").notNull(),
+});
+
 export const teacherAvailability = appSchema.table(
   "teacher_availability",
   {
@@ -143,7 +152,7 @@ export const teacherAvailability = appSchema.table(
     teacherId: uuid("teacher_id")
       .notNull()
       .references(() => authUsers.id, { onDelete: "cascade" }),
-    // Weekly wall-clock hours in Australia/Perth. Sunday is 0; 1440 is midnight.
+    // Weekly hours in the teacher's saved timezone. Sunday is 0; 1440 is midnight.
     dayOfWeek: integer("day_of_week").notNull(),
     startMinute: integer("start_minute").notNull(),
     endMinute: integer("end_minute").notNull(),

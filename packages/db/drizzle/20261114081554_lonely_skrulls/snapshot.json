@@ -1,0 +1,111 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "f3563b11-0b47-4299-9a5b-2cbb4878f576",
+  "prevIds": ["4856e38f-2c24-46e0-aee7-8f39bbedd7fa"],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "teacher_schedule_settings"],
+      "writes": [
+        "s|tbl|app.teacher_schedule_settings",
+        "n|tbl|app.teacher_schedule_settings",
+        "e|tbl|app.teacher_schedule_settings",
+        "n|rel|app.teacher_schedule_settings",
+        "n|type|app.teacher_schedule_settings",
+        "n|rel|app.teacher_schedule_settings_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "teacher_schedule_settings"],
+      "writes": [
+        "s|fk|app.teacher_schedule_settings.teacher_schedule_settings_teacher_id_users_id_fkey",
+        "n|fk|app.teacher_schedule_settings.teacher_schedule_settings_teacher_id_users_id_fkey",
+        "e|fk|app.teacher_schedule_settings.teacher_schedule_settings_teacher_id_users_id_fkey",
+        "n|con|app.teacher_schedule_settings.teacher_schedule_settings_teacher_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.teacher_schedule_settings",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.teacher_schedule_settings.teacher_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "name": "teacher_schedule_settings",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "teacher_schedule_settings",
+        "name": "teacher_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "teacher_schedule_settings",
+        "name": "time_zone",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "teacher_schedule_settings",
+        "name": "teacher_schedule_settings_teacher_id_users_id_fkey",
+        "nameExplicit": false,
+        "columns": ["teacher_id"],
+        "schemaTo": "auth",
+        "tableTo": "users",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "teacher_schedule_settings",
+        "name": "teacher_schedule_settings_pkey",
+        "columns": ["teacher_id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    }
+  ]
+}

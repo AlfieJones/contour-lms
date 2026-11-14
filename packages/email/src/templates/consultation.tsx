@@ -4,10 +4,11 @@ import { EmailText } from "../components/email-text.tsx";
 import { EmailAction } from "../components/email-action.tsx";
 
 export function ConsultationEmail(input: ConsultationCalendarEmailProps) {
+  const timeZone = input.timeZone ?? "UTC";
   const when = new Intl.DateTimeFormat("en-AU", {
     dateStyle: "full",
-    timeStyle: "short",
-    timeZone: "Australia/Perth",
+    timeStyle: "long",
+    timeZone,
   }).format(new Date(input.scheduledAt));
   return (
     <EmailLayout title={consultationEmailTitle(input.kind)}>
@@ -15,7 +16,7 @@ export function ConsultationEmail(input: ConsultationCalendarEmailProps) {
         {input.studentName} · {input.teacherName}
       </EmailText>
       <EmailText>
-        {when} (Perth, UTC+8) · {input.durationMinutes} minutes
+        {when} ({timeZone}) · {input.durationMinutes} minutes
       </EmailText>
       <EmailText>
         {input.kind === "cancelled"

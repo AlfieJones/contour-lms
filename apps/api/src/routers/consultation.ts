@@ -12,7 +12,7 @@ import {
   type Transaction,
 } from "#procedures";
 import {
-  AVAILABILITY_TIME_ZONE,
+  isValidTimeZone,
   BOOKING_WINDOW_DAYS,
   generateAvailableSlots,
   isAvailableTime,
@@ -68,6 +68,9 @@ export async function queueConsultationEmail(
     ),
   ];
   if (!recipients.length) return;
+  const settings = booking.teacherId
+    ? await tx.query.teacherScheduleSettings.findFirst({ where: { teacherId: booking.teacherId } })
+    : undefined;
   await tx
     .insert(emails)
     .values(
@@ -76,6 +79,7 @@ export async function queueConsultationEmail(
         sequence: booking.calendarSequence,
         recipient,
         details: {
+          timeZone: settings?.timeZone ?? "UTC",
           kind,
           scheduledAt: booking.scheduledAt.toISOString(),
           durationMinutes: booking.durationMinutes,
@@ -138,6 +142,7 @@ const maximumDuration = 120 * 60_000;
 
 const availabilityInput = z
   .object({
+    timeZone: z.string().max(100).refine(isValidTimeZone, "Choose a valid timezone."),
     windows: z
       .array(
         z
@@ -179,12 +184,16 @@ const availabilityInput = z
     }
   });
 
-function readAvailability(db: Database | Transaction, teacherId: string) {
-  return db.query.teacherAvailability.findMany({
-    columns: { dayOfWeek: true, startMinute: true, endMinute: true },
-    where: { teacherId },
-    orderBy: { dayOfWeek: "asc", startMinute: "asc" },
-  });
+async function readAvailability(db: Database | Transaction, teacherId: string) {
+  const [windows, settings] = await Promise.all([
+    db.query.teacherAvailability.findMany({
+      columns: { dayOfWeek: true, startMinute: true, endMinute: true },
+      where: { teacherId },
+      orderBy: { dayOfWeek: "asc", startMinute: "asc" },
+    }),
+    db.query.teacherScheduleSettings.findFirst({ where: { teacherId } }),
+  ]);
+  return { windows, timeZone: settings?.timeZone ?? null };
 }
 
 async function requireAvailableSlot(
@@ -194,8 +203,8 @@ async function requireAvailableSlot(
   durationMinutes: number,
   excludeId?: string,
 ) {
-  const windows = await readAvailability(tx, teacherId);
-  if (!isAvailableTime(scheduledAt, windows, new Date(), durationMinutes)) {
+  const { windows, timeZone } = await readAvailability(tx, teacherId);
+  if (!timeZone || !isAvailableTime(scheduledAt, windows, new Date(), timeZone, durationMinutes)) {
     throw new ORPCError("BAD_REQUEST", {
       message:
         "Choose a time within the teacher’s published availability, at least one hour ahead and within 90 days.",
@@ -222,12 +231,16 @@ async function requireAvailableSlot(
 }
 
 const consultationAvailabilityRouter = {
-  get: teacherProcedure.handler(async ({ context }) => ({
-    windows: await readAvailability(context.db, context.account.id),
-    timeZone: AVAILABILITY_TIME_ZONE,
-  })),
+  get: teacherProcedure.handler(({ context }) => readAvailability(context.db, context.account.id)),
   save: teacherProcedure.input(availabilityInput).handler(({ context, input }) =>
     withTeacherSchedule(context.db, context.account.id, async (tx) => {
+      await tx
+        .insert(schema.teacherScheduleSettings)
+        .values({ teacherId: context.account.id, timeZone: input.timeZone })
+        .onConflictDoUpdate({
+          target: schema.teacherScheduleSettings.teacherId,
+          set: { timeZone: input.timeZone },
+        });
       await tx.delete(availability).where(eq(availability.teacherId, context.account.id));
       if (input.windows.length > 0) {
         await tx.insert(availability).values(
@@ -237,10 +250,7 @@ const consultationAvailabilityRouter = {
           })),
         );
       }
-      return {
-        windows: await readAvailability(tx, context.account.id),
-        timeZone: AVAILABILITY_TIME_ZONE,
-      };
+      return readAvailability(tx, context.account.id);
     }),
   ),
   slots: protectedProcedure
@@ -278,7 +288,7 @@ const consultationAvailabilityRouter = {
         if (!owned) throw new ORPCError("NOT_FOUND");
       }
       const now = new Date();
-      const [windows, bookings] = await Promise.all([
+      const [schedule, bookings] = await Promise.all([
         readAvailability(context.db, input.teacherId),
         context.db.query.consultations.findMany({
           columns: { scheduledAt: true, durationMinutes: true },
@@ -293,7 +303,17 @@ const consultationAvailabilityRouter = {
           },
         }),
       ]);
-      return { slots: generateAvailableSlots(windows, bookings, now, input.durationMinutes) };
+      return {
+        slots: schedule.timeZone
+          ? generateAvailableSlots(
+              schedule.windows,
+              bookings,
+              now,
+              schedule.timeZone,
+              input.durationMinutes,
+            )
+          : [],
+      };
     }),
 };
 

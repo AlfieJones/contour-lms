@@ -72,6 +72,7 @@ test.each(["booked", "rescheduled", "cancelled"] as const)(
       sequence: 2,
       kind,
       scheduledAt: "2026-12-01T01:00:00Z",
+      timeZone: "Australia/Melbourne",
       updatedAt: "2026-11-14T04:00:00Z",
       durationMinutes: 60,
       studentName: "Test Student",
@@ -83,6 +84,9 @@ test.each(["booked", "rescheduled", "cancelled"] as const)(
     const message = sendMail.mock.calls[0]![0];
     expect(message.to).toEqual({ address: "teacher@example.com", name: "" });
     expect(message.html).toContain("https://learn.example.com/");
+    expect(message.text).toContain("Australia/Melbourne");
+    expect(message.text).toMatch(/12:00/);
+    expect(message.text).not.toContain("Perth");
     expect(message.icalEvent).toMatchObject({
       filename: "consultation.ics",
       method: kind === "cancelled" ? "CANCEL" : "REQUEST",
