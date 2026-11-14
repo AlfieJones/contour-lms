@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@lms/db": "workspace:*",
-    "@orpc/client": "2.0.0-beta.42",
-    "@orpc/server": "2.0.0-beta.42",
+    "@orpc/client": "2.0.0-beta.50",
+    "@orpc/server": "2.0.0-beta.50",
     "@orpc/shared": "catalog:",
     "@supabase/supabase-js": "catalog:",
     "zod": "catalog:"

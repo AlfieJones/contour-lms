@@ -35,14 +35,14 @@
   },
   "dependencies": {
     "@lms/env": "workspace:*",
-    "drizzle-orm": "1.0.0-rc.4",
-    "postgres": "3.4.9"
+    "drizzle-orm": "1.0.0-rc.5",
+    "postgres": "4.1.1"
   },
   "devDependencies": {
     "@lms/config": "workspace:*",
     "@next/env": "catalog:",
     "@types/node": "catalog:",
-    "drizzle-kit": "1.0.0-rc.4",
+    "drizzle-kit": "1.0.0-rc.5",
     "tsdown": "catalog:",
     "typescript": "catalog:"
   }

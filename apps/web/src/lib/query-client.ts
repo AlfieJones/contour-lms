@@ -14,7 +14,7 @@ export function makeQueryClient() {
       queries: {
         staleTime: 60 * 1000,
         queryKeyHashFn: (queryKey) => {
-          const { json, meta } = serializer.serialize(queryKey);
+          const { json, meta } = serializer.serializeJson(queryKey);
           return hashKey([json, meta?.map((entry) => JSON.stringify(entry)).sort()]);
         },
       },
@@ -24,10 +24,10 @@ export function makeQueryClient() {
           defaultShouldDehydrateQuery(query) || query.state.status === "pending",
         // Next.js handles error redaction and needs its own errors for dynamic rendering.
         shouldRedactErrors: () => false,
-        serializeData: (data) => serializer.serialize(data),
+        serializeData: (data) => serializer.serializeJson(data),
       },
       hydrate: {
-        deserializeData: (data) => serializer.deserialize(data),
+        deserializeData: (data) => serializer.deserializeJson(data),
       },
     },
   });

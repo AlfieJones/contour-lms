@@ -29,7 +29,7 @@
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "pnpm": "catalog:",
-    "supabase": "2.120.0",
+    "supabase": "3.1.0",
     "turbo": "catalog:"
   },
   "lint-staged": {
@@ -41,5 +41,5 @@
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@12.10.1"
+  "packageManager": "pnpm@12.18.0"
 }
