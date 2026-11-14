@@ -46,8 +46,35 @@ import { formText } from "#lib/form.ts";
 export function StudentEnrolments() {
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
-  const enrolMutation = useMutation(orpc.enrolment.enrol.mutationOptions());
-  const unenrolMutation = useMutation(orpc.enrolment.unenrol.mutationOptions());
+  const enrolMutation = useMutation(
+    orpc.enrolment.enrol.mutationOptions({
+      onSuccess: async () => {
+        const queryKey = orpc.enrolment.key();
+        await queryClient.cancelQueries({ queryKey });
+        await queryClient.invalidateQueries({ queryKey });
+      },
+    }),
+  );
+  const unenrolMutation = useMutation(
+    orpc.enrolment.unenrol.mutationOptions({
+      onSuccess: async (_result, { cancelUpcoming }) => {
+        const keys = [orpc.enrolment.key()];
+        if (cancelUpcoming) {
+          keys.push(
+            orpc.consultation.list.key(),
+            orpc.admin.consultations.key(),
+            orpc.consultation.availability.slots.key(),
+          );
+        }
+        await Promise.all(
+          keys.map(async (queryKey) => {
+            await queryClient.cancelQueries({ queryKey });
+            await queryClient.invalidateQueries({ queryKey });
+          }),
+        );
+      },
+    }),
+  );
   const [pending, setPending] = useState(false);
   const [enrolOpen, setEnrolOpen] = useState(false);
   const [error, setError] = useState("");

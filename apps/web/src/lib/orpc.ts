@@ -2,7 +2,7 @@ import type { RouterClient } from "@orpc/server";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { Router } from "@lms/api";
-import { createAppQueryUtils } from "#lib/orpc-query-utils.ts";
+import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 
 const link = new RPCLink({
   url: "/api/rpc",
@@ -18,4 +18,4 @@ const link = new RPCLink({
 // Server Components import serverClient from orpc.server.ts directly.
 export const client: RouterClient<Router> = createORPCClient(link);
 
-export const orpc = createAppQueryUtils(client);
+export const orpc = createTanstackQueryUtils(client);

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
+  type QueryKey,
   keepPreviousData,
   noop,
   useMutation,
@@ -33,7 +34,7 @@ import { toastManager } from "@lms/ui/toast";
 import { Tooltip, TooltipPopup, TooltipTrigger } from "@lms/ui/tooltip";
 import { PageLayout } from "#components/page-layout.tsx";
 import { DataTable } from "#components/data-table.tsx";
-import { orpc } from "#lib/orpc.ts";
+import { type client, orpc } from "#lib/orpc.ts";
 import { useLocalTimezone } from "#lib/use-local-timezone.ts";
 import type { Account } from "@lms/api";
 import { formatBookingDate, formatBookingTime } from "#lib/consultation-scheduling.ts";
@@ -43,6 +44,8 @@ import {
   type BookingFlow,
   type Consultation,
 } from "#components/consultation-scheduler.tsx";
+
+type ConsultationPage = Awaited<ReturnType<typeof client.consultation.list>>;
 
 export function ConsultationDashboard({
   account,
@@ -63,12 +66,32 @@ export function ConsultationDashboard({
   const [page, setPage] = useState(1);
   const [view, setView] = useState(admin ? "table" : "calendar");
   const queryClient = useQueryClient();
-  const create = useMutation(orpc.consultation.create.mutationOptions());
-  const createForStudent = useMutation(orpc.consultation.createForStudent.mutationOptions());
-  const reschedule = useMutation(orpc.consultation.reschedule.mutationOptions());
-  const cancel = useMutation(orpc.consultation.cancel.mutationOptions());
+  const create = useMutation(
+    orpc.consultation.create.mutationOptions({ onSuccess: () => refreshConsultations(true) }),
+  );
+  const createForStudent = useMutation(
+    orpc.consultation.createForStudent.mutationOptions({
+      onSuccess: () => refreshConsultations(true),
+    }),
+  );
+  const reschedule = useMutation(
+    orpc.consultation.reschedule.mutationOptions({ onSuccess: () => refreshConsultations(true) }),
+  );
+  const cancel = useMutation(
+    orpc.consultation.cancel.mutationOptions({
+      onMutate: ({ id }) => updateStatus(id, "cancelled"),
+      onError: (_error, _input, previous) => restoreConsultations(previous),
+      onSettled: () => refreshConsultations(true),
+    }),
+  );
   const resendCalendarEmail = useMutation(orpc.consultation.resendCalendarEmail.mutationOptions());
-  const setComplete = useMutation(orpc.consultation.setComplete.mutationOptions());
+  const setComplete = useMutation(
+    orpc.consultation.setComplete.mutationOptions({
+      onMutate: ({ id, complete }) => updateStatus(id, complete ? "completed" : "scheduled"),
+      onError: (_error, _input, previous) => restoreConsultations(previous),
+      onSettled: () => refreshConsultations(false),
+    }),
+  );
   const [pending, setPending] = useState(false);
   const saving = useRef(false);
   const [flow, setFlow] = useState<BookingFlow>({ mode: "book" });
@@ -91,6 +114,41 @@ export function ConsultationDashboard({
           placeholderData: keepPreviousData,
         }),
   );
+
+  async function refreshConsultations(includeSlots: boolean) {
+    const keys: QueryKey[] = [orpc.consultation.list.key(), orpc.admin.consultations.key()];
+    if (includeSlots) keys.push(orpc.consultation.availability.slots.key());
+    await Promise.all(
+      keys.map(async (queryKey) => {
+        // Cancel inactive page prefetches too, so stale results cannot land after invalidation.
+        await queryClient.cancelQueries({ queryKey });
+        await queryClient.invalidateQueries({ queryKey });
+      }),
+    );
+  }
+
+  async function updateStatus(id: string, status: Consultation["status"]) {
+    const keys = [orpc.consultation.list.key(), orpc.admin.consultations.key()];
+    await Promise.all(keys.map((queryKey) => queryClient.cancelQueries({ queryKey })));
+    const previous = keys.flatMap((queryKey) =>
+      queryClient.getQueriesData<ConsultationPage>({ queryKey }),
+    );
+    for (const queryKey of keys) {
+      queryClient.setQueriesData<ConsultationPage>({ queryKey }, (page) =>
+        page
+          ? {
+              ...page,
+              items: page.items.map((item) => (item.id === id ? { ...item, status } : item)),
+            }
+          : page,
+      );
+    }
+    return previous;
+  }
+
+  function restoreConsultations(previous: Awaited<ReturnType<typeof updateStatus>> | undefined) {
+    for (const [queryKey, page] of previous ?? []) queryClient.setQueryData(queryKey, page);
+  }
 
   const hasMore = query.data?.hasMore;
   const { isPlaceholderData, dataUpdatedAt } = query;

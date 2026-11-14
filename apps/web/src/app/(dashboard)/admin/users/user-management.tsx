@@ -21,7 +21,9 @@ import {
 } from "@lms/ui/select";
 import { Spinner } from "@lms/ui/spinner";
 import { toastManager } from "@lms/ui/toast";
-import { orpc } from "#lib/orpc.ts";
+import { type client, orpc } from "#lib/orpc.ts";
+
+type UserPage = Awaited<ReturnType<typeof client.admin.users.list>>;
 
 const roles = [
   { value: "student", label: "Student" },
@@ -31,7 +33,35 @@ const roles = [
 export function UserManagement() {
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
-  const changeRole = useMutation(orpc.admin.users.setRole.mutationOptions());
+  const changeRole = useMutation(
+    orpc.admin.users.setRole.mutationOptions({
+      onMutate: async ({ userId, role }) => {
+        const queryKey = orpc.admin.users.list.key();
+        await queryClient.cancelQueries({ queryKey });
+        const previous = queryClient.getQueriesData<UserPage>({ queryKey });
+        queryClient.setQueriesData<UserPage>({ queryKey }, (page) =>
+          page
+            ? {
+                ...page,
+                items: page.items.map((user) => (user.id === userId ? { ...user, role } : user)),
+              }
+            : page,
+        );
+        return previous;
+      },
+      onError: (_error, _input, previous) => {
+        for (const [queryKey, page] of previous ?? []) queryClient.setQueryData(queryKey, page);
+      },
+      onSettled: async () => {
+        await Promise.all(
+          [orpc.admin.users.list.key(), orpc.enrolment.key()].map(async (queryKey) => {
+            await queryClient.cancelQueries({ queryKey });
+            await queryClient.invalidateQueries({ queryKey });
+          }),
+        );
+      },
+    }),
+  );
   const changingId = changeRole.isPending ? changeRole.variables.userId : null;
   const query = useQuery(
     orpc.admin.users.list.queryOptions({ input: { page }, placeholderData: keepPreviousData }),

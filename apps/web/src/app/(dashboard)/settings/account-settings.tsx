@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent, type FormEventHandler, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Account } from "@lms/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@lms/ui/avatar";
 import { Button } from "@lms/ui/button";
@@ -35,7 +35,25 @@ export function AccountSettings({ account }: { account: Account }) {
 
 function ProfileSettings({ account }: { account: Account }) {
   const router = useRouter();
-  const save = useMutation(orpc.user.update.mutationOptions());
+  const queryClient = useQueryClient();
+  const save = useMutation(
+    orpc.user.update.mutationOptions({
+      onSuccess: async () => {
+        await Promise.all(
+          [
+            orpc.user.get.key(),
+            orpc.enrolment.key(),
+            orpc.admin.users.list.key(),
+            orpc.consultation.list.key(),
+            orpc.admin.consultations.key(),
+          ].map(async (queryKey) => {
+            await queryClient.cancelQueries({ queryKey });
+            await queryClient.invalidateQueries({ queryKey });
+          }),
+        );
+      },
+    }),
+  );
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoUrl, setPhotoUrl] = useState(account.avatarUrl);
   const [preview, setPreview] = useState<string | null>(null);

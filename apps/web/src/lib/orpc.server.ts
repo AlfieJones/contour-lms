@@ -7,7 +7,7 @@ import { getDb } from "@lms/db";
 import { env as dbEnv } from "@lms/db/env";
 import { env } from "#env.ts";
 import { createRouterClient } from "@orpc/server";
-import { createAppQueryUtils } from "#lib/orpc-query-utils.ts";
+import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { createSupabaseServerClient } from "#lib/supabase.server.ts";
 
 export async function createContext(): Promise<ApiContext> {
@@ -23,4 +23,4 @@ export const serverClient = createRouterClient(router, {
 });
 
 // Identical keys to the browser utils, with direct procedure calls instead of HTTP.
-export const serverOrpc = createAppQueryUtils(serverClient);
+export const serverOrpc = createTanstackQueryUtils(serverClient);

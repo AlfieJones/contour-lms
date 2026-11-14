@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CopyIcon, PlusIcon, XIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@lms/ui/alert";
 import { Button } from "@lms/ui/button";
@@ -108,7 +108,19 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
   );
   const [pausedWindows, setPausedWindows] = useState<Partial<Record<number, DraftWindow[]>>>({});
   const [error, setError] = useState("");
-  const save = useMutation(orpc.consultation.availability.save.mutationOptions());
+  const queryClient = useQueryClient();
+  const save = useMutation(
+    orpc.consultation.availability.save.mutationOptions({
+      onSuccess: async (availability) => {
+        const queryKey = orpc.consultation.availability.get.queryKey();
+        await queryClient.cancelQueries({ queryKey });
+        queryClient.setQueryData(queryKey, availability);
+        const slotsKey = orpc.consultation.availability.slots.key();
+        await queryClient.cancelQueries({ queryKey: slotsKey });
+        await queryClient.invalidateQueries({ queryKey: slotsKey });
+      },
+    }),
+  );
 
   function change(next: DraftWindow[]) {
     if (next.length > maximumRanges) {
