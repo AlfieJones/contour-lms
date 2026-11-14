@@ -1,0 +1,167 @@
+apps/web/src/components/consultation-calendar.tsx
+  s_bdde23724c7b74::t_a9d39d81cc19d9 3-14,16-17,19-20,22-23,25-29,31-34,36-49,51-77,79-80,89-92,99-100,107-109,113-116,119-121,125-126,128-162,169,176-187
+  s_bdde23724c7b74::t_c88cbe9c4d9bea 167
+  s_0f7454e8d92b0b::t_aab56c68b2e2eb 164-165
+  s_bdde23724c7b74::t_6799e7c31ac6f6 50,78,83-88,93-98,101-106,110-112,122-124,166,168,170-175
+  s_0f7454e8d92b0b::t_512304757a21bd 163
+  s_bdde23724c7b74::t_c780f7648b1fa1 15
+  s_bdde23724c7b74::t_befdc1cc97475e 18
+  s_bdde23724c7b74::t_f52c274cb79ae0 117-118
+  s_bdde23724c7b74::t_98a700ec04ce28 127
+apps/web/src/components/auth-form.tsx
+  s_43889123d9301a::t_f0072602f9cb19 114-121
+apps/web/src/app/icon.svg
+  s_140b55ed54c05d::t_a96a66639e1a75 1-11
+apps/web/src/styles/globals.css
+  s_bdde23724c7b74::t_74fc43c2cadda7 8-51
+apps/web/src/lib/orpc-query-utils.ts
+  s_0f7454e8d92b0b::t_ad6c49875b2152 6-7,10-13,16-38,40-49
+  s_0f7454e8d92b0b::t_2f95d751b9558f 14-15,39
+  s_43889123d9301a::t_766aea95a5f327 61-67,78-79,82
+  s_43889123d9301a::t_b5bc08adb944e1 77
+  s_43889123d9301a::t_6532ea7feac760 80-81
+apps/web/src/app/(dashboard)/settings/security/page.tsx
+  s_43889123d9301a::t_834c90f83f7e94 2,5
+  s_43889123d9301a::t_cd3b430af53651 1,3-4
+apps/web/src/lib/account.server.ts
+  s_43889123d9301a::t_766aea95a5f327 5-6,13-19
+  s_43889123d9301a::t_6961c32eef5db2 10,21
+apps/web/src/components/consultation-dashboard.tsx
+  s_0f7454e8d92b0b::t_1cfc3ba13d84b1 3,432
+  s_9487b4224e2d8e::t_d89e258a0abe2c 116-117,120-122,680-688,692-699,701-729,731,733,735,737-751
+  s_0f7454e8d92b0b::t_9fbb8895ac8900 202-294,317-321,328-330
+  s_0f7454e8d92b0b::t_aab56c68b2e2eb 24,30,322-326,421-431,433-440,444-449,455-459,465-467,473-478,495-498,502-509,516-521,528-538,575
+  s_1cd32e12e76e46::t_ad2a63824115bc 379,555-574,576-587,624-656,658-661,664-678,752
+  s_0f7454e8d92b0b::t_52a4098f3ec0c5 441-443,450-454,468-472,480-494,499-501,510-515,522-527
+  s_0f7454e8d92b0b::t_e7abad251b8716 88-92,168-174,176-196,544-553
+  s_366fae16490f52::t_bd70eaccb63c8f 700
+  s_0f7454e8d92b0b::t_c3845db3bc9cec 341-352,365-366,373-378
+  s_bdde23724c7b74::t_094f1d0221bdc6 29,31,85,98,103,167,539-543,554
+  s_9487b4224e2d8e::t_943f164e00e9da 119
+  s_0f7454e8d92b0b::t_ad6c49875b2152 32,118
+  s_1cd32e12e76e46::t_2fc05ef31765d9 33
+  s_9487b4224e2d8e::t_ffd87d89fedd08 70,123,598,610,730
+  s_0f7454e8d92b0b::t_54a60743d56fe7 461-463,617-623
+  s_fae8b8c2e7ae53::t_a69c063a203f0b 151,158,403-415
+  s_0f7454e8d92b0b::t_fac1f9579b3089 166,175,460,464,594,606,690-691
+  s_0f7454e8d92b0b::t_446686734e02c7 163-165
+  s_0f7454e8d92b0b::t_5438125a996e96 200-201
+  s_0f7454e8d92b0b::t_84b07b891243ad 327
+  s_0f7454e8d92b0b::t_b0f030144c2517 331
+  s_1cd32e12e76e46::t_41738792445769 380-381
+  s_0f7454e8d92b0b::t_fd9ebcc0d89be9 479
+apps/web/src/components/consultation-scheduler.tsx
+  s_fae8b8c2e7ae53::t_2e30a345b4465d 496
+  s_366fae16490f52::t_60810db9526029 49-52
+  s_0f7454e8d92b0b::t_aab56c68b2e2eb 55-57
+  s_9487b4224e2d8e::t_d89e258a0abe2c 257,335-347
+  s_fae8b8c2e7ae53::t_216d4c65557874 31-33,215-216,279,281-282,289-290,299,320,322,328,371,386-390,401-402,405-410,412,415,418,421-422,427-434,436-457,459-474,476,499-612,614-631,633-647
+  s_366fae16490f52::t_951e829df808e3 348-361,377,381,682,686
+  s_366fae16490f52::t_c7939355646c26 392-400
+  s_fae8b8c2e7ae53::t_b4851206b7e5db 10-19,46,67,70-75,77,80,83-87,91,97,100-101,103,227,411,413-414,416,419,423,425,649
+  s_9487b4224e2d8e::t_ffd87d89fedd08 53
+  s_366fae16490f52::t_cb510e32c09b12 109-111,115-116,124-156,158-161,233,333,651,662,730
+  s_fae8b8c2e7ae53::t_ffa9d4ec465778 104-106
+  s_366fae16490f52::t_189567643644f5 162-163
+  s_fae8b8c2e7ae53::t_dc0c85b80e4356 214
+  s_9487b4224e2d8e::t_6877bc0858a2cb 254-256
+  s_9487b4224e2d8e::t_6b2be8f10c4917 258-260
+  s_fae8b8c2e7ae53::t_8270eabf3c8d2b 276-278
+  s_fae8b8c2e7ae53::t_53346b29f08706 280
+  s_fae8b8c2e7ae53::t_3321c2286b1558 283-288
+  s_fae8b8c2e7ae53::t_740a51fa5bcbb5 291-293,296-298
+  s_fae8b8c2e7ae53::t_aa7dca4e8b4b6a 300-302
+  s_fae8b8c2e7ae53::t_18d4a90dad7fc4 321
+  s_fae8b8c2e7ae53::t_c5da1e479ae033 323-327
+  s_366fae16490f52::t_86bf8084d91cbc 378-380
+  s_fae8b8c2e7ae53::t_676039066d1cfe 417
+  s_fae8b8c2e7ae53::t_eabb10e09fc1db 477-479,493-495
+  s_fae8b8c2e7ae53::t_ecbf4c42108d21 497-498
+  s_fae8b8c2e7ae53::t_e94c32561257fd 648
+  s_366fae16490f52::t_392e1ce623caef 652-654,659-661
+  s_366fae16490f52::t_6ed9ce8a1fdaae 663-665,679-681
+  s_366fae16490f52::t_a0104c7d2c20b3 683-685
+  s_366fae16490f52::t_7d0d88f52f6b52 687-689
+  s_366fae16490f52::t_18428eb39eb6b9 727-729
+  s_366fae16490f52::t_1f6fc120976d2d 731-733
+apps/web/src/app/(dashboard)/settings/page.tsx
+  s_43889123d9301a::t_84a69f56b72706 8
+  s_43889123d9301a::t_834c90f83f7e94 1-7,10-12
+  s_43889123d9301a::t_762676ffc04454 9
+apps/web/src/app/(auth)/auth/callback/route.ts
+  s_43889123d9301a::t_e59c2646657d95 9-15
+apps/web/src/app/(dashboard)/admin/users/user-management.tsx
+  s_fae8b8c2e7ae53::t_c1a9bb1b68d749 80-84,87-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f7efecaa12dd0f5c927558d6aee42ea21cd1c3b8",
+  "prompts": {},
+  "sessions": {
+    "s_0f7454e8d92b0b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d86e-5143-7f11-9571-7fdd8fb9f3cf",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_140b55ed54c05d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d858-d953-7fd0-8528-e871be871a71",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_1cd32e12e76e46": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d839-6fd5-72a1-84ee-474c51ccff20",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_366fae16490f52": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d85b-9e08-7a02-bb34-b6529a044e87",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_43889123d9301a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d83f-d210-7802-95e3-d1c64be1613b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_9487b4224e2d8e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d85b-022a-7ba2-9db6-93c6867fd9a2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_bdde23724c7b74": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d866-269d-7c11-be97-d9ca8e03cab8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_fae8b8c2e7ae53": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d788-72b3-7641-8ec6-f6a199bc4531",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
