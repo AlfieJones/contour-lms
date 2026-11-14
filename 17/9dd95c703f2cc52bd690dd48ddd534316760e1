@@ -1,0 +1,25 @@
+README.md
+  s_d7c5f30acc5a56::t_650511519b65fe 71-76,85
+packages/db/drizzle/20261114080019_init/migration.sql
+  s_d7c5f30acc5a56::t_cc4f973c1a9013 1-35,40,46-63,65-66,70-72,75-77
+packages/db/drizzle/20261114080019_init/snapshot.json
+  s_d7c5f30acc5a56::t_9968fb3d5f84a0 5,13-25,39-99,117-133,150-237,256-350,358-363,372-390,403-404,416-418,429-431,442-444,455-456,461-473,482-483,487,495-496,498,500,508-516,521-1035,1049-1061,1075-1147,1156-1200,1212-1226,1235-1262
+packages/db/drizzle/20261114080026_profile_avatars/snapshot.json
+  s_d7c5f30acc5a56::t_c3d87991eaa893 5-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "179dd95c703f2cc52bd690dd48ddd534316760e1",
+  "prompts": {},
+  "sessions": {
+    "s_d7c5f30acc5a56": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d90c-73d6-7700-9ce4-7d2450bd436c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
