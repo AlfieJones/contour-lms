@@ -1,0 +1,555 @@
+apps/api/tests/rpc.test.ts
+  s_31c3e3be996229::t_48bfaacbee4438 14
+  s_31c3e3be996229::t_1e90d04d2c7cea 39,41-51,53
+  s_31c3e3be996229::t_de3954321813ee 54-59
+  s_31c3e3be996229::t_27f2ffa442301d 40
+  s_31c3e3be996229::t_b5c8fd394d7e91 52
+packages/email/src/templates/reauthentication.tsx
+  s_f57ec741a99f3b::t_e8b61833b04a5d 8-13
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-7,14-16
+packages/db/drizzle/20261113102722_user_roles/migration.sql
+  s_31c3e3be996229::t_8e736c9ac8f881 1-6
+  s_31c3e3be996229::t_4e43aa0958cdd6 7-9
+apps/web/src/app/(dashboard)/teachers/page.tsx
+  s_31c3e3be996229::t_0c10610a4e4601 1-10,16
+  s_31c3e3be996229::t_bc0e4afbcbbc90 11-15
+apps/web/src/lib/form.ts
+  s_31c3e3be996229::t_defabcaadb7fff 1-4
+apps/web/tests/consultation-scheduling.test.ts
+  s_c1ed6d1eacc66f::t_a6f919fa2a511a 1-14,16-24,26-30,32-38,40-46,48-58,60-65,67-74,76-81,83-88
+  s_c1ed6d1eacc66f::t_65216edc611efc 15
+  s_c1ed6d1eacc66f::t_218da5e01a7595 25
+  s_c1ed6d1eacc66f::t_634c606a50eec1 31
+  s_c1ed6d1eacc66f::t_3ec984e23bbfe0 39
+  s_c1ed6d1eacc66f::t_6cc2e1e0d5859f 47
+  s_c1ed6d1eacc66f::t_158311b4dd1496 59
+  s_c1ed6d1eacc66f::t_a2f61ab82bcdde 66
+  s_c1ed6d1eacc66f::t_127c84b3f34347 75
+  s_c1ed6d1eacc66f::t_723fb3ea704e8a 82
+packages/email/src/components/email-action.tsx
+  s_f57ec741a99f3b::t_e8b61833b04a5d 6-15
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-5,16-19
+packages/email/src/sender.ts
+  s_f57ec741a99f3b::t_e8b61833b04a5d 12-22
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-11,23-39
+packages/email/src/templates/confirmation.tsx
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-9
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-4,10-16
+apps/web/src/app/(dashboard)/layout.tsx
+  s_31c3e3be996229::t_c6359705e9b74a 3,5-7
+apps/api/package.json
+  s_c1ed6d1eacc66f::t_96e5ebd8cc5960 38
+apps/web/src/styles/globals.css
+  s_31c3e3be996229::t_defabcaadb7fff 4
+supabase/templates/magic_link.html
+  s_f57ec741a99f3b::t_e8b61833b04a5d 1
+.env.example
+  s_31c3e3be996229::t_48bfaacbee4438 5
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 6-11
+  s_31c3e3be996229::t_9a5d50abaaf87e 1
+supabase/templates/email_change.html
+  s_f57ec741a99f3b::t_e8b61833b04a5d 1
+apps/web/src/app/(dashboard)/students/page.tsx
+  s_31c3e3be996229::t_0c10610a4e4601 1-8,10,16
+  s_31c3e3be996229::t_bc0e4afbcbbc90 11-15
+  s_31c3e3be996229::t_118c61d8a1388d 9
+apps/web/src/app/auth/check-email/page.tsx
+  s_31c3e3be996229::t_a167f75e1cbf43 1,4-11,16-17,44-45
+  s_31c3e3be996229::t_994ad45aa6a626 13-15
+  s_31c3e3be996229::t_6df7377474cb6b 23,27-28,30-31,34,36-38
+  s_31c3e3be996229::t_ef4205cd0e1e9d 39
+  s_31c3e3be996229::t_1488a025fd4ccb 40
+  s_31c3e3be996229::t_d3e56d9edadf9d 2,12
+  s_31c3e3be996229::t_1d82310f1b5b1c 3
+  s_31c3e3be996229::t_c8ff2d9b79993c 18-22
+  s_31c3e3be996229::t_189d74444fafaf 24-26
+  s_31c3e3be996229::t_764c5abc6c0909 29
+  s_31c3e3be996229::t_f1709f56f2f4bd 32-33
+  s_31c3e3be996229::t_95531c37570fca 35
+  s_31c3e3be996229::t_57ef6293f66bc0 41-43
+apps/web/src/app/signup/page.tsx
+  s_31c3e3be996229::t_bc0e4afbcbbc90 5-9
+  s_31c3e3be996229::t_c6359705e9b74a 1-4,10,14
+  s_31c3e3be996229::t_215d0a0e3e77f9 12-13
+  s_31c3e3be996229::t_c4a032613c24e2 11
+apps/web/src/lib/orpc.server.ts
+  s_31c3e3be996229::t_c6359705e9b74a 10,13,17,20
+  s_40823c3eaa4992::t_b11915707be077 9,25
+  s_40823c3eaa4992::t_3ee4a0edf01c6a 1-3
+  s_40823c3eaa4992::t_1dbb84acd5fd69 21,23-24
+packages/ui/src/components/card.tsx
+  s_31c3e3be996229::t_113780619c1b76 6
+  s_31c3e3be996229::t_3fb9d9e6423014 1-5,7-253
+packages/email/src/server.ts
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-15
+apps/web/src/app/(dashboard)/admin/users/page.tsx
+  s_31c3e3be996229::t_940d168c30f757 1-6,8
+  s_31c3e3be996229::t_284f14eea88908 7
+packages/ui/src/components/select.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 9
+  s_31c3e3be996229::t_e9aa3c819311f6 7,42-233
+  s_31c3e3be996229::t_dd0a240e84c34d 1-6,8,10-41,234-243
+packages/email/package.json
+  s_f57ec741a99f3b::t_e8b61833b04a5d 29-30,33,37-38
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 11-20,25-26,41-42
+  s_31c3e3be996229::t_8bf366d62a6861 1-10,21-24,27-28,31,34-36,39-40,43-44
+  s_31c3e3be996229::t_bc0e4afbcbbc90 32
+packages/ui/src/components/button.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 7-8
+apps/web/src/components/app-shell.tsx
+  s_31c3e3be996229::t_c6359705e9b74a 7,9,14
+  s_31c3e3be996229::t_c6a263ac5e9dee 17
+pnpm-workspace.yaml
+  s_31c3e3be996229::t_44e12793b7b047 33-34
+  s_c1ed6d1eacc66f::t_96e5ebd8cc5960 49
+supabase/templates/recovery.html
+  s_f57ec741a99f3b::t_e8b61833b04a5d 1
+packages/env/tests/env.test.ts
+  s_31c3e3be996229::t_705c16a9796f54 125-137
+  s_31c3e3be996229::t_48bfaacbee4438 28
+  s_31c3e3be996229::t_8a88429a1373c6 116-124
+packages/ui/src/components/scroll-area.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 5
+apps/web/src/lib/account.server.ts
+  s_31c3e3be996229::t_c6359705e9b74a 1-12
+apps/web/src/components/app-sidebar.tsx
+  s_40823c3eaa4992::t_55701f2e107a43 44
+  s_31c3e3be996229::t_940d168c30f757 8,29-32,34,75
+  s_31c3e3be996229::t_743f6af169a90c 36
+  s_31c3e3be996229::t_705c16a9796f54 60,62,71,74,76-91,96-103,116-118,120
+  s_31c3e3be996229::t_3a702f9701379d 4,9,26,54,109
+  s_31c3e3be996229::t_7573d653b056d8 33
+  s_31c3e3be996229::t_028b0967b0abc9 35
+  s_31c3e3be996229::t_bed4efdb4760d5 37
+  s_31c3e3be996229::t_4fe83858bbc85f 61
+packages/ui/src/components/radio-group.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 6
+  s_31c3e3be996229::t_e9aa3c819311f6 8-18
+  s_31c3e3be996229::t_f4b0c086f355f3 1-5,7,19-36
+packages/email/src/templates/enrolment.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-27
+supabase/templates/confirmation.html
+  s_f57ec741a99f3b::t_e8b61833b04a5d 1
+packages/db/src/index.ts
+  s_31c3e3be996229::t_743f6af169a90c 30
+apps/api/src/routers/admin-user.ts
+  s_31c3e3be996229::t_7483d54421dc3f 1-8,11,19-22,26-29,32,36-38,42,46-49
+  s_31c3e3be996229::t_de3954321813ee 9-10,12-18,23-25,30-31,33-35,39-41,43-45
+apps/api/src/context.ts
+  s_31c3e3be996229::t_48bfaacbee4438 7
+packages/env/src/index.ts
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 10-17
+  s_31c3e3be996229::t_705c16a9796f54 19-45
+apps/web/src/components/auth-form.tsx
+  s_31c3e3be996229::t_705c16a9796f54 33-34,49-55
+  s_31c3e3be996229::t_defabcaadb7fff 11,20-21
+  s_31c3e3be996229::t_a167f75e1cbf43 41
+  s_40823c3eaa4992::t_b9da8e71dd029c 70,78,112
+  s_31c3e3be996229::t_ca995d832145ae 22,24-25,35-38,75-77,79-81
+  s_31c3e3be996229::t_215d0a0e3e77f9 13,68,86
+  s_31c3e3be996229::t_113780619c1b76 7-8,66-67,69,73-74,82-85,87-111,113
+  s_31c3e3be996229::t_c6359705e9b74a 1-5,9-10,12,14-19,23,26-32,39-40,42-48,56-61,72,116-117
+  s_31c3e3be996229::t_4d4f2836eb7e87 6
+  s_31c3e3be996229::t_e9db1c2293a385 62-65
+  s_31c3e3be996229::t_90c7cbcae09855 114-115
+apps/web/src/lib/use-local-timezone.ts
+  s_c1ed6d1eacc66f::t_f2c41de2cb661a 1-12
+apps/web/src/components/user-management.tsx
+  s_40823c3eaa4992::t_b11915707be077 3,24,33-35,40-43,47-48
+  s_31c3e3be996229::t_940d168c30f757 1-2,12-22,25-32,39,57-58,133
+  s_40823c3eaa4992::t_d934257c4634fb 4-10,36-38,44-46
+  s_31c3e3be996229::t_de3954321813ee 59,61-74,85,101,129-130,132
+  s_31c3e3be996229::t_1bcc24ef2a3384 60
+  s_31c3e3be996229::t_1d23aeecec84be 75-77,82-84
+  s_31c3e3be996229::t_af992f53f67029 86-88,98-100
+  s_31c3e3be996229::t_db934e8fe147e8 102-104,126-128
+  s_31c3e3be996229::t_cd445175c98257 131
+apps/web/src/components/consultation-dashboard.tsx
+  s_31c3e3be996229::t_5853273544f8d3 51,60-64,71-72,151,329,359,513,524
+  s_40823c3eaa4992::t_b9da8e71dd029c 5-11,98-101,327,366,401-402
+  s_31c3e3be996229::t_58ebf96bafcd83 360,514,525
+  s_c1ed6d1eacc66f::t_f2c41de2cb661a 50,94
+  s_40823c3eaa4992::t_3ee4a0edf01c6a 45,49,79-84,102,105-106,108-113,149,181,194,196-197,371
+  s_31c3e3be996229::t_ef83a6c71fdb8b 594,646
+  s_31c3e3be996229::t_bc0e4afbcbbc90 12-19,23-30,54-57,115,147-148,150,152-153,185-193,195,198-200,203-209,212-221,226-228,231-235,237-249,303-304,319-326,328,340,343-349,351-358,361-365,367-370,372-391,394,427-430,450,510-512,515-521,538-547,550-556,561-578,580-581,585-587,643-645,648,650,652-658
+  s_31c3e3be996229::t_922a5c1c5650e1 169-180,182-183,339,392,396-397,406,408,582-584,588-593,595-642,647,649,651
+  s_c1ed6d1eacc66f::t_f20b925f2ba960 1-4,20-22,31-34,46,52-53,58-59,78,85-93,95-97,103-104,107,114,116-146,163-166,210,222-225,229-230,236,415,507-509,522-523,526-537,548-549,557-560,579,659-662
+  s_31c3e3be996229::t_ad1a1cc5e40e24 65-70
+  s_31c3e3be996229::t_a3fbb48c4d705a 184
+  s_31c3e3be996229::t_dc5452865a50a1 201-202
+  s_31c3e3be996229::t_fa94d2f6b6e74d 250-252,300-302
+  s_31c3e3be996229::t_126fc9506f4776 305-307,316-318
+  s_31c3e3be996229::t_51245e777dcf55 330-332,336-338
+  s_31c3e3be996229::t_1d444111877213 341-342
+  s_31c3e3be996229::t_34eba3a619a460 350
+  s_31c3e3be996229::t_7b5b7cecc3bf3d 393
+  s_31c3e3be996229::t_1a00c238c72f5f 395
+  s_31c3e3be996229::t_c54a965b1c41bc 407
+  s_31c3e3be996229::t_89b9161c3fb58f 431-433,447-449
+apps/api/src/index.ts
+  s_31c3e3be996229::t_48bfaacbee4438 3
+apps/web/src/app/auth/callback/route.ts
+  s_31c3e3be996229::t_c6359705e9b74a 1-12
+apps/api/src/procedures.ts
+  s_31c3e3be996229::t_8bf366d62a6861 31-38,40
+  s_31c3e3be996229::t_7483d54421dc3f 4,19
+  s_31c3e3be996229::t_48bfaacbee4438 14,17-18,22-25,27-30
+  s_31c3e3be996229::t_705c16a9796f54 20-21
+  s_31c3e3be996229::t_a501104c8b7b63 26
+  s_31c3e3be996229::t_adc74d36be4aa1 39
+packages/db/drizzle/20261113032724_consultations/snapshot.json
+  s_31c3e3be996229::t_eb17e7e7cc3fff 6,10-11,15,24,28,45,61,262,265,274,300
+  s_31c3e3be996229::t_b51372d225739b 1-5,7-9,12-14,16-23,25-27,29-44,46-60,62-261,263-264,266-273,275-299
+apps/api/tsconfig.json
+  s_31c3e3be996229::t_d4d10039c23321 4
+packages/db/package.json
+  s_31c3e3be996229::t_57ca2707224b83 32-33
+packages/email/src/render.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-10,15
+  s_f57ec741a99f3b::t_e8b61833b04a5d 11-14
+scripts/local.mjs
+  s_f57ec741a99f3b::t_e8b61833b04a5d 46-49
+  s_31c3e3be996229::t_215d0a0e3e77f9 19
+  s_31c3e3be996229::t_dc0985e40b07b8 29-38,51-54,58-68,70
+  s_31c3e3be996229::t_9a5d50abaaf87e 1-18,20-28,55-57,69,71
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 39-45,50
+apps/web/package.json
+  s_40823c3eaa4992::t_75dce0d965ee1a 13
+packages/email/src/components/email-text.tsx
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-7
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-4,8
+packages/ui/src/components/badge.tsx
+  s_31c3e3be996229::t_e9aa3c819311f6 24-30
+  s_31c3e3be996229::t_39194ebb1e52ce 7
+  s_31c3e3be996229::t_4c7144d1e55548 1-6,8-23,31-60
+packages/ui/src/components/textarea.tsx
+  s_31c3e3be996229::t_e9aa3c819311f6 46
+  s_31c3e3be996229::t_39194ebb1e52ce 6
+  s_31c3e3be996229::t_f0eb152db02774 1-5,7-45,47-57
+apps/api/tests/consultation.integration.test.ts
+  s_31c3e3be996229::t_c04072dda3d694 293-295
+  s_31c3e3be996229::t_829496f55efdf3 488
+  s_31c3e3be996229::t_8856f5469f0364 301,308,324-325,329-420,431-434,440-444,450,463-464,470-473,478,482,486-487,489-490,502,511,518,529,531-535,543-548,552-558
+  s_31c3e3be996229::t_9a5d50abaaf87e 559-564,570-575,580
+  s_31c3e3be996229::t_134ca1afcd53d8 9-25,28,30-35,37-62,65-66,68-70,73,81-96,98-114,120-126,128-130,132-147,149-249,506,581-583
+  s_31c3e3be996229::t_e302cb9db572f3 250-258,265-267,283-285,292,298-300,565-566,576-577
+  s_31c3e3be996229::t_58ebf96bafcd83 484,539
+  s_31c3e3be996229::t_5d72d330a2f687 1-3,6-8
+  s_31c3e3be996229::t_bc0e4afbcbbc90 115-119,280-282,302-307,309-323,326-328,421-430,435-439,445-449,451-462,465-469,474-477,479-481,483,485,491-501,503-505,512,515-516,523,526,536-538,540-542,549-551
+  s_31c3e3be996229::t_4e43aa0958cdd6 259-264,268-279,286-291,296-297
+  s_31c3e3be996229::t_360bfee8edc8ea 4-5,26-27,29,63-64,67,72,74-80,97,127,148,567-569,578-579
+  s_31c3e3be996229::t_5112843d7dc323 36
+  s_31c3e3be996229::t_b8b682296cfc2c 71
+  s_31c3e3be996229::t_1acd3438951600 131
+  s_31c3e3be996229::t_b7e2d153a7f93f 507-510
+  s_31c3e3be996229::t_32a6ff683877ba 513-514
+  s_31c3e3be996229::t_09dea5bb53a09d 517
+  s_31c3e3be996229::t_ec6afb11e4fecb 519-522
+  s_31c3e3be996229::t_8241755f694f4e 524-525
+  s_31c3e3be996229::t_2de6a3fbea2513 527-528
+  s_31c3e3be996229::t_822cb8bb36d313 530
+packages/email/src/templates/invite.tsx
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-9
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-4,10-16
+apps/web/src/lib/supabase.server.ts
+  s_31c3e3be996229::t_705c16a9796f54 8-22,25
+  s_31c3e3be996229::t_c6359705e9b74a 1-7,23-24,26
+apps/api/src/routers/user.ts
+  s_31c3e3be996229::t_7483d54421dc3f 3,12
+apps/web/src/app/auth/error/page.tsx
+  s_31c3e3be996229::t_705c16a9796f54 5,7-13,15
+  s_31c3e3be996229::t_c6359705e9b74a 2-4,16
+  s_31c3e3be996229::t_ad65c802080088 1
+  s_31c3e3be996229::t_1d2c8ad7bd526d 6
+  s_31c3e3be996229::t_90f7725ec5ffcb 14
+apps/web/src/lib/orpc.ts
+  s_40823c3eaa4992::t_b11915707be077 5,21
+  s_31c3e3be996229::t_defabcaadb7fff 18-19
+packages/db/drizzle/20261113111015_teacher_enrolments/migration.sql
+  s_31c3e3be996229::t_d4d10039c23321 17-19
+  s_31c3e3be996229::t_9285db3891e69a 1-16
+package.json
+  s_31c3e3be996229::t_9a5d50abaaf87e 8,22
+  s_31c3e3be996229::t_215d0a0e3e77f9 7
+  s_31c3e3be996229::t_57ca2707224b83 14-15
+packages/ui/src/components/alert.tsx
+  s_31c3e3be996229::t_e9aa3c819311f6 13-57
+  s_31c3e3be996229::t_39194ebb1e52ce 3
+  s_31c3e3be996229::t_89af2541068f01 1-2,4-12,58-78
+packages/email/turbo.json
+  s_f57ec741a99f3b::t_768945b54b1e31 1-12
+packages/env/package.json
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 29-33
+packages/email/src/index.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-3
+apps/web/src/lib/orpc-query-utils.ts
+  s_40823c3eaa4992::t_b11915707be077 1-3,5-8,17-20,23-24,31-39
+  s_40823c3eaa4992::t_60b1366e92570a 4,12-16,21-22,25-28,30
+  s_40823c3eaa4992::t_75dce0d965ee1a 9-11
+  s_40823c3eaa4992::t_6f95fb97add95b 29
+apps/api/src/routers/enrolment.ts
+  s_31c3e3be996229::t_e64cb2abaa317f 1-11,22,25-28,30,32-39,52,56,59,67,101,106,112-113
+  s_31c3e3be996229::t_bc0e4afbcbbc90 12-18,20,40-51,53,55,60-61,63,68,70-98,100,102-105,107-110
+  s_31c3e3be996229::t_829496f55efdf3 69
+  s_31c3e3be996229::t_77428be7177aec 19
+  s_31c3e3be996229::t_50a9a871fbf8d5 21
+  s_31c3e3be996229::t_b791bfe195aaf2 23-24
+  s_31c3e3be996229::t_a75ef5f166e716 29
+  s_31c3e3be996229::t_de3e09f28a79fe 31
+  s_31c3e3be996229::t_d37d5cc347287a 54
+  s_31c3e3be996229::t_6d7ad475ce42ee 57-58
+  s_31c3e3be996229::t_5926f90775d0d0 62
+  s_31c3e3be996229::t_2ab57146602810 64-66
+  s_31c3e3be996229::t_e049c8d1e22975 99
+  s_31c3e3be996229::t_c87dd9b172cf94 111
+apps/web/src/components/consultation-scheduler.tsx
+  s_40823c3eaa4992::t_b9da8e71dd029c 238,288,626
+  s_c1ed6d1eacc66f::t_ace51f3cbd92c7 1-4,12-17,28-32,36,45-46,50-53,56-62,76-78,81-84,90-92,103-121,130-136,139-146,149-153,157-175,182-187,190-191,200-201,205-212,217-218,220-232,239-241,270-271,281,285-286,290-294,317,324,339,389,393-438,442,482,494-501,507,618,624,632-633,642-644
+  s_31c3e3be996229::t_5853273544f8d3 35,55,79,101
+  s_31c3e3be996229::t_922a5c1c5650e1 5-11,19-26,37-44,47-49,63-75,86-89,93-100,137-138,154-156,178-181,213-216,233-237,242-269,272-280,282-284,287,289,300-301,311-316,318-321,323,331,335,338,343-346,370,380,385,439,441,448,502,504,506,508-512,527,529,533-540,542,562-563,582-583,585,591,593-594,619-623,625,627-631,635-641
+  s_c1ed6d1eacc66f::t_f2c41de2cb661a 33,85,122-129,192-199,219,295,503,513-514,516-517,558
+  s_f57ec741a99f3b::t_6630eb9b87b1f2 18,27,34,54,80,102,147-148,176-177,188-189,202-204,296-299,302-310,322,325-330,332-334,336-337,340-342,347-369,371-379,381-384,386-388,390-392,440,443-447,449-481,483-493,505,515,518-526,528,530-532,541,543-557,559-561,564-581,584,586-590,592,595-617,634
+apps/web/src/components/teacher-select.tsx
+  s_31c3e3be996229::t_4a38bb4ceae29a 1-5,13-17,21,27-31
+  s_31c3e3be996229::t_bc0e4afbcbbc90 6-12,18-20,22-26
+apps/web/src/lib/supabase.ts
+  s_31c3e3be996229::t_c6359705e9b74a 1-5,10
+  s_31c3e3be996229::t_705c16a9796f54 6-9
+packages/db/drizzle.config.ts
+  s_31c3e3be996229::t_9a5d50abaaf87e 13
+  s_31c3e3be996229::t_48bfaacbee4438 12
+apps/web/turbo.json
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 12-16,27-31,42-46
+  s_31c3e3be996229::t_2ac5f500a9698e 8,23,38
+apps/api/src/routers/index.ts
+  s_31c3e3be996229::t_7483d54421dc3f 4,12
+  s_31c3e3be996229::t_e64cb2abaa317f 5,11
+  s_31c3e3be996229::t_48bfaacbee4438 3,10
+.oxfmtrc.json
+  s_31c3e3be996229::t_e9aa3c819311f6 3-10
+supabase/config.toml
+  s_31c3e3be996229::t_3c59537d58b93d 37
+  s_31c3e3be996229::t_1e90d04d2c7cea 30
+  s_31c3e3be996229::t_215d0a0e3e77f9 40-58
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 23-25,59-62
+  s_31c3e3be996229::t_48bfaacbee4438 5,31-32,34,38
+  s_f57ec741a99f3b::t_f6b73da286735b 33,39
+README.md
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 53-76
+  s_31c3e3be996229::t_dc0985e40b07b8 1,3,7,13-14,16-17,36,39-41,46,49,78,80
+  s_31c3e3be996229::t_2d609a1f43b31e 5-6,8-10,12,15,35,37-38,42,83
+  s_31c3e3be996229::t_5d72d330a2f687 2,4,84
+  s_31c3e3be996229::t_215d0a0e3e77f9 11,52
+  s_31c3e3be996229::t_62e348ec9de438 43-45,47-48,50-51,77,79,81-82
+  s_f57ec741a99f3b::t_7a6f88558bc0d8 18-34
+packages/db/drizzle/20261113102722_user_roles/snapshot.json
+  s_31c3e3be996229::t_8e736c9ac8f881 1-5,7-9,11-18,20-22,24-89,91-92,94-104,106-120
+  s_31c3e3be996229::t_4e43aa0958cdd6 6,10,19,23,90,93,105,121
+packages/email/src/auth.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-16
+packages/ui/src/components/alert-dialog.tsx
+  s_31c3e3be996229::t_e9aa3c819311f6 10-141
+  s_31c3e3be996229::t_afffb836be7305 1-9,142-148
+packages/email/tsdown.config.ts
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 4
+  s_31c3e3be996229::t_8bf366d62a6861 1-3,5-9
+supabase/templates/invite.html
+  s_f57ec741a99f3b::t_e8b61833b04a5d 1
+packages/env/src/email.ts
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-5
+apps/web/src/app/login/page.tsx
+  s_31c3e3be996229::t_c6359705e9b74a 1-4,10,14
+  s_31c3e3be996229::t_bc0e4afbcbbc90 5-9
+  s_31c3e3be996229::t_215d0a0e3e77f9 12-13
+  s_31c3e3be996229::t_00df47d91bacd0 11
+supabase/templates/reauthentication.html
+  s_f57ec741a99f3b::t_e8b61833b04a5d 1
+packages/db/drizzle/20261113032724_consultations/migration.sql
+  s_31c3e3be996229::t_b51372d225739b 1-19
+packages/email/src/templates/email-change.tsx
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-9
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-4,10-16
+packages/email/src/components/email-layout.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-8,12-13,17,21-27
+  s_f57ec741a99f3b::t_e8b61833b04a5d 9-11,14-16,18-20
+apps/web/src/app/layout.tsx
+  s_31c3e3be996229::t_defabcaadb7fff 13
+apps/web/src/components/logout-button.tsx
+  s_31c3e3be996229::t_c6359705e9b74a 1-14,18-25,38
+  s_31c3e3be996229::t_705c16a9796f54 15-17,26-37
+apps/web/src/lib/query-client.ts
+  s_40823c3eaa4992::t_d934257c4634fb 11-17
+  s_40823c3eaa4992::t_3d2851099eff8f 10,18,31
+  s_40823c3eaa4992::t_1dbb84acd5fd69 1-2,21,24,27-30,34
+apps/web/src/components/student-enrolments.tsx
+  s_40823c3eaa4992::t_b9da8e71dd029c 4-10,29-31,37-39
+  s_31c3e3be996229::t_0c10610a4e4601 1-2,14-17,19-22,26-28,32,42-62,64-66,68-69,73-76,84,88-89,100,166,168-169
+  s_40823c3eaa4992::t_3ee4a0edf01c6a 3,18,23-25,33-36,40-41,63,151-152
+  s_31c3e3be996229::t_bc0e4afbcbbc90 70-72,77-83,85-87,90-99,101-110,144-146,165
+  s_31c3e3be996229::t_38039de6870c19 67
+  s_31c3e3be996229::t_35d5450cd839b7 111-113,141-143
+  s_31c3e3be996229::t_85fc48a2926c83 167
+packages/env/tests/email.test.ts
+  s_f57ec741a99f3b::t_f9bff22b21b806 1-3,10-11,18-19,26-27,36-48
+  s_f57ec741a99f3b::t_e8b61833b04a5d 4-9,12-17,20-25,28-35
+packages/db/drizzle/20261113032727_permissions/snapshot.json
+  s_31c3e3be996229::t_85a7395148ed53 1-5,7-8
+  s_31c3e3be996229::t_eb17e7e7cc3fff 6,9
+packages/db/src/schema.ts
+  s_31c3e3be996229::t_48bfaacbee4438 1,12-16
+  s_31c3e3be996229::t_7483d54421dc3f 29
+  s_31c3e3be996229::t_705c16a9796f54 30-36,39-49,51-60,85-86
+  s_31c3e3be996229::t_bc0e4afbcbbc90 2-11,68-70,78-84
+  s_31c3e3be996229::t_8bf366d62a6861 37-38,50,61-67,71-77
+  s_31c3e3be996229::t_de3954321813ee 17-28
+packages/email/vitest.config.ts
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-5
+packages/ui/src/components/form.tsx
+  s_31c3e3be996229::t_3fb9d9e6423014 1-5,7-10
+  s_31c3e3be996229::t_f5d3144e3c7350 6
+apps/web/src/app/(dashboard)/admin/page.tsx
+  s_40823c3eaa4992::t_1dbb84acd5fd69 4-5,14-15,17-18
+  s_31c3e3be996229::t_c6359705e9b74a 1-2,6-9,19
+  s_40823c3eaa4992::t_679d6612a402f2 16
+apps/web/tests/orpc-query.test.ts
+  s_40823c3eaa4992::t_c3974bd3f34513 62-64
+  s_40823c3eaa4992::t_a23f847b0f515c 14,50,67,108,136
+  s_40823c3eaa4992::t_3d2851099eff8f 1-13,19-20,33-38,42-49,51-61,65-66,68-89,103-107,109,116-118,122-126,133-135,137-226
+  s_40823c3eaa4992::t_d934257c4634fb 15-18,21-32,39-41,90-102,110-115,119-121,127-132
+packages/email/tsconfig.json
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 3-4,7
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-6,8
+  s_31c3e3be996229::t_8bf366d62a6861 1-2,9
+packages/ui/src/components/calendar.tsx
+  s_31c3e3be996229::t_e9aa3c819311f6 4,22-111
+  s_31c3e3be996229::t_39194ebb1e52ce 6
+  s_31c3e3be996229::t_a99611869cc243 1-3,5,7-21,112
+packages/ui/src/components/spinner.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 3
+packages/email/tests/sender.test.ts
+  s_f57ec741a99f3b::t_f9bff22b21b806 1-3,8-13,23-24,57,71-75,84-88,97
+  s_f57ec741a99f3b::t_e8b61833b04a5d 4-7,14-22,25-56,58-70,76-83,89-96
+packages/email/src/templates/recovery.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-4,10-16
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-9
+apps/api/src/account.ts
+  s_31c3e3be996229::t_8bf366d62a6861 2,41-43,53-54
+  s_31c3e3be996229::t_7483d54421dc3f 4-10,17,21,28,35-36,40
+  s_31c3e3be996229::t_48bfaacbee4438 1,3,11,18,29,55-57
+  s_31c3e3be996229::t_bc0e4afbcbbc90 44-52
+  s_31c3e3be996229::t_de3954321813ee 12-16,22-24,27,30-34,37-39
+  s_31c3e3be996229::t_43942817628518 19-20
+  s_31c3e3be996229::t_f0bf1dea5df015 25-26
+scripts/emails.mjs
+  s_31c3e3be996229::t_215d0a0e3e77f9 1-6,8-10
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 7
+packages/db/drizzle/20261113111015_teacher_enrolments/snapshot.json
+  s_31c3e3be996229::t_44e12793b7b047 6,10,19,23,29,33,50,66,73,77,84,88,107,126,374,377,390,393,406,409,421,437
+  s_31c3e3be996229::t_9285db3891e69a 1-5,7-9,11-18,20-22,24-28,30-32,34-49,51-65,67-72,74-76,78-83,85-87,89-106,108-125,127-373,375-376,378-389,391-392,394-405,407-408,410-420,422-436
+packages/ui/src/styles/globals.css
+  s_31c3e3be996229::t_39194ebb1e52ce 9-15
+packages/db/drizzle/20261113032727_permissions/migration.sql
+  s_31c3e3be996229::t_3ec170e0508462 1-14
+packages/ui/src/components/empty.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 3
+  s_31c3e3be996229::t_e9aa3c819311f6 20-76
+  s_31c3e3be996229::t_7e4e94f9b37f9e 1-2,4-19,77-124
+apps/web/src/app/(dashboard)/page.tsx
+  s_40823c3eaa4992::t_1dbb84acd5fd69 3-4,12-13,15-16
+  s_31c3e3be996229::t_c6359705e9b74a 1-2,5-7
+  s_40823c3eaa4992::t_3ee4a0edf01c6a 8-11
+  s_40823c3eaa4992::t_3ff82fd2815ec7 14
+apps/web/src/lib/consultation-scheduling.ts
+  s_31c3e3be996229::t_e9aa3c819311f6 39-46,50-54,94-98
+  s_c1ed6d1eacc66f::t_8269aa864b3afa 1-38,47-49,55-93,99-113
+apps/api/src/mail.ts
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1
+apps/web/src/components/teachers.tsx
+  s_31c3e3be996229::t_0c10610a4e4601 1-12,22,48-49
+  s_31c3e3be996229::t_bc0e4afbcbbc90 23-32,46
+  s_31c3e3be996229::t_0bb9a7f443a05a 13-15,19-21
+  s_31c3e3be996229::t_848e7e89ec2868 33-35,43-45
+  s_31c3e3be996229::t_38f68b64cce308 47
+packages/email/src/templates/magic-link.tsx
+  s_f57ec741a99f3b::t_6f205fd4bbf71e 1-4,10-16
+  s_f57ec741a99f3b::t_e8b61833b04a5d 5-9
+apps/api/src/routers/consultation.ts
+  s_31c3e3be996229::t_705c16a9796f54 11-13,18-20,26,28,36-38,43,50-55,69-70,73,88-89,91-92,103-104,106-108,110-113,118,120-125,130-133,138-148,156,158,160-162
+  s_31c3e3be996229::t_48bfaacbee4438 3-4,8-10,14-16,23-24,39-40,58,93,96,114-116,119,134-136,149-155,163-165
+  s_31c3e3be996229::t_743f6af169a90c 1-2,27,29,157,159
+  s_31c3e3be996229::t_e64cb2abaa317f 7,41,94-95,105,137
+  s_31c3e3be996229::t_8e736c9ac8f881 25,117
+  s_31c3e3be996229::t_bc0e4afbcbbc90 30-31,33-35,44-49,97-102,126,128-129
+  s_31c3e3be996229::t_215d0a0e3e77f9 109
+  s_31c3e3be996229::t_1fe52fe60d5e54 5-6
+  s_31c3e3be996229::t_8ad3dffaf67972 17
+  s_31c3e3be996229::t_8d7d80213930b9 21-22
+  s_31c3e3be996229::t_631f5b3fcc2e93 32
+  s_31c3e3be996229::t_9d17b933f4a7a1 42
+  s_31c3e3be996229::t_36aac8fbbb1348 56-57
+  s_31c3e3be996229::t_3710b888015899 59-61,66-68
+  s_31c3e3be996229::t_a6d78701016288 71-72
+  s_31c3e3be996229::t_952e84e4ba00e7 74-76,85-87
+  s_31c3e3be996229::t_8ed2d7db27fb6f 90
+  s_31c3e3be996229::t_c2af74c7301ad9 127
+apps/web/src/app/api/rpc/[[...rest]]/route.ts
+  s_31c3e3be996229::t_c6359705e9b74a 11,14-16,22-24
+  s_31c3e3be996229::t_705c16a9796f54 12-13
+packages/email/tests/templates.test.ts
+  s_f57ec741a99f3b::t_e8b61833b04a5d 10-13,15-21,26-31
+  s_f57ec741a99f3b::t_f9bff22b21b806 1-9,14,22-25,32-37
+apps/api/tests/account.test.ts
+  s_31c3e3be996229::t_8a88429a1373c6 1-5,9,14-23,30
+  s_31c3e3be996229::t_940d168c30f757 31-35,44
+  s_31c3e3be996229::t_705c16a9796f54 6-8,24-29,38
+  s_31c3e3be996229::t_3c59537d58b93d 10-13
+  s_31c3e3be996229::t_ba3ed26f6ababc 36-37
+  s_31c3e3be996229::t_88fd1867a9bc01 39-43
+packages/ui/src/components/dialog.tsx
+  s_31c3e3be996229::t_39194ebb1e52ce 1-11,13-15,17,19-21,23-75,77-203
+  s_31c3e3be996229::t_e9aa3c819311f6 12,16,18,22,76,204
+packages/ui/package.json
+  s_c1ed6d1eacc66f::t_34f327b8e0d0ae 69
+pnpm-lock.yaml
+  s_f57ec741a99f3b::t_88061f94f9b85c 167-172,280-282,310,418-457,478,484-487,532-561,565-576,604-616,635-790,968-970,1472-1478,1684-1691,1944-1946,1956-1958,1967-1969,2134-2148,2153-2159,2165-2168,2180-2186,2197-2208,2217-2224,2228-2247,2255-2271,2453-2460,2465-2476,2480-2484,2492-2497,2516-2519,2526-2535,2549-2556,2564-2589,2669-2676,2689-2730,2736-2739,2767-2779,2817-2830,2837-2840,2858-2870,2874-2883,2889-2896,2901-2908,2950-2952,2970-2983,2995-3004,3055-3058,3112-3115,3127-3130,3219-3221,3227-3238,3244-3247,3264-3291,3294-3317,3327,3329,3342-3350,3376-3453,3578-3579,3903-3911,4018-4025,4233-4236,4245-4248,4257-4260,4321,4328,4350-4365,4368-4374,4377-4380,4387-4392,4401-4416,4421-4430,4433-4444,4449-4470,4491-4508,4514-4519,4522-4550,4557-4560,4572-4577,4582-4598,4605-4608,4613-4626,4684-4690,4701-4729,4732-4733,4764-4773,4832-4845,4850-4851,4883-4891,4894-4901,4907-4935,4938-4941,5005-5009,5047-5077,5084-5091,5132-5137,5204-5205,5217-5218,5221,5230,5235,5238,5249,5256-5257,5260-5261,5265-5266
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f8715a5b3a6b07087518d9db736efb05d6afbfd0",
+  "prompts": {},
+  "sessions": {
+    "s_31c3e3be996229": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d2ce-c561-7d33-8afa-365e66b1e5dd",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_40823c3eaa4992": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d495-d217-72e3-bda5-d7f1ab291120",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_c1ed6d1eacc66f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d493-e75b-70c2-868b-7018358d1bf9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    },
+    "s_f57ec741a99f3b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d704-3409-7fc3-87d9-48d15d63cf6c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
