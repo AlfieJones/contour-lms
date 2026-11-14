@@ -1,0 +1,24 @@
+packages/ui/src/components/toggle-group.tsx
+  s_fae8b8c2e7ae53::t_a69c063a203f0b 9,11-15,24,58
+  s_fae8b8c2e7ae53::t_47d538a992adad 1-8,10,16-23,25-57,59-97
+packages/ui/src/components/toggle.tsx
+  s_fae8b8c2e7ae53::t_47d538a992adad 6
+  s_fae8b8c2e7ae53::t_ee53d8f09d86b2 1-5,7-34,36-45
+  s_fae8b8c2e7ae53::t_a69c063a203f0b 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7876a6c8cf047e44145ab9b0d148386433e0f175",
+  "prompts": {},
+  "sessions": {
+    "s_fae8b8c2e7ae53": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d788-72b3-7641-8ec6-f6a199bc4531",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
