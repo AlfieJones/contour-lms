@@ -1,13 +1,18 @@
+import { serverEnvSchema, validate } from "@lms/env";
 import { loadEnvConfig } from "@next/env";
-import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const monorepoRoot = fileURLToPath(new URL("../../", import.meta.url));
+loadEnvConfig(
+  resolve(dirname(fileURLToPath(import.meta.url)), "../.."),
+  process.env.NODE_ENV !== "production",
+  console,
+  true,
+);
 
-export default async function config(): Promise<NextConfig> {
-  // Next already loaded app-local env files; reload from the monorepo root.
-  loadEnvConfig(monorepoRoot, process.env.NODE_ENV === "development", console, true);
-  await import("@lms/env/server");
+validate(serverEnvSchema, process.env, "server");
 
-  return {};
-}
+const config: NextConfig = {};
+
+export default config;

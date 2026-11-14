@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* Scan components in both src (TSX) and the built package (JS). */
-@source "../";
-
 @custom-variant dark (&:is(.dark *));
 
 /* The theme maps these font variables; provide defaults until custom fonts are added. */

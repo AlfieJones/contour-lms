@@ -1,11 +1,8 @@
 project_id = "contour-test"
 
 [api]
-enabled = true
-port = 55321
-schemas = ["public", "graphql_public"]
-extra_search_path = ["public", "extensions"]
-max_rows = 1000
+enabled = false
+port = 54321
 
 [db]
 port = 55322

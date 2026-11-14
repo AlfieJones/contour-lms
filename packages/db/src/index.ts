@@ -1,4 +1,3 @@
-import { getDatabaseEnv } from "@lms/env/database";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
@@ -19,9 +18,9 @@ export type Database = ReturnType<typeof createDb>;
 
 let database: Database | undefined;
 
-export function getDb(): Database {
+export function getDb(url: string): Database {
   if (!database) {
-    database = createDb(getDatabaseEnv().DATABASE_URL);
+    database = createDb(url);
   }
 
   return database;

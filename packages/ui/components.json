@@ -18,6 +18,7 @@
     "ui": "#components"
   },
   "registries": {
-    "@coss": "https://coss.com/ui/r/{name}.json"
+    "@coss": "https://coss.com/ui/r/{name}.json",
+    "@toggles": "https://toggles.dev/r/{name}.json"
   }
 }

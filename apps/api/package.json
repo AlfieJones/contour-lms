@@ -5,6 +5,7 @@
   "type": "module",
   "imports": {
     "#*": {
+      "development": "./src/*.ts",
       "types": "./src/*.ts",
       "source": "./src/*.ts",
       "default": "./dist/*.js"
@@ -12,16 +13,19 @@
   },
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./client": {
-      "types": "./dist/client.d.ts",
-      "default": "./dist/client.js"
+    "./context": {
+      "development": "./src/context.ts",
+      "types": "./dist/context.d.ts",
+      "default": "./dist/context.js"
     },
-    "./handler": {
-      "types": "./dist/handler.d.ts",
-      "default": "./dist/handler.js"
+    "./procedures": {
+      "development": "./src/procedures.ts",
+      "types": "./dist/procedures.d.ts",
+      "default": "./dist/procedures.js"
     }
   },
   "scripts": {

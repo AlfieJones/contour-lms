@@ -1,0 +1,7 @@
+@import "@lms/ui/styles.css";
+
+:root {
+  --font-sans: var(--font-geist-sans);
+}
+
+@source "../../../../**/*.{ts,tsx}";

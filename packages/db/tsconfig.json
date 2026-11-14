@@ -1,8 +1,7 @@
 {
   "extends": "@lms/config/tsconfig.base.json",
   "compilerOptions": {
-    "types": ["node"],
-    "customConditions": ["source"]
+    "types": ["node"]
   },
   "include": ["src", "drizzle.config.ts", "tsdown.config.ts"]
 }

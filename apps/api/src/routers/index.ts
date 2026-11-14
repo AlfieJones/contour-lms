@@ -1,15 +1,9 @@
-import type { RouterClient } from "@orpc/server";
+import { healthRouter } from "#routers/health";
+import { userRouter } from "#routers/user";
 
-import { userRouter } from "./user";
-import { orgRouter } from "./org";
-import { projectRouter } from "./project";
-import { appsRouter } from "./apps";
-
-export const appRouter = {
-  apps: appsRouter,
+export const router = {
+  health: healthRouter,
   user: userRouter,
-  org: orgRouter,
-  project: projectRouter,
 };
-export type AppRouter = typeof appRouter;
-export type AppRouterClient = RouterClient<typeof appRouter>;
+
+export type Router = typeof router;

@@ -1,9 +1,5 @@
-import { validateEnv } from "#index";
+import { serverEnvSchema, validate } from "#index";
 
-if (typeof window !== "undefined") {
-  throw new Error("Use @lms/env/client in browser code.");
-}
+export const env = validate(serverEnvSchema, process.env, "server");
 
-export const env = validateEnv(process.env);
-
-export type { Env } from "#index";
+export type Env = typeof env;

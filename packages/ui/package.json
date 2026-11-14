@@ -8,44 +8,55 @@
   ],
   "imports": {
     "#lib/*": {
+      "development": "./src/lib/*.ts",
       "types": "./src/lib/*.ts",
       "source": "./src/lib/*.ts",
       "default": "./dist/lib/*.js"
     },
     "#hooks/*": {
+      "development": "./src/hooks/*.ts",
       "types": "./src/hooks/*.ts",
       "source": "./src/hooks/*.ts",
       "default": "./dist/hooks/*.js"
     },
     "#components/*": {
+      "development": "./src/components/*.tsx",
       "types": "./src/components/*.tsx",
       "source": "./src/components/*.tsx",
       "default": "./dist/components/*.js"
     },
     "#components": {
+      "development": "./src/components",
       "types": "./src/components",
       "source": "./src/components",
       "default": "./dist/components"
     },
     "#lib": {
+      "development": "./src/lib",
       "types": "./src/lib",
       "source": "./src/lib",
       "default": "./dist/lib"
     },
     "#hooks": {
+      "development": "./src/hooks",
       "types": "./src/hooks",
       "source": "./src/hooks",
       "default": "./dist/hooks"
     }
   },
   "exports": {
-    "./styles.css": "./dist/styles/globals.css",
+    "./styles.css": {
+      "development": "./src/styles/globals.css",
+      "default": "./dist/styles/globals.css"
+    },
     "./lib/*": {
-      "types": "./src/lib/*.ts",
+      "development": "./src/lib/*.ts",
+      "types": "./dist/lib/*.d.ts",
       "default": "./dist/lib/*.js"
     },
     "./*": {
-      "types": "./src/components/*.tsx",
+      "development": "./src/components/*.tsx",
+      "types": "./dist/components/*.d.ts",
       "default": "./dist/components/*.js"
     }
   },

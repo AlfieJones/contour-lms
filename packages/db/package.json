@@ -5,6 +5,7 @@
   "type": "module",
   "imports": {
     "#*": {
+      "development": "./src/*.ts",
       "types": "./src/*.ts",
       "source": "./src/*.ts",
       "default": "./dist/*.js"
@@ -12,14 +13,17 @@
   },
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./schema": {
+      "development": "./src/schema.ts",
       "types": "./dist/schema.d.ts",
       "default": "./dist/schema.js"
     },
     "./auth-schema": {
+      "development": "./src/auth-schema.ts",
       "types": "./dist/auth-schema.d.ts",
       "default": "./dist/auth-schema.js"
     }

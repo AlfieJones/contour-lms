@@ -7,20 +7,26 @@
     "#*": "./src/*"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --conditions=development ./node_modules/next/dist/bin/next dev",
     "build": "next build",
     "start": "next start",
-    "check-types": "next typegen && tsc --noEmit"
+    "check-types": "node --conditions=development ./node_modules/next/dist/bin/next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@lms/api": "workspace:*",
+    "@lms/db": "workspace:*",
     "@lms/env": "workspace:*",
     "@lms/ui": "workspace:*",
     "@next/env": "catalog:",
+    "@orpc/client": "2.0.0-beta.42",
+    "@orpc/server": "2.0.0-beta.42",
+    "@orpc/tanstack-query": "catalog:",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "catalog:",
+    "@tanstack/react-query": "catalog:",
     "lucide-react": "catalog:",
     "next": "^16.4.0",
+    "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

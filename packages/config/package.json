@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./tsconfig.base.json": "./tsconfig.base.json"
+    "./tsconfig.base.json": {
+      "development": "./tsconfig.base.json",
+      "default": "./tsconfig.base.json"
+    }
   }
 }

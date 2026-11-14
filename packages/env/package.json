@@ -5,6 +5,7 @@
   "type": "module",
   "imports": {
     "#*": {
+      "development": "./src/*.ts",
       "types": "./src/*.ts",
       "source": "./src/*.ts",
       "default": "./dist/*.js"
@@ -12,20 +13,19 @@
   },
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./client": {
+      "development": "./src/client.ts",
       "types": "./dist/client.d.ts",
       "default": "./dist/client.js"
     },
     "./server": {
+      "development": "./src/server.ts",
       "types": "./dist/server.d.ts",
       "default": "./dist/server.js"
-    },
-    "./database": {
-      "types": "./dist/database.d.ts",
-      "default": "./dist/database.js"
     }
   },
   "scripts": {

@@ -1,17 +1,16 @@
-import nextEnv from "@next/env";
-import { getDatabaseEnv } from "@lms/env/database";
+import { serverEnvSchema, validate } from "@lms/env";
+import { loadEnvConfig } from "@next/env";
 import { defineConfig } from "drizzle-kit";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-nextEnv.loadEnvConfig(
-  fileURLToPath(new URL("../../", import.meta.url)),
-  process.env.NODE_ENV !== "production",
-);
+loadEnvConfig(resolve(dirname(fileURLToPath(import.meta.url)), "../.."));
+const env = validate(serverEnvSchema, process.env, "server");
 
 export default defineConfig({
   dialect: "postgresql",
   schema: "./src/schema.ts",
   out: "./drizzle",
   schemaFilter: ["public"],
-  dbCredentials: { url: getDatabaseEnv().DATABASE_URL },
+  dbCredentials: { url: env.DATABASE_URL },
 });
