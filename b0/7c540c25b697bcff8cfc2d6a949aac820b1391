@@ -1,0 +1,25 @@
+package.json
+  s_6f342eeb645745::t_4763e92a9d41fc 8
+  s_6f342eeb645745::t_52117bf0d7fd6b 37-38
+README.md
+  s_6f342eeb645745::t_4763e92a9d41fc 146,149-153
+  s_6f342eeb645745::t_5c94622854ec86 154
+.github/workflows/check.yml
+  s_6f342eeb645745::t_4763e92a9d41fc 6,17,20-36,38,44-47,50-51,54-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b07c540c25b697bcff8cfc2d6a949aac820b1391",
+  "prompts": {},
+  "sessions": {
+    "s_6f342eeb645745": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d90f-abbc-7d53-befe-0a2bca690b4b",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
