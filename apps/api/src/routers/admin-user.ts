@@ -1,39 +1,41 @@
-import { asc, eq, schema } from "@lms/db";
-import { authUsers } from "@lms/db/auth-schema";
+import { schema } from "@lms/db";
 import { ORPCError } from "@orpc/server";
 import { z } from "zod";
-import { isAdminEmail } from "#account";
-import { adminOS } from "#procedures";
+import { isAdminEmail, adminProcedure } from "#procedures";
 
 export const adminUserRouter = {
-  list: adminOS
+  list: adminProcedure
     .input(z.object({ page: z.int().min(1).max(10000).default(1) }))
     .handler(async ({ context, input }) => {
-      const rows = await context.db
-        .select({ id: authUsers.id, email: authUsers.email, role: schema.userRoles.role })
-        .from(authUsers)
-        .leftJoin(schema.userRoles, eq(authUsers.id, schema.userRoles.userId))
-        .orderBy(asc(authUsers.email), asc(authUsers.id))
-        .limit(21)
-        .offset((input.page - 1) * 20);
+      const rows = await context.db.query.authUsers.findMany({
+        columns: { id: true, email: true, rawUserMetaData: true },
+        with: { role: { columns: { role: true } } },
+        orderBy: { email: "asc", id: "asc" },
+        limit: 21,
+        offset: (input.page - 1) * 20,
+      });
       return {
-        items: rows.slice(0, 20).map((user) => ({
-          id: user.id,
-          email: user.email,
-          role: isAdminEmail(user.email ?? "", context.adminEmailPatterns)
-            ? ("admin" as const)
-            : (user.role ?? "student"),
-        })),
+        items: rows.slice(0, 20).map((user) => {
+          const name = user.rawUserMetaData?.full_name ?? user.rawUserMetaData?.name;
+          return {
+            id: user.id,
+            name: typeof name === "string" ? name.trim() || null : null,
+            email: user.email,
+            role: isAdminEmail(user.email ?? "", context.adminEmailPatterns)
+              ? ("admin" as const)
+              : (user.role?.role ?? "student"),
+          };
+        }),
         hasMore: rows.length > 20,
       };
     }),
-  setRole: adminOS
+  setRole: adminProcedure
     .input(z.object({ userId: z.uuid(), role: z.enum(["student", "teacher"]) }).strict())
     .handler(async ({ context, input }) => {
-      const [user] = await context.db
-        .select({ email: authUsers.email })
-        .from(authUsers)
-        .where(eq(authUsers.id, input.userId));
+      const user = await context.db.query.authUsers.findFirst({
+        columns: { email: true },
+        where: { id: input.userId },
+      });
       if (!user) throw new ORPCError("NOT_FOUND");
       if (isAdminEmail(user.email ?? "", context.adminEmailPatterns)) {
         throw new ORPCError("FORBIDDEN", {

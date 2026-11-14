@@ -1,30 +1,15 @@
-import { and, asc, eq, schema, sql, type Database } from "@lms/db";
-import { authUsers } from "@lms/db/auth-schema";
+import { and, eq, schema, sql } from "@lms/db";
 import { ORPCError } from "@orpc/server";
 import { z } from "zod";
-import { isAdminEmail } from "#account";
-import { sendEnrolmentEmail } from "#mail";
-import { studentOS, teacherOS } from "#procedures";
+import { sendEnrolmentEmail } from "@lms/email/server";
+import {
+  withTeacherSchedule,
+  queueConsultationEmail,
+  deliverConsultationEmails,
+} from "./consultation.ts";
+import { isAdminEmail, studentProcedure, teacherProcedure } from "#procedures";
 
 const table = schema.enrolments;
-
-// Recheck the current role on every booking; old enrolments grant no teacher privileges.
-export async function requireEnrolledTeacher(
-  db: Database,
-  studentId: string,
-  teacherId: string,
-  patterns: string[],
-) {
-  const [teacher] = await db
-    .select({ email: authUsers.email, role: schema.userRoles.role })
-    .from(table)
-    .leftJoin(schema.userRoles, eq(schema.userRoles.userId, table.teacherId))
-    .innerJoin(authUsers, eq(authUsers.id, table.teacherId))
-    .where(and(eq(table.studentId, studentId), eq(table.teacherId, teacherId)));
-  if (!teacher?.email || (teacher.role !== "teacher" && !isAdminEmail(teacher.email, patterns))) {
-    throw new ORPCError("FORBIDDEN", { message: "Choose a teacher who has enrolled you." });
-  }
-}
 
 async function notify(email: string, teacherName: string | null, hasAccount: boolean) {
   try {
@@ -37,36 +22,53 @@ async function notify(email: string, teacherName: string | null, hasAccount: boo
 }
 
 export const enrolmentRouter = {
-  students: teacherOS
+  students: teacherProcedure
     .input(z.object({ page: z.int().min(1).max(10000).default(1) }))
     .handler(async ({ context, input }) => {
-      const rows = await context.db
-        .select()
-        .from(table)
-        .where(eq(table.teacherId, context.account.id))
-        .orderBy(asc(table.studentEmail), asc(table.id))
-        .limit(21)
-        .offset((input.page - 1) * 20);
-      return { items: rows.slice(0, 20), hasMore: rows.length > 20 };
+      const rows = await context.db.query.enrolments.findMany({
+        with: { student: { columns: { rawUserMetaData: true } } },
+        where: { teacherId: context.account.id },
+        orderBy: { studentEmail: "asc", id: "asc" },
+        limit: 21,
+        offset: (input.page - 1) * 20,
+      });
+      const items = rows.slice(0, 20).map(({ student, ...row }) => {
+        const studentMetadata = student?.rawUserMetaData;
+        const name = studentMetadata?.full_name ?? studentMetadata?.name;
+        const avatarUrl = studentMetadata?.avatar_url;
+        return {
+          ...row,
+          studentName: row.studentName ?? (typeof name === "string" ? name.trim() || null : null),
+          studentAvatarUrl: typeof avatarUrl === "string" ? avatarUrl.trim() || null : null,
+        };
+      });
+      return { items, hasMore: rows.length > 20 };
     }),
-  teachers: studentOS.handler(async ({ context }) => {
-    const rows = await context.db
-      .select({ id: authUsers.id, email: authUsers.email, role: schema.userRoles.role })
-      .from(table)
-      .innerJoin(authUsers, eq(authUsers.id, table.teacherId))
-      .leftJoin(schema.userRoles, eq(schema.userRoles.userId, table.teacherId))
-      .where(eq(table.studentId, context.account.id))
-      .orderBy(asc(authUsers.email));
+  teachers: studentProcedure.handler(async ({ context }) => {
+    const rows = await context.db.query.authUsers.findMany({
+      columns: { id: true, email: true, rawUserMetaData: true },
+      with: { role: { columns: { role: true } } },
+      where: { teacherEnrolments: { studentId: context.account.id } },
+      orderBy: { email: "asc" },
+    });
     return rows
       .filter(
         (row): row is typeof row & { email: string } =>
           !!row.email &&
-          (row.role === "teacher" || isAdminEmail(row.email, context.adminEmailPatterns)),
+          (row.role?.role === "teacher" || isAdminEmail(row.email, context.adminEmailPatterns)),
       )
-      .map(({ id, email }) => ({ id, email }));
+      .map(({ id, email, rawUserMetaData: metadata }) => {
+        const name = metadata?.full_name ?? metadata?.name;
+        return { id, email, name: typeof name === "string" ? name.trim() || null : null };
+      });
   }),
-  enrol: teacherOS
-    .input(z.object({ email: z.string().trim().toLowerCase().pipe(z.email().max(255)) }))
+  enrol: teacherProcedure
+    .input(
+      z.object({
+        name: z.string().trim().min(1).max(100).optional(),
+        email: z.string().trim().toLowerCase().pipe(z.email().max(255)),
+      }),
+    )
     .handler(async ({ context, input }) => {
       if (
         input.email === context.account.email ||
@@ -74,23 +76,20 @@ export const enrolmentRouter = {
       ) {
         throw new ORPCError("BAD_REQUEST", { message: "Enter a student's email address." });
       }
-      const [user] = await context.db
-        .select({
-          id: authUsers.id,
-          confirmedAt: authUsers.emailConfirmedAt,
-          role: schema.userRoles.role,
-        })
-        .from(authUsers)
-        .leftJoin(schema.userRoles, eq(authUsers.id, schema.userRoles.userId))
-        .where(sql`lower(${authUsers.email}) = ${input.email}`);
-      if (user?.role === "teacher")
+      const user = await context.db.query.authUsers.findFirst({
+        columns: { id: true, emailConfirmedAt: true },
+        with: { role: { columns: { role: true } } },
+        where: { RAW: (user) => sql`lower(${user.email}) = ${input.email}` },
+      });
+      if (user?.role?.role === "teacher")
         throw new ORPCError("BAD_REQUEST", { message: "This account is a teacher." });
       const [row] = await context.db
         .insert(table)
         .values({
           teacherId: context.account.id,
           studentEmail: input.email,
-          studentId: user?.confirmedAt ? user.id : null,
+          studentName: input.name,
+          studentId: user?.emailConfirmedAt ? user.id : null,
         })
         .onConflictDoNothing({ target: [table.teacherId, table.studentEmail] })
         .returning();
@@ -98,16 +97,53 @@ export const enrolmentRouter = {
       // The enrolment remains saved if mail fails; teachers can retry without duplicating it.
       return { ...row, emailSent: await notify(input.email, context.account.name, !!user) };
     }),
-  resend: teacherOS.input(z.object({ id: z.uuid() })).handler(async ({ context, input }) => {
-    const [row] = await context.db
-      .select()
-      .from(table)
-      .where(and(eq(table.id, input.id), eq(table.teacherId, context.account.id)));
+  resend: teacherProcedure.input(z.object({ id: z.uuid() })).handler(async ({ context, input }) => {
+    const row = await context.db.query.enrolments.findFirst({
+      where: { id: input.id, teacherId: context.account.id },
+    });
     if (!row) throw new ORPCError("NOT_FOUND");
-    const [user] = await context.db
-      .select({ id: authUsers.id })
-      .from(authUsers)
-      .where(sql`lower(${authUsers.email}) = ${row.studentEmail}`);
+    const user = await context.db.query.authUsers.findFirst({
+      columns: { id: true },
+      where: { RAW: (user) => sql`lower(${user.email}) = ${row.studentEmail}` },
+    });
     return { emailSent: await notify(row.studentEmail, context.account.name, !!user) };
   }),
+  unenrol: teacherProcedure
+    .input(z.object({ id: z.uuid(), cancelUpcoming: z.boolean().default(false) }).strict())
+    .handler(async ({ context, input }) => {
+      const result = await withTeacherSchedule(context.db, context.account.id, async (tx) => {
+        const [row] = await tx
+          .delete(table)
+          .where(and(eq(table.id, input.id), eq(table.teacherId, context.account.id)))
+          .returning({
+            id: table.id,
+            studentId: table.studentId,
+            studentEmail: table.studentEmail,
+          });
+        if (!row) throw new ORPCError("NOT_FOUND", { message: "Enrolment not found." });
+        let cancelledIds: string[] = [];
+        if (input.cancelUpcoming) {
+          const bookings = schema.consultations;
+          const cancelled = await tx
+            .update(bookings)
+            .set({ status: "cancelled", calendarSequence: sql`${bookings.calendarSequence} + 1` })
+            .where(
+              and(
+                eq(bookings.teacherId, context.account.id),
+                eq(bookings.status, "scheduled"),
+                sql`${bookings.scheduledAt} > ${new Date()}`,
+                sql`(${bookings.studentId} = ${row.studentId} or (${bookings.studentId} is null and ${bookings.studentEmail} = ${row.studentEmail}))`,
+              ),
+            )
+            .returning();
+          for (const booking of cancelled) await queueConsultationEmail(tx, booking, "cancelled");
+          cancelledIds = cancelled.map((booking) => booking.id);
+        }
+        return { id: row.id, cancelledIds };
+      });
+      const sent = await Promise.all(
+        result.cancelledIds.map((id) => deliverConsultationEmails(context.db, id)),
+      );
+      return { id: result.id, emailSent: sent.every(Boolean) };
+    }),
 };
