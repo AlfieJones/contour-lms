@@ -1,0 +1,19 @@
+apps/web/src/lib/consultation-scheduling.ts
+  s_d90f5dfa949126::t_40e117373a7ece 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9aa0ac5858343ee24ec9c50f5d192a047558ef8d",
+  "prompts": {},
+  "sessions": {
+    "s_d90f5dfa949126": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d931-c3f3-7d62-88fe-0f7b54b0f7ba",
+        "model": "unknown"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
