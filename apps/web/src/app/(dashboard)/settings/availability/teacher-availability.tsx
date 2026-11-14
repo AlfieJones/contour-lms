@@ -15,14 +15,6 @@ import {
   CardFrameTitle,
   CardPanel,
 } from "@lms/ui/card";
-import {
-  Autocomplete,
-  AutocompleteEmpty,
-  AutocompleteInput,
-  AutocompleteItem,
-  AutocompleteList,
-  AutocompletePopup,
-} from "@lms/ui/autocomplete";
 import { Field, FieldLabel } from "@lms/ui/field";
 import {
   Menu,
@@ -44,7 +36,7 @@ import {
 import { Skeleton } from "@lms/ui/skeleton";
 import { Switch } from "@lms/ui/switch";
 import { toastManager } from "@lms/ui/toast";
-import { isValidTimeZone, type AvailabilityWindow } from "@lms/api/consultation-scheduling";
+import type { AvailabilityWindow } from "@lms/api/consultation-scheduling";
 import { nextAvailabilityRange } from "#lib/availability-editor.ts";
 import { useLocalTimezone } from "#lib/use-local-timezone.ts";
 import { orpc } from "#lib/orpc.ts";
@@ -80,7 +72,9 @@ export function TeacherAvailability() {
         <CardFrameTitle id="availability-title" render={<h2 />}>
           Weekly hours
         </CardFrameTitle>
-        <CardFrameDescription>Set the times you are available each day.</CardFrameDescription>
+        <CardFrameDescription>
+          Set the times you are available each day. Hours use your local timezone.
+        </CardFrameDescription>
       </CardFrameHeader>
       {query.isPending || !localTimeZone ? (
         <Card>
@@ -107,11 +101,7 @@ export function TeacherAvailability() {
           </CardPanel>
         </Card>
       ) : (
-        <AvailabilityForm
-          initialWindows={query.data.windows}
-          initialTimeZone={query.data.timeZone ?? localTimeZone}
-          localTimeZone={localTimeZone}
-        />
+        <AvailabilityForm initialWindows={query.data.windows} localTimeZone={localTimeZone} />
       )}
     </CardFrame>
   );
@@ -119,11 +109,9 @@ export function TeacherAvailability() {
 
 function AvailabilityForm({
   initialWindows,
-  initialTimeZone,
   localTimeZone,
 }: {
   initialWindows: AvailabilityWindow[];
-  initialTimeZone: string;
   localTimeZone: string;
 }) {
   const {
@@ -132,18 +120,11 @@ function AvailabilityForm({
     formState: { isSubmitting: pending },
   } = useForm({
     defaultValues: {
-      timeZone: initialTimeZone,
       windows: initialWindows.map((window, index) => ({ ...window, key: `initial-${index}` })),
     },
   });
   const { field } = useController({ control, name: "windows" });
   const windows = field.value;
-  const { field: timeZoneField } = useController({ control, name: "timeZone" });
-  const [timeZones] = useState(() =>
-    [
-      ...new Set([localTimeZone, initialTimeZone, "UTC", ...Intl.supportedValuesOf("timeZone")]),
-    ].sort(),
-  );
   const [pausedWindows, setPausedWindows] = useState<Partial<Record<number, DraftWindow[]>>>({});
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
@@ -196,12 +177,8 @@ function AvailabilityForm({
     ]);
   }
 
-  async function submit({ windows, timeZone }: { windows: DraftWindow[]; timeZone: string }) {
+  async function submit({ windows }: { windows: DraftWindow[] }) {
     setError("");
-    if (!isValidTimeZone(timeZone)) {
-      setError("Choose a valid timezone, such as Australia/Melbourne.");
-      return;
-    }
     for (const [index, window] of windows.entries()) {
       if (window.startMinute >= window.endMinute) {
         setError("Each end time must be later than its start time.");
@@ -223,7 +200,7 @@ function AvailabilityForm({
     }
     try {
       await save.mutateAsync({
-        timeZone,
+        timeZone: localTimeZone,
         windows: windows.map(({ dayOfWeek, startMinute, endMinute }) => ({
           dayOfWeek,
           startMinute,
@@ -244,37 +221,8 @@ function AvailabilityForm({
   return (
     <Card render={<form onSubmit={handleSubmit(submit)} />}>
       <CardPanel className="p-0">
-        <div className="border-b px-5 py-4 sm:px-6">
-          <Field>
-            <FieldLabel>Timezone</FieldLabel>
-            <Autocomplete
-              items={timeZones}
-              value={timeZoneField.value}
-              disabled={pending}
-              onValueChange={(value) => {
-                timeZoneField.onChange(value);
-              }}
-            >
-              <AutocompleteInput placeholder="Search timezones…" onBlur={timeZoneField.onBlur} />
-              <AutocompletePopup>
-                <AutocompleteEmpty>No timezones found.</AutocompleteEmpty>
-                <AutocompleteList>
-                  {(zone: string) => (
-                    <AutocompleteItem key={zone} value={zone}>
-                      {zone}
-                    </AutocompleteItem>
-                  )}
-                </AutocompleteList>
-              </AutocompletePopup>
-            </Autocomplete>
-          </Field>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Weekly hours use this timezone, including daylight saving. Changing it keeps the hours
-            below; existing bookings stay at the same time.
-          </p>
-        </div>
         <fieldset disabled={pending} className="min-w-0">
-          <legend className="sr-only">Weekly consultation hours in {timeZoneField.value}</legend>
+          <legend className="sr-only">Weekly consultation hours in {localTimeZone}</legend>
           {days.map((day) => {
             const ranges = windows
               .filter((window) => window.dayOfWeek === day.value)

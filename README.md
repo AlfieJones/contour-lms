@@ -94,7 +94,7 @@ ADMIN_EMAIL_PATTERNS='["admin@example.com"]'
 
 - Students can book with teachers who have enrolled them. I use the name from their profile so they don't have to enter it for every booking.
 - Sessions last **30, 60, or 120 minutes**, start on the half-hour, and require **one hour's notice**, up to **90 days ahead**.
-- Teachers set availability in their own timezone (detected from their browser, and editable). The demo teacher uses **Melbourne time**. Bookings are shown in your local timezone.
+- Teachers' availability uses their browser's local timezone automatically when they save their hours. The demo teacher uses **Melbourne time**. Bookings are shown in your local timezone.
 - Cancelling frees up the slot but keeps the booking in the history. You can mark a completed consultation incomplete again, but you can't reopen a cancelled one.
 - Booking changes lock the teacher's schedule and check availability again before saving, so two API requests can't book the same slot.
 - If an email fails, the booking still goes through. Failed emails can be retried manually.
