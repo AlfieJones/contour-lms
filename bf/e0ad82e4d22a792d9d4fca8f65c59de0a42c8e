@@ -1,0 +1,57 @@
+apps/web/src/app/(dashboard)/settings/availability/teacher-availability.tsx
+  s_98f5c158459d98::t_1abf4e45da6af2 110-114,120-124,251-254,256-257,262,264,266,272-273
+  s_98f5c158459d98::t_02311db00c5c17 18,49,76,85,125-128,135,141,199,226,247-249,270-271,274-275,277
+  s_98f5c158459d98::t_ffdc1ffe1858c6 19-25,47,142-146,201-204,250,255,258-261,263,265,267-269
+apps/api/src/routers/consultation.ts
+  s_98f5c158459d98::t_9d92a2728207d6 15,71-73,82,145,187-196,206-207,234,239,253,291
+  s_98f5c158459d98::t_1abf4e45da6af2 237-238,240-243,306-316
+apps/api/src/routers/consultation-scheduling.ts
+  s_98f5c158459d98::t_1abf4e45da6af2 23-30,34-36,76-80
+  s_98f5c158459d98::t_9d92a2728207d6 6-22,31-33,37-42,55,62,67-75,81-85,92,96-98,111,113
+  s_98f5c158459d98::t_ffdc1ffe1858c6 104,106-107,115
+apps/api/src/routers/consultation-scheduling.test.ts
+  s_98f5c158459d98::t_1abf4e45da6af2 5,9-10,19-23,25-26,30-36,41,46,51-142
+packages/db/drizzle/20261114081554_lonely_skrulls/snapshot.json
+  s_98f5c158459d98::t_02311db00c5c17 1-111
+packages/email/src/calendar.ts
+  s_98f5c158459d98::t_02311db00c5c17 6
+packages/db/seed.ts
+  s_98f5c158459d98::t_02311db00c5c17 20,88-89,115-116,124,129-130,134,137,211
+  s_98f5c158459d98::t_1abf4e45da6af2 86-87,117-123,125-128,138-141
+packages/email/src/templates/consultation.tsx
+  s_98f5c158459d98::t_02311db00c5c17 7,10-11,19
+README.md
+  s_98f5c158459d98::t_4d80b454034001 121
+  s_98f5c158459d98::t_4838cf9724978e 118
+  s_98f5c158459d98::t_372bb1faa3ed5d 7-13,25-30,34,36,51-55,61,63-70,82,93,96,102,112
+  s_98f5c158459d98::t_41a5abed912ce8 85-86
+  s_98f5c158459d98::t_598e0971721ccd 15,31-33,38,47,49,57-59,72,84,87,95,98-100,113-114,120
+  s_98f5c158459d98::t_62cddb7681e201 6
+  s_98f5c158459d98::t_02311db00c5c17 3-4,14,48,75-80,97,109-111
+  s_98f5c158459d98::t_3bfdbecb5a94c6 74
+  s_98f5c158459d98::t_fde9f443fffab7 115-117
+  s_98f5c158459d98::t_0b05ffac2e5007 119
+packages/db/src/schema.ts
+  s_98f5c158459d98::t_9d92a2728207d6 92,140-147,155
+packages/email/src/server.test.ts
+  s_98f5c158459d98::t_1abf4e45da6af2 75,87-89
+packages/db/drizzle/20261114081554_lonely_skrulls/migration.sql
+  s_98f5c158459d98::t_ffdc1ffe1858c6 6-12
+  s_98f5c158459d98::t_02311db00c5c17 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bfe0ad82e4d22a792d9d4fca8f65c59de0a42c8e",
+  "prompts": {},
+  "sessions": {
+    "s_98f5c158459d98": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d917-c365-7b90-a6e9-f3a2ea47c837",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
