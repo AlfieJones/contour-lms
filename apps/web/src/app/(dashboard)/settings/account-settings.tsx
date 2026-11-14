@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type FormEvent, type FormEventHandler, type ReactNode } from "react";
+import { useForm } from "react-hook-form";
+import { useEffect, useState, type FormEventHandler, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Account } from "@lms/api";
@@ -15,13 +16,11 @@ import {
   CardPanel,
 } from "@lms/ui/card";
 import { Field, FieldLabel, FieldDescription } from "@lms/ui/field";
-import { Form } from "@lms/ui/form";
 import { Input } from "@lms/ui/input";
 import { toastManager } from "@lms/ui/toast";
 import { FormError } from "#components/form-error.tsx";
 import { getSupabaseBrowserClient } from "#lib/supabase.ts";
 import { orpc } from "#lib/orpc.ts";
-import { formText } from "#lib/form.ts";
 
 export function AccountSettings({ account }: { account: Account }) {
   return (
@@ -58,7 +57,14 @@ function ProfileSettings({ account }: { account: Account }) {
   const [photoUrl, setPhotoUrl] = useState(account.avatarUrl);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileKey, setFileKey] = useState(0);
-  const [pending, setPending] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting: pending },
+  } = useForm({
+    defaultValues: { name: account.name ?? "" },
+    shouldUseNativeValidation: true,
+  });
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -67,15 +73,8 @@ function ProfileSettings({ account }: { account: Account }) {
     };
   }, [preview]);
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (pending) return;
-    const name = formText(new FormData(event.currentTarget), "name").trim();
-    if (!name) {
-      setError("Enter your name.");
-      return;
-    }
-    setPending(true);
+  async function submit(values: { name: string }) {
+    const name = values.name.trim();
     setError("");
     const storage = getSupabaseBrowserClient().storage.from("avatars");
     let uploadedPath: string | null = null;
@@ -115,8 +114,6 @@ function ProfileSettings({ account }: { account: Account }) {
       setError(
         cause instanceof Error ? cause.message : "Couldn’t save your profile. Please try again.",
       );
-    } finally {
-      setPending(false);
     }
   }
 
@@ -124,7 +121,7 @@ function ProfileSettings({ account }: { account: Account }) {
     <SettingsSection
       id="profile"
       title="Profile"
-      onSubmit={(event) => void submit(event)}
+      onSubmit={handleSubmit(submit)}
       footer={
         <Button type="submit" loading={pending}>
           Save changes
@@ -187,12 +184,13 @@ function ProfileSettings({ account }: { account: Account }) {
           </div>
         </div>
         <Field name="name">
-          <FieldLabel>Name</FieldLabel>
+          <FieldLabel htmlFor="profile-name">Name</FieldLabel>
           <Input
-            name="name"
+            nativeInput
+            id="profile-name"
+            {...register("name", { validate: (value) => !!value.trim() || "Enter your name." })}
             type="text"
             autoComplete="name"
-            defaultValue={account.name ?? ""}
             required
             maxLength={100}
           />
@@ -223,6 +221,11 @@ function useSecurityAction() {
 
 function PasswordSettings() {
   const action = useSecurityAction();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: { password: "", confirmPassword: "", nonce: "" },
+    shouldUseNativeValidation: true,
+    shouldUnregister: true,
+  });
   const [needsCode, setNeedsCode] = useState(false);
   const [notice, setNotice] = useState("");
   async function sendCode() {
@@ -231,16 +234,11 @@ function PasswordSettings() {
     setNeedsCode(true);
     setNotice("A verification code has been sent to your email.");
   }
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
+  async function submit(values: { password: string; confirmPassword: string; nonce: string }) {
     await action.run(async () => {
       setNotice("");
-      const password = formText(data, "password");
-      if (password !== formText(data, "confirm-password"))
-        throw new Error("The passwords don’t match.");
-      const nonce = formText(data, "nonce").trim();
+      const password = values.password;
+      const nonce = values.nonce?.trim();
       const { error } = await getSupabaseBrowserClient().auth.updateUser({
         password,
         ...(nonce ? { nonce } : {}),
@@ -250,7 +248,7 @@ function PasswordSettings() {
         return;
       }
       if (error) throw error;
-      form.reset();
+      reset();
       setNeedsCode(false);
       setNotice("Your password has been updated.");
     });
@@ -259,7 +257,7 @@ function PasswordSettings() {
     <SettingsSection
       id="security"
       title="Password"
-      onSubmit={(event) => void submit(event)}
+      onSubmit={handleSubmit(submit)}
       footer={
         <>
           {needsCode && (
@@ -281,9 +279,11 @@ function PasswordSettings() {
       <fieldset className="grid min-w-0 gap-4 sm:grid-cols-2">
         <legend className="sr-only">New password</legend>
         <Field name="password" disabled={action.pending}>
-          <FieldLabel>New password</FieldLabel>
+          <FieldLabel htmlFor="new-password">New password</FieldLabel>
           <Input
-            name="password"
+            nativeInput
+            id="new-password"
+            {...register("password", { required: "Enter a new password." })}
             type="password"
             autoComplete="new-password"
             minLength={8}
@@ -293,10 +293,16 @@ function PasswordSettings() {
           />
           <FieldDescription>At least 8 characters.</FieldDescription>
         </Field>
-        <Field name="confirm-password" disabled={action.pending}>
-          <FieldLabel>Confirm new password</FieldLabel>
+        <Field name="confirmPassword" disabled={action.pending}>
+          <FieldLabel htmlFor="confirm-password">Confirm new password</FieldLabel>
           <Input
-            name="confirm-password"
+            nativeInput
+            id="confirm-password"
+            {...register("confirmPassword", {
+              required: "Confirm your new password.",
+              validate: (value, values) =>
+                value === values.password || "The passwords don’t match.",
+            })}
             type="password"
             autoComplete="new-password"
             minLength={8}
@@ -308,9 +314,11 @@ function PasswordSettings() {
       </fieldset>
       {needsCode && (
         <Field name="nonce" disabled={action.pending}>
-          <FieldLabel>Email verification code</FieldLabel>
+          <FieldLabel htmlFor="password-nonce">Email verification code</FieldLabel>
           <Input
-            name="nonce"
+            nativeInput
+            id="password-nonce"
+            {...register("nonce", { required: "Enter the email verification code." })}
             type="text"
             autoComplete="one-time-code"
             inputMode="numeric"
@@ -380,7 +388,7 @@ function SettingsSection({
       id={id}
       aria-labelledby={`${id}-title`}
       className="scroll-mt-6"
-      render={onSubmit ? <Form onSubmit={onSubmit} /> : <section />}
+      render={onSubmit ? <form onSubmit={onSubmit} /> : <section />}
     >
       <CardFrameHeader>
         <CardFrameTitle id={`${id}-title`} render={<h2 />}>

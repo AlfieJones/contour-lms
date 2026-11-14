@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { Controller, useController, useForm, useWatch, type Control } from "react-hook-form";
 import Link from "next/link";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ArrowLeftIcon, ArrowRightIcon, ChevronDownIcon, Clock3Icon } from "lucide-react";
@@ -15,7 +16,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@lms/ui/dialog";
-import { Field, FieldDescription, FieldLabel } from "@lms/ui/field";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@lms/ui/field";
 import { RadioGroupPrimitive, RadioPrimitive } from "@lms/ui/radio-group";
 import {
   Select,
@@ -33,7 +34,6 @@ import { Toggle } from "@lms/ui/toggle";
 import { ToggleGroup } from "@lms/ui/toggle-group";
 import { Textarea } from "@lms/ui/textarea";
 import { orpc, type client } from "#lib/orpc.ts";
-import { formText } from "#lib/form.ts";
 import { useLocalTimezone } from "#lib/use-local-timezone.ts";
 import {
   availableSlots,
@@ -65,6 +65,14 @@ export type BookingDetails = {
   reason: string;
   scheduledAt: string;
   durationMinutes: number;
+};
+
+type BookingFormValues = {
+  enrolmentId: string;
+  reason: string;
+  teacherId: string | null;
+  durationMinutes: number;
+  scheduledAt: string | null;
 };
 
 const noSlots: string[] = [];
@@ -101,33 +109,40 @@ function Scheduler({
 }: SchedulerProps & { timeZone: string }) {
   const [now, setNow] = useState(() => new Date());
   const original = flow.mode === "book" ? undefined : flow.consultation;
-  const [durationMinutes, setDurationMinutes] = useState(original?.durationMinutes ?? 60);
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { isSubmitting: pending },
+  } = useForm<BookingFormValues>({
+    defaultValues: {
+      enrolmentId: "",
+      reason: original?.reason ?? "",
+      teacherId: teachers.some((teacher) => teacher.id === original?.teacherId)
+        ? original!.teacherId
+        : teachers.length === 1
+          ? teachers[0]!.id
+          : null,
+      durationMinutes: original?.durationMinutes ?? 60,
+      scheduledAt: null,
+    },
+  });
+  const [durationMinutes, teacherId, slot] = useWatch({
+    control,
+    name: ["durationMinutes", "teacherId", "scheduledAt"],
+  });
   const [chosenDay, setChosenDay] = useState<Date | null>(null);
   const [viewedMonth, setViewedMonth] = useState<Date | null>(null);
-  const [slot, setSlot] = useState<string | null>(null);
   const [hour12, setHour12] = useState(true);
   const [step, setStep] = useState<"duration" | "time" | "details" | "confirmed">(
     flow.mode === "reschedule" ? "time" : "duration",
   );
-  const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [confirmed, setConfirmed] = useState<Consultation | null>(null);
   const localHeading = useRef<HTMLHeadingElement>(null);
   const stepHeading = headingRef ?? localHeading;
   const previousStep = useRef(step);
   const rescheduling = flow.mode === "reschedule";
-  const detailsForm = useRef<HTMLFormElement>(null);
-  const [draft, setDraft] = useState({
-    enrolmentId: undefined as string | undefined,
-    reason: original?.reason ?? "",
-  });
-  const [teacherId, setTeacherId] = useState<string | null>(() =>
-    teachers.some((teacher) => teacher.id === original?.teacherId)
-      ? original!.teacherId
-      : teachers.length === 1
-        ? teachers[0]!.id
-        : null,
-  );
   const availability = useQuery(
     orpc.consultation.availability.slots.queryOptions({
       input: {
@@ -176,39 +191,25 @@ function Scheduler({
 
   function changeDuration(value: number) {
     if (!CONSULTATION_DURATIONS.some((duration) => duration.minutes === value)) return;
-    setDurationMinutes(value);
+    setValue("durationMinutes", value);
     setChosenDay(null);
     setViewedMonth(null);
-    setSlot(null);
+    setValue("scheduledAt", null);
     setError("");
-  }
-
-  function readDraft(form: HTMLFormElement) {
-    const data = new FormData(form);
-    return {
-      enrolmentId: formText(data, "enrolmentId") || undefined,
-      reason: rescheduling ? original!.reason : formText(data, "reason"),
-    };
   }
 
   function changeTeacher(value: string | null) {
     if (pending || value === teacherId) return;
-    const nextDraft =
-      step === "details" && detailsForm.current ? readDraft(detailsForm.current) : draft;
-    setDraft(nextDraft);
-    setTeacherId(value);
+    setValue("teacherId", value);
     setChosenDay(null);
     setViewedMonth(null);
-    setSlot(null);
+    setValue("scheduledAt", null);
     setError("");
     if (step === "details") setStep("time");
   }
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (pending) return;
-    const nextDraft = readDraft(event.currentTarget);
-    setDraft(nextDraft);
+  async function submit(values: BookingFormValues) {
+    if (step !== "details") return;
     if (
       !slot ||
       !availableSlots(day, timeZone, new Date(), publishedSlots).some(
@@ -217,14 +218,15 @@ function Scheduler({
     ) {
       setError("That time is no longer within the booking window. Please choose another time.");
       setStep("time");
-      setSlot(null);
+      setValue("scheduledAt", null);
       return;
     }
     const details = {
-      ...nextDraft,
-      teacherId: teacherId ?? "",
+      enrolmentId: values.enrolmentId || undefined,
+      reason: rescheduling ? original!.reason : values.reason,
+      teacherId: values.teacherId ?? "",
       scheduledAt: slot,
-      durationMinutes,
+      durationMinutes: values.durationMinutes,
     };
     if (!teachers.some((teacher) => teacher.id === details.teacherId)) {
       setError("Choose a teacher who has enrolled you.");
@@ -239,7 +241,6 @@ function Scheduler({
       return;
     }
     setError("");
-    setPending(true);
     try {
       const result = await onSave(details);
       if (result) {
@@ -255,11 +256,9 @@ function Scheduler({
       setError(
         error instanceof Error ? error.message : "Couldn’t save the booking. Please try again.",
       );
-      setSlot(null);
+      setValue("scheduledAt", null);
       setStep("time");
       void availability.refetch();
-    } finally {
-      setPending(false);
     }
   }
 
@@ -384,7 +383,7 @@ function Scheduler({
   return (
     <>
       {header}
-      <form ref={detailsForm} onSubmit={(event) => void submit(event)} className="contents">
+      <form noValidate onSubmit={(event) => void handleSubmit(submit)(event)} className="contents">
         <DialogPanel className="@container min-h-0 p-0 in-[[data-slot=dialog-popup]:has([data-slot=dialog-header])]:pt-0">
           {original && (
             <div className="flex flex-wrap items-start justify-between gap-3 border-b bg-muted/25 px-5 py-3 text-sm sm:px-6">
@@ -462,7 +461,7 @@ function Scheduler({
                     onSelect={(value) => {
                       if (value) {
                         setChosenDay(value);
-                        setSlot(null);
+                        setValue("scheduledAt", null);
                         setError("");
                       }
                     }}
@@ -517,7 +516,7 @@ function Scheduler({
                             onValueChange={(values) => {
                               const value = values[0];
                               if (!value) return;
-                              setSlot(String(value));
+                              setValue("scheduledAt", String(value));
                               setError("");
                               setStep("details");
                             }}
@@ -565,7 +564,7 @@ function Scheduler({
                 <fieldset disabled={pending}>
                   <legend className="sr-only">{bookingForStudents ? "Student" : "Teacher"}</legend>
                   {bookingForStudents ? (
-                    <StudentSelect defaultValue={draft.enrolmentId} />
+                    <StudentSelect control={control} />
                   ) : (
                     <TeacherSelect
                       teachers={teachers}
@@ -592,16 +591,33 @@ function Scheduler({
               ) : (
                 <fieldset disabled={pending} className="flex min-w-0 flex-col gap-5">
                   <legend className="sr-only">Consultation details</legend>
-                  <Field>
-                    <FieldLabel>Discussion notes</FieldLabel>
-                    <Textarea
-                      name="reason"
-                      defaultValue={draft.reason}
-                      required
-                      maxLength={2000}
-                      placeholder="Add a topic or question"
-                    />
-                  </Field>
+                  <Controller
+                    control={control}
+                    name="reason"
+                    rules={{
+                      required: "Enter discussion notes for the consultation.",
+                      maxLength: {
+                        value: 2000,
+                        message: "Keep discussion notes under 2,000 characters.",
+                      },
+                    }}
+                    render={({ field, fieldState }) => (
+                      <Field name={field.name} invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="booking-reason">Discussion notes</FieldLabel>
+                        <Textarea
+                          {...field}
+                          id="booking-reason"
+                          aria-invalid={fieldState.invalid}
+                          required
+                          maxLength={2000}
+                          placeholder="Add a topic or question"
+                        />
+                        <FieldError match={fieldState.invalid}>
+                          {fieldState.error?.message}
+                        </FieldError>
+                      </Field>
+                    )}
+                  />
                 </fieldset>
               )}
               {error && (
@@ -620,9 +636,8 @@ function Scheduler({
                 variant="ghost"
                 disabled={pending}
                 onClick={() => {
-                  if (detailsForm.current) setDraft(readDraft(detailsForm.current));
                   setError("");
-                  setSlot(null);
+                  setValue("scheduledAt", null);
                   setStep("time");
                 }}
               >
@@ -651,7 +666,15 @@ function Scheduler({
   );
 }
 
-function StudentSelect({ defaultValue }: { defaultValue?: string }) {
+function StudentSelect({ control }: { control: Control<BookingFormValues> }) {
+  const {
+    field: { ref, onBlur, ...field },
+    fieldState,
+  } = useController({
+    control,
+    name: "enrolmentId",
+    rules: { required: "Choose an enrolled student." },
+  });
   const query = useInfiniteQuery(
     orpc.enrolment.students.infiniteOptions({
       input: (page: number) => ({ page }),
@@ -671,16 +694,17 @@ function StudentSelect({ defaultValue }: { defaultValue?: string }) {
       })) ?? [];
 
   return (
-    <Field name="enrolmentId">
+    <Field name="enrolmentId" invalid={fieldState.invalid}>
       <FieldLabel>Student</FieldLabel>
       <Select
-        name="enrolmentId"
+        name={field.name}
         items={items}
-        defaultValue={defaultValue ?? null}
+        value={field.value || null}
+        onValueChange={(value) => field.onChange(value ?? "")}
         required
         disabled={query.isPending || (!query.data && query.isError)}
       >
-        <SelectTrigger>
+        <SelectTrigger ref={ref} onBlur={onBlur} aria-invalid={fieldState.invalid}>
           <SelectValue
             placeholder={query.isPending ? "Loading students…" : "Choose an enrolled student"}
           />
@@ -695,6 +719,7 @@ function StudentSelect({ defaultValue }: { defaultValue?: string }) {
           </SelectGroup>
         </SelectPopup>
       </Select>
+      <FieldError match={fieldState.invalid}>{fieldState.error?.message}</FieldError>
       {query.isError ? (
         <div className="flex flex-col items-start gap-2">
           <p role="alert" className="text-sm text-destructive-foreground">

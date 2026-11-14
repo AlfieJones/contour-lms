@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
 import { EllipsisIcon } from "lucide-react";
 import {
   keepPreviousData,
@@ -36,14 +37,16 @@ import {
   DialogTrigger,
 } from "@lms/ui/dialog";
 import { Field, FieldLabel } from "@lms/ui/field";
-import { Form } from "@lms/ui/form";
 import { Input } from "@lms/ui/input";
 import { Menu, MenuGroup, MenuItem, MenuPopup, MenuTrigger } from "@lms/ui/menu";
 import { toastManager } from "@lms/ui/toast";
 import { orpc } from "#lib/orpc.ts";
-import { formText } from "#lib/form.ts";
 
 export function StudentEnrolments() {
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: { email: "" },
+    shouldUseNativeValidation: true,
+  });
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
   const enrolMutation = useMutation(
@@ -107,13 +110,10 @@ export function StudentEnrolments() {
     }
   }
 
-  async function enrol(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const email = formText(formData, "email").trim().toLowerCase();
+  async function enrol(values: { email: string }) {
+    const email = values.email.trim().toLowerCase();
     if (await send(() => enrolMutation.mutateAsync({ email }))) {
-      form.reset();
+      reset();
       setEnrolOpen(false);
     }
   }
@@ -153,6 +153,7 @@ export function StudentEnrolments() {
               return;
             }
             setEnrolOpen(open);
+            reset();
             setError("");
           }}
         >
@@ -164,14 +165,17 @@ export function StudentEnrolments() {
               <DialogTitle>Enrol a student</DialogTitle>
               <DialogDescription>Send an enrolment invitation by email.</DialogDescription>
             </DialogHeader>
-            <Form onSubmit={enrol} className="contents">
+            <form onSubmit={handleSubmit(enrol)} className="contents">
               <DialogPanel className="flex flex-col gap-4">
                 <Field name="email" disabled={pending}>
-                  <FieldLabel>Email</FieldLabel>
+                  <FieldLabel htmlFor="enrol-email">Email</FieldLabel>
                   <Input
-                    name="email"
+                    nativeInput
+                    id="enrol-email"
+                    {...register("email", { required: "Enter the student’s email." })}
                     type="email"
                     placeholder="student@example.com"
+                    disabled={pending}
                     required
                     maxLength={255}
                   />
@@ -190,7 +194,7 @@ export function StudentEnrolments() {
                   Enrol student
                 </Button>
               </DialogFooter>
-            </Form>
+            </form>
           </DialogPopup>
         </Dialog>
       }

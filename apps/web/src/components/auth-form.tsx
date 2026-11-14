@@ -1,31 +1,30 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@lms/ui/button";
 import { PageLayout } from "#components/page-layout.tsx";
-import { Field, FieldError, FieldLabel } from "@lms/ui/field";
-import { Form } from "@lms/ui/form";
+import { Field, FieldLabel } from "@lms/ui/field";
 import { Input } from "@lms/ui/input";
 import { getSupabaseBrowserClient } from "#lib/supabase.ts";
-import { formText } from "#lib/form.ts";
 
 export function AuthForm({ signup = false, email = "" }: { signup?: boolean; email?: string }) {
-  const [pending, setPending] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting: pending },
+  } = useForm({
+    defaultValues: { name: "", email, password: "" },
+    shouldUseNativeValidation: true,
+  });
   const [error, setError] = useState("");
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const email = formText(form, "email").trim();
-    const password = formText(form, "password");
-    const name = formText(form, "name").trim();
+  async function submit(values: { name: string; email: string; password: string }) {
+    const email = values.email.trim();
+    const password = values.password;
+    const name = values.name.trim();
     setError("");
-    if (signup && !name) {
-      setError("Enter your name.");
-      return;
-    }
-    setPending(true);
     try {
       const supabase = getSupabaseBrowserClient();
       if (signup) {
@@ -53,8 +52,6 @@ export function AuthForm({ signup = false, email = "" }: { signup?: boolean; ema
             ? "Confirm your email before logging in."
             : "Could not log in. Check your email and password or try again shortly.",
       );
-    } finally {
-      setPending(false);
     }
   }
 
@@ -71,37 +68,47 @@ export function AuthForm({ signup = false, email = "" }: { signup?: boolean; ema
         </Link>
       }
     >
-      <Form onSubmit={submit} className="flex w-full flex-col gap-4">
+      <form onSubmit={handleSubmit(submit)} className="flex w-full flex-col gap-4">
         {signup && (
           <Field name="name">
-            <FieldLabel>Name</FieldLabel>
-            <Input name="name" type="text" autoComplete="name" required maxLength={100} />
-            <FieldError />
+            <FieldLabel htmlFor="auth-name">Name</FieldLabel>
+            <Input
+              nativeInput
+              id="auth-name"
+              {...register("name", {
+                validate: (value) => !signup || !!value.trim() || "Enter your name.",
+              })}
+              type="text"
+              autoComplete="name"
+              required
+              maxLength={100}
+            />
           </Field>
         )}
         <Field name="email">
-          <FieldLabel>Email</FieldLabel>
+          <FieldLabel htmlFor="auth-email">Email</FieldLabel>
           <Input
-            name="email"
-            defaultValue={email}
+            nativeInput
+            id="auth-email"
+            {...register("email", { required: "Enter your email." })}
             type="email"
             autoComplete="email"
             required
             maxLength={254}
           />
-          <FieldError />
         </Field>
         <Field name="password">
-          <FieldLabel>Password</FieldLabel>
+          <FieldLabel htmlFor="auth-password">Password</FieldLabel>
           <Input
-            name="password"
+            nativeInput
+            id="auth-password"
+            {...register("password", { required: "Enter your password." })}
             type="password"
             autoComplete={signup ? "new-password" : "current-password"}
             required
             minLength={signup ? 8 : undefined}
             maxLength={128}
           />
-          <FieldError />
         </Field>
         {error && (
           <p role="alert" className="text-sm text-destructive-foreground">
@@ -119,7 +126,7 @@ export function AuthForm({ signup = false, email = "" }: { signup?: boolean; ema
             Forgot your password?
           </Link>
         )}
-      </Form>
+      </form>
     </PageLayout>
   );
 }

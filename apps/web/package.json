@@ -30,6 +30,7 @@
     "next-themes": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-hook-form": "catalog:",
     "server-only": "catalog:",
     "temporal-polyfill": "catalog:",
     "zod": "catalog:"

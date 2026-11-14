@@ -1,25 +1,28 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@lms/ui/button";
 import { Field, FieldLabel } from "@lms/ui/field";
-import { Form } from "@lms/ui/form";
 import { Input } from "@lms/ui/input";
 import { PageLayout } from "#components/page-layout.tsx";
 import { FormError } from "#components/form-error.tsx";
 import { getSupabaseBrowserClient } from "#lib/supabase.ts";
-import { formText } from "#lib/form.ts";
 
 export default function ForgotPasswordPage() {
-  const [pending, setPending] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting: pending },
+  } = useForm({
+    defaultValues: { email: "" },
+    shouldUseNativeValidation: true,
+  });
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (pending) return;
-    const email = formText(new FormData(event.currentTarget), "email").trim();
-    setPending(true);
+  async function submit(values: { email: string }) {
+    const email = values.email.trim();
     setError("");
     try {
       const { error } = await getSupabaseBrowserClient().auth.resetPasswordForEmail(email, {
@@ -29,8 +32,6 @@ export default function ForgotPasswordPage() {
       setSent(true);
     } catch {
       setError("Couldn’t send the reset email. Please try again shortly.");
-    } finally {
-      setPending(false);
     }
   }
   return (
@@ -39,7 +40,7 @@ export default function ForgotPasswordPage() {
       title="Reset password"
       description="We’ll email you a link to get back into your account."
     >
-      <Form className="flex flex-col gap-4" onSubmit={(event) => void submit(event)}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(submit)}>
         {sent ? (
           <p role="status" className="text-sm">
             If an account exists for this email, you’ll receive a link to reset your password.
@@ -48,9 +49,11 @@ export default function ForgotPasswordPage() {
         ) : (
           <>
             <Field name="email" disabled={pending}>
-              <FieldLabel>Email</FieldLabel>
+              <FieldLabel htmlFor="reset-email">Email</FieldLabel>
               <Input
-                name="email"
+                nativeInput
+                id="reset-email"
+                {...register("email", { required: "Enter your email." })}
                 type="email"
                 autoComplete="email"
                 maxLength={254}
@@ -67,7 +70,7 @@ export default function ForgotPasswordPage() {
         <Link href="/login" className="text-sm text-muted-foreground hover:underline">
           Back to log in
         </Link>
-      </Form>
+      </form>
     </PageLayout>
   );
 }

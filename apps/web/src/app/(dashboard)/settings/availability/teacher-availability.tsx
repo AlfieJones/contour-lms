@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useController, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CopyIcon, PlusIcon, XIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@lms/ui/alert";
@@ -103,9 +104,17 @@ export function TeacherAvailability() {
 }
 
 function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWindow[] }) {
-  const [windows, setWindows] = useState<DraftWindow[]>(() =>
-    initialWindows.map((window, index) => ({ ...window, key: `initial-${index}` })),
-  );
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting: pending },
+  } = useForm({
+    defaultValues: {
+      windows: initialWindows.map((window, index) => ({ ...window, key: `initial-${index}` })),
+    },
+  });
+  const { field } = useController({ control, name: "windows" });
+  const windows = field.value;
   const [pausedWindows, setPausedWindows] = useState<Partial<Record<number, DraftWindow[]>>>({});
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
@@ -127,7 +136,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
       setError("You can add up to 28 time ranges across the week.");
       return;
     }
-    setWindows(next);
+    field.onChange(next);
     setError("");
   }
 
@@ -158,9 +167,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
     ]);
   }
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (save.isPending) return;
+  async function submit({ windows }: { windows: DraftWindow[] }) {
     setError("");
     for (const [index, window] of windows.entries()) {
       if (window.startMinute >= window.endMinute) {
@@ -201,9 +208,9 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
   }
 
   return (
-    <Card render={<form onSubmit={(event) => void submit(event)} />}>
+    <Card render={<form onSubmit={handleSubmit(submit)} />}>
       <CardPanel className="p-0">
-        <fieldset disabled={save.isPending} className="min-w-0">
+        <fieldset disabled={pending} className="min-w-0">
           <legend className="sr-only">Weekly consultation hours in Perth time</legend>
           {days.map((day) => {
             const ranges = windows
@@ -224,7 +231,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
                   <Switch
                     checked={ranges.length > 0}
                     disabled={
-                      save.isPending ||
+                      pending ||
                       (ranges.length === 0 &&
                         windows.length + (pausedWindows[day.value]?.length ?? 1) > maximumRanges)
                     }
@@ -244,7 +251,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
                           label={`${day.label} start time, range ${index + 1}`}
                           items={startTimeItems}
                           value={window.startMinute}
-                          disabled={save.isPending}
+                          disabled={pending}
                           onValueChange={(startMinute) =>
                             change(
                               windows.map((item) =>
@@ -260,7 +267,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
                           label={`${day.label} end time, range ${index + 1}`}
                           items={endTimeItems}
                           value={window.endMinute}
-                          disabled={save.isPending}
+                          disabled={pending}
                           onValueChange={(endMinute) =>
                             change(
                               windows.map((item) =>
@@ -308,7 +315,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
                           type="button"
                           variant="outline"
                           size="icon-sm"
-                          disabled={save.isPending || ranges.length === 0}
+                          disabled={pending || ranges.length === 0}
                           aria-label={`Copy ${day.label} hours to other days`}
                           title="Copy hours to other days"
                         />
@@ -358,7 +365,7 @@ function AvailabilityForm({ initialWindows }: { initialWindows: AvailabilityWind
           </Alert>
         )}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Button type="submit" loading={save.isPending} className="self-start sm:shrink-0">
+          <Button type="submit" loading={pending} className="self-start sm:shrink-0">
             Save availability
           </Button>
         </div>

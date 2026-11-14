@@ -35,6 +35,7 @@ catalog:
   "@fullcalendar/react": ^7.1.5
   "@fullcalendar/timegrid": ^6.1.22
   temporal-polyfill: ^1.0.8
+  react-hook-form: ^7.92.0
 minimumReleaseAgeExclude:
   - "@supabase/auth-js@2.117.3"
   - "@supabase/functions-js@2.117.3"
