@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@lms/db": "workspace:*",
+    "@lms/email": "catalog:",
     "@orpc/client": "2.0.0-beta.50",
     "@orpc/server": "2.0.0-beta.50",
     "@orpc/shared": "catalog:",

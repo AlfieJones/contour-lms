@@ -4,4 +4,5 @@ import type { Database } from "@lms/db";
 export interface ApiContext {
   supabase: SupabaseClient;
   db: Database;
+  adminEmailPatterns: string[];
 }

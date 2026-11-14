@@ -11,6 +11,7 @@ import { router } from "../src/index.ts";
 test("RPC client and handler round-trip public requests without a session", async () => {
   const handler = new RPCHandler(router);
   const context = {
+    adminEmailPatterns: [],
     db: createDb("postgresql://postgres:postgres@127.0.0.1:55322/postgres"),
     supabase: createClient("http://127.0.0.1:55321", "sb_publishable_test_key", {
       auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
@@ -35,4 +36,25 @@ test("RPC client and handler round-trip public requests without a session", asyn
 
   await expect(client.health()).resolves.toEqual({ status: "ok" });
   await expect(client.user.get()).resolves.toBeNull();
+  await expect(client.consultation.list({ page: 1 })).rejects.toMatchObject({
+    code: "UNAUTHORIZED",
+  });
+  await expect(
+    client.consultation.createForStudent({
+      enrolmentId: "00000000-0000-4000-8000-000000000000",
+      firstName: "Test",
+      lastName: "Student",
+      reason: "Review",
+      scheduledAt: new Date(Date.now() + 86400_000).toISOString(),
+    }),
+  ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+  await expect(client.admin.consultations({ page: 1 })).rejects.toMatchObject({
+    code: "UNAUTHORIZED",
+  });
+  await expect(client.admin.users.list({ page: 1 })).rejects.toMatchObject({
+    code: "UNAUTHORIZED",
+  });
+  await expect(
+    client.admin.users.setRole({ userId: "00000000-0000-4000-8000-000000000000", role: "teacher" }),
+  ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
 });

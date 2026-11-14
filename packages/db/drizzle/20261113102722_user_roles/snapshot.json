@@ -1,0 +1,121 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "ca4275e0-66d8-452e-b2b1-4481fa7c6469",
+  "prevIds": ["374bc7da-75ea-4e75-b1d2-ac066ee5310f"],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": ["table", "app", "user_roles"],
+      "writes": [
+        "s|tbl|app.user_roles",
+        "n|tbl|app.user_roles",
+        "e|tbl|app.user_roles",
+        "n|rel|app.user_roles",
+        "n|type|app.user_roles",
+        "n|rel|app.user_roles_pkey"
+      ],
+      "reads": ["n|sch|app"]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": ["table", "app", "user_roles"],
+      "writes": [
+        "s|fk|app.user_roles.user_roles_user_id_users_id_fkey",
+        "n|fk|app.user_roles.user_roles_user_id_users_id_fkey",
+        "e|fk|app.user_roles.user_roles_user_id_users_id_fkey",
+        "n|con|app.user_roles.user_roles_user_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|app.user_roles",
+        "n|sch|app",
+        "n|tbl|auth.users",
+        "n|sch|auth",
+        "n|col|app.user_roles.user_id",
+        "n|col|auth.users.id",
+        "e|uniqueness|auth.users.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "name": "user_roles",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "user_roles",
+        "name": "user_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "user_roles",
+        "name": "role",
+        "type": "varchar(20)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "'student'",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "user_roles",
+        "name": "user_roles_user_id_users_id_fkey",
+        "nameExplicit": false,
+        "columns": ["user_id"],
+        "schemaTo": "auth",
+        "tableTo": "users",
+        "columnsTo": ["id"],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "user_roles",
+        "name": "user_roles_pkey",
+        "columns": ["user_id"],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "app",
+        "table": "user_roles",
+        "name": "user_roles_role_check",
+        "value": "\"role\" in ('student', 'teacher')",
+        "entityType": "checks"
+      }
+    }
+  ]
+}

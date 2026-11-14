@@ -1,0 +1,44 @@
+{
+  "name": "@lms/email",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "development": "./src/index.tsx",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "development": "./src/server.ts",
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    },
+    "./sender": {
+      "development": "./src/sender.ts",
+      "types": "./dist/sender.d.ts",
+      "default": "./dist/sender.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@lms/env": "workspace:*",
+    "nodemailer": "10.5.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-email": "6.11.12"
+  },
+  "devDependencies": {
+    "@lms/config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/nodemailer": "8.0.2",
+    "@types/react": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
