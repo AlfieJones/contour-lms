@@ -1,0 +1,49 @@
+supabase/templates/reauthentication.html
+  s_c03414d1d344b6::t_e27f2a29ca8999 1-27
+supabase/templates/confirmation.html
+  s_c03414d1d344b6::t_e27f2a29ca8999 1-27
+apps/api/tests/consultation.integration.test.ts
+  s_c03414d1d344b6::t_8fbf7c98b2b161 7,536-538,549
+supabase/templates/recovery.html
+  s_c03414d1d344b6::t_e27f2a29ca8999 1-27
+apps/web/tests/consultation-scheduling.test.ts
+  s_c03414d1d344b6::t_a232769c4db475 12,15-16,18-19,26-27,33,35,40-42,44,59,66-92,97
+.github/workflows/check.yml
+  s_c03414d1d344b6::t_8fbf7c98b2b161 32-45
+packages/email/src/render.tsx
+  s_c03414d1d344b6::t_e27f2a29ca8999 5
+README.md
+  s_c03414d1d344b6::t_8fbf7c98b2b161 1-7,23-25,30-45,47-73,84-86,96,99-101,123
+  s_c03414d1d344b6::t_e27f2a29ca8999 114-119
+  s_c03414d1d344b6::t_01b73a56f37872 11-16
+  s_c03414d1d344b6::t_a232769c4db475 83
+  s_c03414d1d344b6::t_527c6db588f2bb 102
+supabase/templates/email_change.html
+  s_c03414d1d344b6::t_e27f2a29ca8999 1-27
+packages/email/src/index.tsx
+  s_c03414d1d344b6::t_e27f2a29ca8999 1
+packages/email/tests/templates.test.ts
+  s_c03414d1d344b6::t_e27f2a29ca8999 2
+supabase/templates/invite.html
+  s_c03414d1d344b6::t_e27f2a29ca8999 1-27
+apps/web/src/lib/consultation-scheduling.ts
+  s_c03414d1d344b6::t_a232769c4db475 7-12,62-66
+supabase/templates/magic_link.html
+  s_c03414d1d344b6::t_e27f2a29ca8999 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c1af5774f976d0ff5e83d6995f97b607efe9896a",
+  "prompts": {},
+  "sessions": {
+    "s_c03414d1d344b6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d8f8-d9cc-76a0-806c-b5e220e5db75",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
