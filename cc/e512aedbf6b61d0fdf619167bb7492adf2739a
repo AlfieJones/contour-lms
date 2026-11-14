@@ -1,0 +1,97 @@
+apps/web/src/env.ts
+  s_138289885f2527::t_824f236513d36a 31
+apps/web/src/app/(dashboard)/page.tsx
+  s_138289885f2527::t_824f236513d36a 12
+apps/web/src/app/(auth)/auth/callback/route.ts
+  s_138289885f2527::t_824f236513d36a 17
+apps/web/src/app/(dashboard)/admin/consultations/page.tsx
+  s_138289885f2527::t_824f236513d36a 11
+apps/web/src/lib/form.ts
+  s_138289885f2527::t_824f236513d36a 3
+apps/web/src/lib/consultation-scheduling.ts
+  s_138289885f2527::t_824f236513d36a 6,8,14,22,29,31,40,48,60,62,67,80,109
+apps/web/src/components/app-shell.tsx
+  s_138289885f2527::t_824f236513d36a 88,143,158,173
+  s_138289885f2527::t_156fbece7f9f5d 285
+apps/web/src/app/(auth)/forgot-password/page.tsx
+  s_138289885f2527::t_824f236513d36a 18,21,23,27,33,41
+apps/web/src/components/consultation-scheduler.tsx
+  s_138289885f2527::t_824f236513d36a 59,63,89,94,108,120,125,138,150,178,189,199,208-209,223,225,228-229,248,253,258,263,266,296,359,374,551,778
+  s_138289885f2527::t_156fbece7f9f5d 241,402,435,467,483,588,640,649
+apps/web/src/components/auth-form.tsx
+  s_138289885f2527::t_824f236513d36a 19,30,43,48
+  s_138289885f2527::t_156fbece7f9f5d 86,99,112
+apps/web/src/lib/availability-editor.ts
+  s_138289885f2527::t_824f236513d36a 8,14,19,22
+apps/web/src/proxy.ts
+  s_138289885f2527::t_824f236513d36a 27
+apps/web/src/app/(dashboard)/teachers/teachers.tsx
+  s_138289885f2527::t_824f236513d36a 17
+  s_138289885f2527::t_156fbece7f9f5d 35,41
+apps/web/src/app/(auth)/signup/page.tsx
+  s_138289885f2527::t_824f236513d36a 13
+apps/web/src/app/(dashboard)/admin/users/user-management.tsx
+  s_138289885f2527::t_156fbece7f9f5d 68,77
+  s_138289885f2527::t_824f236513d36a 42,45
+apps/web/src/app/(auth)/auth/mfa/page.tsx
+  s_138289885f2527::t_824f236513d36a 18
+apps/web/src/app/(auth)/login/page.tsx
+  s_138289885f2527::t_824f236513d36a 13
+apps/web/src/components/consultation-dashboard.tsx
+  s_138289885f2527::t_156fbece7f9f5d 133,157,230,241,325,331,337,343,360,380,479,518,537,770,776
+  s_138289885f2527::t_824f236513d36a 57,64,67,75,78,84,87,104,107,120-121,125,128,131,139,143,145,155,158,422,561,598,650,652,740
+apps/web/src/lib/query-client.ts
+  s_138289885f2527::t_824f236513d36a 22
+apps/web/src/app/(dashboard)/layout.tsx
+  s_138289885f2527::t_824f236513d36a 7
+apps/web/src/lib/orpc-query-utils.ts
+  s_138289885f2527::t_824f236513d36a 18,24,39,45,58
+apps/web/src/app/(auth)/auth/check-email/page.tsx
+  s_138289885f2527::t_156fbece7f9f5d 33
+apps/web/src/components/consultation-calendar.tsx
+  s_138289885f2527::t_824f236513d36a 38,52,57,72,76,81
+apps/web/src/app/(dashboard)/settings/page.tsx
+  s_138289885f2527::t_824f236513d36a 7
+apps/web/src/app/(dashboard)/settings/account-settings.tsx
+  s_138289885f2527::t_824f236513d36a 39,55,57,59,64,67,70,85,90,98,103,108,204,207,210,219,227,231,235,238,244,248,253,258,260,266,346,361
+  s_138289885f2527::t_156fbece7f9f5d 165,305,319
+apps/web/src/components/data-table.tsx
+  s_138289885f2527::t_824f236513d36a 62
+apps/web/src/app/api/rpc/[[...rest]]/route.ts
+  s_138289885f2527::t_824f236513d36a 24
+apps/web/src/app/(dashboard)/teachers/page.tsx
+  s_138289885f2527::t_824f236513d36a 11
+apps/web/src/app/(dashboard)/students/student-enrolments.tsx
+  s_138289885f2527::t_156fbece7f9f5d 159,166,185,192,198,360
+  s_138289885f2527::t_824f236513d36a 60,63,72,77,81,90,103,290
+apps/web/src/app/(dashboard)/students/page.tsx
+  s_138289885f2527::t_824f236513d36a 11
+apps/web/src/app/(dashboard)/admin/users/page.tsx
+  s_138289885f2527::t_824f236513d36a 12
+apps/web/src/app/(dashboard)/settings/availability/teacher-availability.tsx
+  s_138289885f2527::t_824f236513d36a 51,55,68,114,123,130,132,137,146,161,163,165,171,186,195,222
+  s_138289885f2527::t_156fbece7f9f5d 77,359
+apps/web/src/app/(auth)/auth/mfa/mfa-challenge.tsx
+  s_138289885f2527::t_156fbece7f9f5d 76
+  s_138289885f2527::t_824f236513d36a 24,27,29,33,40,47
+apps/web/src/lib/supabase.server.ts
+  s_138289885f2527::t_824f236513d36a 8
+apps/web/src/lib/account.server.ts
+  s_138289885f2527::t_824f236513d36a 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cce512aedbf6b61d0fdf619167bb7492adf2739a",
+  "prompts": {},
+  "sessions": {
+    "s_138289885f2527": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d8ff-42a3-7fb2-b4e8-051e6d7d5b61",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
