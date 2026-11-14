@@ -1,0 +1,289 @@
+packages/db/package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 32-33
+apps/web/src/lib/orpc.server.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-3,9-10,13,17,20-21,23-25
+packages/email/src/sender.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-39
+README.md
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-84
+packages/db/drizzle/20261113032727_permissions/snapshot.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-9
+packages/email/vitest.config.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-5
+packages/db/drizzle/20261113032724_consultations/snapshot.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-300
+apps/web/src/app/layout.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 13
+apps/api/src/context.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 7
+apps/web/src/components/student-enrolments.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-169
+apps/web/src/app/(dashboard)/admin/users/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-8
+apps/web/src/components/consultation-scheduler.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-644
+apps/web/src/lib/orpc-query-utils.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-39
+packages/email/src/templates/enrolment.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-27
+apps/web/src/lib/consultation-scheduling.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-113
+packages/email/src/templates/reauthentication.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/env/src/email.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-5
+packages/ui/src/components/badge.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-60
+packages/ui/src/components/textarea.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-57
+packages/ui/src/components/toast.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-309
+packages/env/src/index.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 10-17,19-45
+packages/ui/src/components/segmented-control.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-212
+apps/web/src/app/login/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-14
+packages/db/drizzle/20261113032727_permissions/migration.sql
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-14
+apps/web/src/components/user-management.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-133
+apps/web/src/components/teachers.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-49
+packages/email/src/index.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-3
+apps/api/tsconfig.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 4
+packages/ui/src/components/select.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-243
+apps/web/src/app/auth/callback/route.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-12
+apps/web/src/styles/globals.css
+  s_f57ec741a99f3b::t_315a5ec831a3e5 4
+packages/ui/src/components/form.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-10
+packages/email/src/templates/email-change.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/ui/src/components/tabs.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-107
+packages/db/drizzle/20261113111015_teacher_enrolments/migration.sql
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-19
+packages/email/src/components/email-action.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-19
+packages/email/tests/templates.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-37
+packages/db/drizzle/20261113102722_user_roles/migration.sql
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-9
+packages/email/tsconfig.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-9
+apps/web/src/lib/orpc.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 5,18-19,21
+packages/env/tests/email.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-48
+apps/api/tests/consultation.integration.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-583
+apps/web/src/components/data-table.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-184
+packages/email/turbo.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-12
+supabase/config.toml
+  s_f57ec741a99f3b::t_315a5ec831a3e5 5,23-25,30-34,37-62
+apps/web/src/components/user-menu.tsx
+  s_f57ec741a99f3b::t_bf63a631703cdc 35-36,47-49
+apps/web/src/components/admin-dashboard.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-39
+apps/web/src/app/(dashboard)/students/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+apps/web/src/app/auth/check-email/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-45
+apps/web/src/app/providers.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 5,14-18
+.oxfmtrc.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 3-10
+apps/web/src/components/student-select.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-99
+apps/web/package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 13
+.env.example
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1,5-11
+packages/ui/src/components/pagination.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-124
+apps/web/tests/orpc-query.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-226
+apps/api/src/routers/enrolment.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-113
+apps/web/src/lib/form.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-4
+apps/web/src/app/(dashboard)/admin/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-19
+apps/web/src/lib/supabase.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-10
+packages/db/drizzle/20261113102722_user_roles/snapshot.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-121
+packages/db/src/schema.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-86
+apps/web/src/components/page-layout.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-56
+apps/web/src/app/(dashboard)/teachers/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/email/src/auth.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/env/tests/env.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 28,116-137
+apps/api/tests/rpc.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 13,44-64
+supabase/templates/reauthentication.html
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+packages/ui/package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 69
+packages/env/package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 29-33
+apps/api/src/account.ts
+  s_f57ec741a99f3b::t_bf63a631703cdc 19-20,27
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-18,21-26,28-59
+apps/web/src/components/app-shell.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 7,9,14,17
+apps/web/src/components/logout-button.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-38
+apps/web/src/app/(dashboard)/layout.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 3,5-7
+packages/ui/src/components/card.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-253
+apps/web/src/app/api/rpc/[[...rest]]/route.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 11-16,22-24
+packages/ui/src/components/button.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 7-8
+packages/ui/src/components/scroll-area.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 5
+apps/api/tests/account.test.ts
+  s_f57ec741a99f3b::t_bf63a631703cdc 45-65
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-44
+apps/web/src/app/signup/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-14
+packages/email/package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-44
+apps/api/src/mail.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+packages/email/tsdown.config.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-9
+apps/web/src/components/auth-form.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-117
+apps/api/package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 38
+apps/api/src/routers/index.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 3-5,10-12
+packages/ui/src/components/calendar.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-112
+packages/ui/src/components/empty.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-124
+packages/ui/src/components/spinner.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 3
+apps/web/src/app/(dashboard)/courses/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-2,4
+apps/web/src/lib/use-local-timezone.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-12
+supabase/templates/recovery.html
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+apps/api/src/routers/admin-user.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-49
+apps/api/src/routers/consultation.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-165
+apps/web/src/components/app-sidebar.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 4,8,29-37,44,54,60-62,71,74-91,103,124
+packages/email/src/components/email-text.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-8
+packages/email/src/templates/magic-link.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/email/src/templates/recovery.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/db/drizzle.config.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 12-13
+package.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 7-8,14-15,22
+apps/api/src/routers/user.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 3,16
+packages/email/tests/sender.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-97
+apps/web/src/app/auth/error/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/ui/src/styles/globals.css
+  s_f57ec741a99f3b::t_315a5ec831a3e5 9-15,68-133
+packages/email/src/templates/confirmation.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+pnpm-workspace.yaml
+  s_f57ec741a99f3b::t_315a5ec831a3e5 33-34,49
+scripts/local.mjs
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-71
+apps/api/src/index.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 3
+packages/db/drizzle/20261113032724_consultations/migration.sql
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-19
+supabase/templates/confirmation.html
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+supabase/templates/magic_link.html
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+apps/api/src/procedures.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 4,14,17-40
+scripts/emails.mjs
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-10
+apps/web/src/lib/supabase.server.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-26
+packages/db/drizzle/20261113111015_teacher_enrolments/snapshot.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-437
+packages/ui/src/components/alert-dialog.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-148
+supabase/templates/email_change.html
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+packages/email/src/render.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-15
+packages/email/src/components/email-layout.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-27
+supabase/templates/invite.html
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1
+apps/web/src/components/teacher-select.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-31
+apps/web/src/components/consultation-dashboard.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-662
+packages/db/src/index.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 30
+apps/web/src/lib/account.server.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-12
+packages/email/src/server.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-15
+apps/web/src/lib/query-client.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-2,10-18,21,24,27-31,34
+packages/ui/src/components/table.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-133
+packages/ui/src/components/dialog.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-204
+apps/web/turbo.json
+  s_f57ec741a99f3b::t_315a5ec831a3e5 8,12-16,23,27-31,38,42-46
+packages/ui/src/components/alert.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-78
+packages/email/src/templates/invite.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+apps/web/tests/consultation-scheduling.test.ts
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-88
+apps/web/src/app/(dashboard)/page.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-16
+packages/ui/src/components/radio-group.tsx
+  s_f57ec741a99f3b::t_315a5ec831a3e5 1-36
+pnpm-lock.yaml
+  s_f57ec741a99f3b::t_7704f928ee0ef5 167-172,280-282,310,418-457,478,484-487,532-561,565-576,604-616,635-790,968-970,1472-1478,1684-1691,1944-1946,1956-1958,1967-1969,2134-2148,2153-2159,2165-2168,2180-2186,2197-2208,2217-2224,2228-2247,2255-2271,2453-2460,2465-2476,2480-2484,2492-2497,2516-2519,2526-2535,2549-2556,2564-2589,2669-2676,2689-2730,2736-2739,2767-2779,2817-2830,2837-2840,2858-2870,2874-2883,2889-2896,2901-2908,2950-2952,2970-2983,2995-3004,3055-3058,3112-3115,3127-3130,3219-3221,3227-3238,3244-3247,3264-3291,3294-3317,3327,3329,3342-3350,3376-3453,3578-3579,3903-3911,4018-4025,4233-4236,4245-4248,4257-4260,4321,4328,4350-4365,4368-4374,4377-4380,4387-4392,4401-4416,4421-4430,4433-4444,4449-4470,4491-4508,4514-4519,4522-4550,4557-4560,4572-4577,4582-4598,4605-4608,4613-4626,4684-4690,4701-4729,4732-4733,4764-4773,4832-4845,4850-4851,4883-4891,4894-4901,4907-4935,4938-4941,5005-5009,5047-5077,5084-5091,5132-5137,5204-5205,5217-5218,5221,5230,5235,5238,5249,5256-5257,5260-5261,5265-5266
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "99596fbdf1bee0f78ad4f88aa9ca480dd8942f49",
+  "prompts": {},
+  "sessions": {
+    "s_f57ec741a99f3b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d704-3409-7fc3-87d9-48d15d63cf6c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Alfie Jones <alfie.jones@hotmail.co.uk>"
+    }
+  }
+}
