@@ -21,7 +21,11 @@
     "lint:fix": "oxlint --fix .",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
-    "check:boundaries": "turbo boundaries"
+    "check:boundaries": "turbo boundaries",
+    "test:e2e": "turbo run build --filter=@lms/web^... && node scripts/test.mjs e2e",
+    "test:accounts": "turbo run build --filter=@lms/web^... && node scripts/test.mjs accounts",
+    "test:e2e:install": "pnpm --filter @lms/web exec playwright install chromium",
+    "test:integration": "turbo run build --filter=@lms/web^... && node scripts/test.mjs integration"
   },
   "devDependencies": {
     "husky": "catalog:",

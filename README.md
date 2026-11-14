@@ -8,6 +8,7 @@ and [Supabase](https://supabase.com/)/[PostgreSQL](https://www.postgresql.org/).
 - **Teachers:** enrol students and manage weekly availability.
 - **Admins:** view all consultations and manage student/teacher roles.
 - **Email:** account verification, enrolment notifications, and consultation calendar invitations/updates.
+- **Tests:** Playwright browser smoke tests and Vitest unit/API integration tests, run in GitHub Actions.
 
 ## Run locally
 
@@ -106,13 +107,13 @@ pnpm test   # Unit tests
 pnpm ready  # Package boundaries, build, types, tests, lint, and formatting
 ```
 
-- **[Vitest](https://vitest.dev/):** availability rules, environment validation, and email delivery with mocked SMTP.
-- **[Node test runner](https://nodejs.org/api/test.html):** browser date and slot helpers.
-- **[GitHub Actions](https://docs.github.com/en/actions):** runs these checks on pushes and pull requests. It uses placeholder environment values, so it doesn't need Supabase running or any secrets.
+- **[Vitest](https://vitest.dev/):** scheduling rules, environment validation, email delivery, and API integration tests for auth, roles, and bookings.
+- **[Playwright](https://playwright.dev/):** login/logout for all roles, session persistence, and creating/cancelling consultations. Tests generate and clean up their own student, teacher, and admin accounts.
+- **[GitHub Actions](https://docs.github.com/en/actions):** runs quality checks, unit tests, and browser/API tests on pushes and pull requests.
 
 ## What I'd do next
 
-- Improve test coverage, especially integration and end-to-end tests.
+- Extend integration and end-to-end coverage to rescheduling, availability editing, MFA, and email verification.
 - Sync teachers' calendars and automatically block booking slots when they already have something on.
 - Try [Supabase Realtime](https://supabase.com/docs/guides/realtime) to show booking changes without refreshing.
 - Add rate limiting to auth and API requests.

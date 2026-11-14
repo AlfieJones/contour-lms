@@ -55,3 +55,33 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: ${{ matrix.name }}
         run: ${{ matrix.command }}
+
+  e2e:
+    name: Browser and integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HUSKY: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @lms/web exec playwright install --with-deps chromium
+      - run: pnpm supabase:start
+      - run: pnpm db:migrate
+      - run: pnpm test:integration
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: |
+            apps/web/playwright-report/
+            apps/web/test-results/
+          retention-days: 7
+          if-no-files-found: ignore
