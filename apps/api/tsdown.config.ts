@@ -1,7 +1,12 @@
 import { defineConfig } from "tsdown";
 
 export default defineConfig({
-  entry: ["src/*.ts"],
+  entry: [
+    "src/index.ts",
+    "src/context.ts",
+    "src/procedures.ts",
+    "src/routers/consultation-scheduling.ts",
+  ],
   root: "src",
   // Node builds must match the .js/.d.ts package subpaths.
   outExtensions: () => ({ js: ".js", dts: ".d.ts" }),

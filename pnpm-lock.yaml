@@ -167,12 +167,12 @@ catalogs:
     '@daypicker/react':
       specifier: ^10.0.2
       version: 10.0.2
+    '@fullcalendar/react':
+      specifier: ^7.1.5
+      version: 7.1.5
     '@lms/email':
       specifier: workspace:*
       version: workspace:*
-    '@next/env':
-      specifier: 16.4.6
-      version: 16.4.6
     '@orpc/shared':
       specifier: 2.0.0-beta.50
       version: 2.0.0-beta.50
@@ -227,6 +227,9 @@ catalogs:
     server-only:
       specifier: ^0.0.1
       version: 0.0.1
+    temporal-polyfill:
+      specifier: ^1.0.8
+      version: 1.0.8
     tsdown:
       specifier: 0.23.7
       version: 0.23.7
@@ -311,6 +314,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@fullcalendar/react':
+        specifier: 'catalog:'
+        version: 7.1.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(temporal-polyfill@1.0.8)
       '@lms/api':
         specifier: workspace:*
         version: link:../api
@@ -323,9 +329,6 @@ importers:
       '@lms/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@next/env':
-        specifier: 'catalog:'
-        version: 16.4.6
       '@orpc/client':
         specifier: 2.0.0-beta.50
         version: 2.0.0-beta.50
@@ -362,6 +365,12 @@ importers:
       server-only:
         specifier: 'catalog:'
         version: 0.0.1
+      temporal-polyfill:
+        specifier: 'catalog:'
+        version: 1.0.8
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@lms/config':
         specifier: workspace:*
@@ -395,13 +404,16 @@ importers:
       postgres:
         specifier: 4.1.1
         version: 4.1.1
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@lms/config':
         specifier: workspace:*
         version: link:../config
-      '@next/env':
+      '@supabase/supabase-js':
         specifier: 'catalog:'
-        version: 16.4.6
+        version: 2.119.0
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.2
@@ -432,6 +444,9 @@ importers:
       react-email:
         specifier: 6.11.12
         version: 6.11.12(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.7
     devDependencies:
       '@lms/config':
         specifier: workspace:*
@@ -802,6 +817,24 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@full-ui/headless-calendar@7.1.5':
+    resolution: {integrity: sha512-kTSGhUM7NkdJFvv6Pu9WWQrLDUg9L/1l1DSOp/IoOEutH0n2AEu10wWXl37kgXHU1+3WpxDM7h+MXTaO++QH2A==}
+    peerDependencies:
+      temporal-polyfill: ^1.0.7
+
+  '@fullcalendar/core@7.1.5':
+    resolution: {integrity: sha512-adUp5YFeQmEJ5MAF0Qs3U0cNNvxQQ+dmAXiG5FFzrHULMkdB0ktnyTkcGcfM9ZlDlO4cxrRLXFiBwALJ13+Utg==}
+    peerDependencies:
+      '@full-ui/headless-calendar': 7.1.5
+      temporal-polyfill: ^1.0.7
+
+  '@fullcalendar/react@7.1.5':
+    resolution: {integrity: sha512-us8Hggc1g6vxK3jQvIAtJOcGltSh/Y7wiqB5hT3+S5XkELHS5vFMfecayxprlLcCtV/BzK+Ot2VgeFUmA62JXg==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      react-dom: ^17 || ^18 || ^19
+      temporal-polyfill: ^1.0.7
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -3033,6 +3066,15 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
+  temporal-polyfill@1.0.8:
+    resolution: {integrity: sha512-RCCGa0GddT099XG49ijdD0tDf86L8vfuZun1+JyJiO4Y2NP9PACQsG0OnvNPXwVLisdvhr/zqL2nhKQmXXx08A==}
+
+  temporal-spec@1.0.1:
+    resolution: {integrity: sha512-wxVoanmDeavXie1vu2JaQ3WIc3JZnWAOYFBsJyATaVsXsycKYUflGsyBmrRSnoCpZJpwPyr38VpgSUlQ8CbFxg==}
+
+  temporal-utils@1.0.4:
+    resolution: {integrity: sha512-4mAcgbWlaxe+gn23gk8g0iHxCVGVOhKzSCfF5HM3lfvH8BdT+/pBmH/R/E4CrIse+koUgs8ThkPzCLnui6Fi8w==}
+
   tinybench@6.2.3:
     resolution: {integrity: sha512-Al01C2JIBnO2CXCAPbpAl6sUiOZHeThGtHYNTa51JRw9PyWOCdr+9Ong05R4qg/Sk3+H645E8ov1h2c58ityNw==}
     engines: {node: '>=20.0.0'}
@@ -3467,6 +3509,23 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@full-ui/headless-calendar@7.1.5(temporal-polyfill@1.0.8)':
+    dependencies:
+      temporal-polyfill: 1.0.8
+
+  '@fullcalendar/core@7.1.5(@full-ui/headless-calendar@7.1.5(temporal-polyfill@1.0.8))(temporal-polyfill@1.0.8)':
+    dependencies:
+      '@full-ui/headless-calendar': 7.1.5(temporal-polyfill@1.0.8)
+      temporal-polyfill: 1.0.8
+
+  '@fullcalendar/react@7.1.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(temporal-polyfill@1.0.8)':
+    dependencies:
+      '@full-ui/headless-calendar': 7.1.5(temporal-polyfill@1.0.8)
+      '@fullcalendar/core': 7.1.5(@full-ui/headless-calendar@7.1.5(temporal-polyfill@1.0.8))(temporal-polyfill@1.0.8)
+      react: 19.3.1
+      react-dom: 19.3.1(react@19.3.1)
+      temporal-polyfill: 1.0.8
 
   '@img/colour@1.1.0':
     optional: true
@@ -5115,6 +5174,15 @@ snapshots:
   tailwindcss@4.3.5: {}
 
   tapable@2.3.3: {}
+
+  temporal-polyfill@1.0.8:
+    dependencies:
+      temporal-spec: 1.0.1
+      temporal-utils: 1.0.4
+
+  temporal-spec@1.0.1: {}
+
+  temporal-utils@1.0.4: {}
 
   tinybench@6.2.3: {}
 

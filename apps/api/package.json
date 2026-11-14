@@ -12,6 +12,11 @@
     }
   },
   "exports": {
+    "./consultation-scheduling": {
+      "development": "./src/routers/consultation-scheduling.ts",
+      "types": "./dist/routers/consultation-scheduling.d.ts",
+      "default": "./dist/routers/consultation-scheduling.js"
+    },
     ".": {
       "development": "./src/index.ts",
       "types": "./dist/index.d.ts",

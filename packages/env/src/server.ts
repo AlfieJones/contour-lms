@@ -1,9 +1,9 @@
-import { serverEnvSchema, validate } from "#index";
+import { createEnv as parseEnvironment, type EnvFields, type EnvOptions } from "#index";
 
-if (typeof window !== "undefined") {
-  throw new Error("Use @lms/env/client in browser code.");
+if ("window" in globalThis) {
+  throw new Error("Use @lms/env with explicit public values in browser code.");
 }
 
-export const env = validate(serverEnvSchema, process.env, "server");
-
-export type Env = typeof env;
+export function createEnv<const T extends EnvFields>(options: EnvOptions<T>) {
+  return parseEnvironment({ ...options, values: process.env });
+}

@@ -1,2 +1,2 @@
-pnpm build:packages
+pnpm build
 pnpm exec lint-staged

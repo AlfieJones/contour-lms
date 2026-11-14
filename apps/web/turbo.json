@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "env": [
         "ADMIN_EMAIL_PATTERNS",
         "DATABASE_URL",
@@ -18,7 +18,7 @@
       "dependsOn": ["^build", "check-types"]
     },
     "check-types": {
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "env": [
         "ADMIN_EMAIL_PATTERNS",
         "DATABASE_URL",
@@ -33,7 +33,7 @@
       "outputs": ["next-env.d.ts", ".next/types/**", "tsconfig.tsbuildinfo"]
     },
     "dev": {
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.env*"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "env": [
         "ADMIN_EMAIL_PATTERNS",
         "DATABASE_URL",

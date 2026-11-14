@@ -4,5 +4,5 @@
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM"]
   },
-  "include": ["src", "tests", "tsdown.config.ts", "vitest.config.ts"]
+  "include": ["src", "tsdown.config.ts", "vitest.config.ts"]
 }

@@ -1,6 +1,6 @@
 "use client";
 import { createBrowserClient } from "@supabase/ssr";
-import { env } from "@lms/env/client";
+import { env } from "#env.client.ts";
 
 export function getSupabaseBrowserClient() {
   return createBrowserClient(
